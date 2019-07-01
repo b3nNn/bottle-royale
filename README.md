@@ -2,6 +2,13 @@
 
 Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.
 
+# Features
+- Up to **100 bots** per game scripted with **javascript**.
+- **Event driven** client API and **scenario driven** for debugging.
+- Game view with **three.js** (live, replay).
+- Data persistence with **RethinkDB**.
+- **Docker** for production deployment.
+
 # Guides
 ### Create a bot
 
@@ -14,11 +21,11 @@ Provide your scripts which use the **JS API** inside a bundle **directory**. See
 ### Start a match
 Start a match by running the start command:
 ```sh
-npm run start -- -B examples/my_bot.bundle -B examples/foo_bar.bundle
+npm run start -- -B examples/my_bot.bundle examples/foo_bar.bundle
 ```
 or with a game configuration file:
 ```sh
-npm run start -- -B examples/my_bot.bundle -B examples/foo_bar.bundle --config game.config.js
+npm run start -- -B examples/my_bot.bundle examples/foo_bar.bundle --config game.config.js
 ```
 
 ### Game Configuration
