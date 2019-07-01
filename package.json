@@ -1,0 +1,22 @@
+{
+  "name": "bottle-royale",
+  "version": "0.0.1",
+  "description": "Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.",
+  "main": "index.js",
+  "scripts": {
+    "build": "go get -d -v && go build -a -installsuffix cgo -ldflags=\"-w -s\" -o ./bin/bottleroyale",
+    "start": "./bin/bottleroyale",
+    "clean": "rm -rf ./bin",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b3nNn/bottle-royale.git"
+  },
+  "author": "benoit martinet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/b3nNn/bottle-royale/issues"
+  },
+  "homepage": "https://github.com/b3nNn/bottle-royale#readme"
+}
