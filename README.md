@@ -1,4 +1,5 @@
-# Bottle Royale - A Battle Royale Arena for JS Bots
+# 🚧🚧 (DRAFT) Bottle Royale - A Battle Royale Arena for JS Bots 🚧🚧
+
 
 Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.
 
