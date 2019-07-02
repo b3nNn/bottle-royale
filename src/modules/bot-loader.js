@@ -25,7 +25,7 @@ class BotBundle {
     constructor(path, scripts) {
         this.path = path;
         this.apps = {
-            bot: new BotApplication(scripts.bot),
+            bot: new BotApplication(scripts.bot, `${process.cwd()}/${this.path}/bot.js`, `${process.cwd()}/${this.path}`),
             discord: new DiscordApplication(scripts.discord)
         };
         this.scripts = scripts;
@@ -37,7 +37,9 @@ class BotBundle {
 }
 
 class ScriptedApplication {
-    constructor(script) {
+    constructor(script, path, dir) {
+        this.path = path;
+        this.dir = dir;
         this.script = script;
         this.compiled = null;
         this.runtime = null;
@@ -47,7 +49,7 @@ class ScriptedApplication {
             require: {
                 external: true,
                 builtin: ['path'],
-                root: "./",
+                root: this.dir,
                 mock: {
                     fs: {
                         readFileSync() { return 'Nice try!'; }
@@ -61,7 +63,8 @@ class ScriptedApplication {
         return new Promise((resolve, reject) => {
             try {
                 this.compiled = new VMScript(this.script);
-                this.runtime = this.vm.run(this.compiled);
+                console.log('runtime path', this.path);
+                this.runtime = this.vm.run(this.compiled, this.path);
                 resolve(this);
             } catch (err) {
                 console.error('Failed to compile script.', err);
@@ -72,13 +75,20 @@ class ScriptedApplication {
 }
 
 class BotApplication extends ScriptedApplication {
-    constructor(script) {
-        super(script);
+    constructor(script, path, dir) {
+        super(script, path);
         this.client = GameService.createClient(this);
+        this.behavior = GameService.createBehavior(this.client);
     }
 
     prepare() {
         this.runtime.ready(this.client);
+    }
+
+    load() {
+        if (this.runtime.load) {
+            this.runtime.load(this.client, this.behavior);
+        }
     }
 }
 
