@@ -22,11 +22,11 @@ Provide your scripts which use the **JS API** inside a bundle **directory**. See
 ### Start a match
 Start a match by running the start command:
 ```sh
-npm run start -- -B examples/my_bot.bundle examples/foo_bar.bundle
+npm run start -- --bot examples/my_bot.bundle --bot examples/foo_bar.bundle
 ```
 or with a game configuration file:
 ```sh
-npm run start -- -B examples/my_bot.bundle examples/foo_bar.bundle --config game.config.js
+npm run start -- --bot examples/my_bot.bundle --bot examples/foo_bar.bundle --config game.config.js
 ```
 
 ### Game Configuration
