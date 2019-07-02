@@ -8,5 +8,7 @@ module.exports = {
         client.on('error', err => {
             client.log('error ' + err);
         });
+    },
+    load: (client, behavior) => {
     }
 }

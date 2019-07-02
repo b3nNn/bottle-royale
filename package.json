@@ -7,7 +7,7 @@
     "start": "nodemon index.js",
     "stress": "nodemon index.js --  --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle --bot examples/my_bot.bundle",
     "build": "webpack --config webpack.build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -45,5 +45,8 @@
     "vm2": "^3.8.2",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
   }
 }

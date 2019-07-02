@@ -1,6 +1,6 @@
 import minimist from 'minimist';
 import _ from 'lodash';
-import { BotBundle, BotBundleLoader } from './modules/bot-loader';
+import BotBundleLoader from './modules/bundle/bot-bundle-loader';
 import GameService from './services/game-service';
 
 const argv = minimist(process.argv.slice(2));
@@ -26,7 +26,6 @@ const run = async () => {
             console.log('bundle load error', bundle.path, err);
         }
     }
-    GameService.setupGameClients();
     GameService.startMatchmaking();
     GameService.mainLoop();
     // console.log('collections', GameService.collections('game').all());
