@@ -1,3 +1,5 @@
+const aliveStrategy = require('./alive-strategy.js');
+
 module.exports = {
     // to some stuff, then connects
     ready: client => {
@@ -15,7 +17,9 @@ module.exports = {
             client.log('game ready');
         });
     },
-    load: game => {
-
+    load: (client, behavior) => {
+        behavior.while(['alive'], aliveStrategy(behavior), () => {
+            client.log('Oups i\'m dead');
+        });
     }
 };

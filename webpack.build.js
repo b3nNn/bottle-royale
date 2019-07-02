@@ -8,6 +8,12 @@ module.exports = {
     entry: {
         app: "./src/app.js"
     },
+    node: {
+        fs: 'empty',
+        child_process: 'empty',
+        module: 'empty',
+        path: 'empty'
+    },
     module: {
         rules: [
             {
@@ -34,6 +40,17 @@ module.exports = {
         {
             test: /\.css$/,
             use: ['style-loader', 'css-loader'],
+        },
+        {
+            test: /\.coffee$/,
+            use: [ {
+                loader: 'coffee-loader',
+                options: { 
+                  transpile: {
+                    presets: ['env']
+                  }
+                }
+            } ]
         }]
     },
     output: {
