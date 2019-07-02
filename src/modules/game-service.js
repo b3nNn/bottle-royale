@@ -117,9 +117,8 @@ class GameService {
 
     mainLoop(run = true) {
         if (run) {
-            console.log('update mainLoop');
             this.updateBehaviors();
-            setTimeout(() => this.mainLoop(true), 500);
+            setTimeout(() => this.mainLoop(true), (1000 / 30));
         }
     }
 }

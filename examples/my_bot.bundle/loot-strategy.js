@@ -10,5 +10,8 @@ module.exports = behavior => {
             next(surviveStrategy(behavior));
         });
     });
+    strategy.task('watch-for-stuff', task => {
+        behavior.client.log('hello from watch-for-stuff');
+    });
     return strategy;
 };

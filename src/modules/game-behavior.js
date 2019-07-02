@@ -35,6 +35,7 @@ class GameBehavior {
             to.act();
             from.name = to.name;
             from.hooks = _.concat(from.hooks, to.hooks);
+            from.tasks = _.merge(from.tasks, to.tasks);
         };
     }
 
@@ -54,7 +55,7 @@ class GameBehavior {
             }
             return acc;
         }, []), hook => {
-            console.log('behavior update', this.client.ID, this.tags);
+            // console.log('behavior update', this.client.ID, this.tags);
             if (hook.strategy instanceof GameStrategy) {
                 // console.log('while', _.values(hook.tags), hook.strategy.running, hook.fullFill, this.hasTags(hook.tags));
                 if (this.hasTags(hook.tags)) {
@@ -78,6 +79,7 @@ class GameStrategy {
         this.actCallback = null;
         this.running = false;
         this.hooks = [];
+        this.tasks = {};
     }
 
     on(event, callback) {
@@ -116,6 +118,16 @@ class GameStrategy {
         this.running = true;
     }
 
+    task(name, fn) {
+        this.tasks[name] = fn;
+    }
+
+    runTask(name) {
+        if (_.isFunction(this.tasks[name])) {
+            this.tasks[name]();
+        }
+    }
+
     update(behavior) {
         _.each(_.reduce(this.hooks, (acc, hook) => {
             if (hook.fullFill !== true) {
@@ -123,10 +135,16 @@ class GameStrategy {
             }
             return acc;
         }, []), hook => {
-            console.log('strategy update', this.name, behavior.hasTags(hook.tags), hook.tags, hook.tasks);
+            // console.log('strategy update', this.name, behavior.hasTags(hook.tags), hook.tags, hook.tasks);
             if (behavior.hasTags(hook.tags)) {
                 hook.fullFill = true;
                 hook.callback(behavior.nextStrategy(this));
+            } else {
+                _.each(hook.tasks, task => {
+                    _.each(_.keys(task), key => {
+                        this.runTask(key);
+                    });
+                });
             }
         });
     }
