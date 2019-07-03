@@ -10,5 +10,10 @@ module.exports = {
         });
     },
     load: (client, behavior) => {
+        const strategy = behavior.createStrategy('empty-strategy');
+    
+        behavior.while(['alive'], strategy, () => {
+            client.log('WTF i\'m dead too');
+        });
     }
 }

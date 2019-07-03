@@ -28,7 +28,7 @@ const run = async () => {
     }
     GameService.startMatchmaking();
     GameService.mainLoop();
-    // console.log('collections', GameService.collections('game').all());
+    console.log('collections', GameService.collections('game').all());
 };
 
 run();

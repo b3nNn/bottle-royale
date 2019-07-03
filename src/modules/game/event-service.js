@@ -20,6 +20,15 @@ class EventService {
             listener.callback(params);
         });
     }
+
+    filter(event, filter) {
+        return _.reduce(this.collections('game').kind('listener'), (acc, item) => {
+            if (item.event == event && filter(item) === true) {
+                acc.push(item);
+            }
+            return acc;
+        }, []);
+    }
 }
 
 export default EventService;

@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import nanoid from 'nanoid';
-import GameCollections from './game-collections';
-
-const Collections = GameCollections();
+import GameService from '../../services/game-service';
 
 class GameClient {
     constructor() {
@@ -15,7 +13,7 @@ class GameClient {
 
     on(event, callback) {
         console.log(`[${this.longID}] listener init ${this.ID}:${event}`);
-        Collections('game').push('listener', {
+        GameService.collections('game').push('listener', {
             clientID: this.ID,
             event,
             callback

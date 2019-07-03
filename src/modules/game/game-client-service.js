@@ -38,27 +38,6 @@ class GameClientService {
             client.app.prepare();
         });
     }
-
-    joinPlayer(clientID) {
-        this.collections('game').push('client_ready', {
-            clientID: clientID
-        });
-    }
-
-    startMatchmaking() {
-        const game = {
-            accept: () => {
-                console.log(`[${game.clientID}] matchmacking accepted`);
-                this.joinPlayer(game.clientID);
-            },
-            reject: () => {}
-        };
-        GameService.eventEach('game_found', listener => {
-            game.clientID = listener.clientID;
-            listener.callback(game);
-        });
-
-    }
 }
 
 export default GameClientService;
