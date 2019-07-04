@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import GameService from '../../services/game-service';
 
 const { NodeVM, VMScript } = require('vm2');
@@ -40,6 +41,14 @@ class ScriptedApplication {
     }
 
     loadRuntime(runtime) {}
+
+    toScriptingError(err) {
+        const matches = err.stack.match(/\(vm.js:[0-9]+:[0-9]+\)/g);
+        const latest = matches.pop();
+        const script = `${this.path}`;
+        const error = `${_.split(err.stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
+        return error;
+    }
 }
 
 

@@ -8,20 +8,14 @@ class GameClient {
     }
 
     connect(nickname) {
-        console.log(`[${this.longID}] ${nickname} is connected`);
     }
 
     on(event, callback) {
-        console.log(`[${this.longID}] listener init ${this.ID}:${event}`);
-        GameService.collections('game').push('listener', {
-            clientID: this.ID,
-            event,
-            callback
-        });
+        GameService.clients.events.on(event, callback, { clientID: this.ID });
     }
 
     off(event) {
-
+        GameService.clients.events.off(event);
     }
 
     log(str) {

@@ -12,10 +12,10 @@ module.exports = behavior => {
         });
     });
     strategy.task('select-drop-location', task => {
-        behavior.client.log('hello from select-drop-location');
+        // behavior.client.log('hello from select-drop-location');
     });
     strategy.task('watch-for-enemy', task => {
-        behavior.client.log('hello from watch-for-enemy');
+        // behavior.client.log('hello from watch-for-enemy');
     });
     return strategy;
 };

@@ -14,12 +14,44 @@ class BotApplication extends ScriptedApplication {
         this.proxy.setRuntime(runtime);
     }
 
-    prepare() {
-        this.proxy.ready(this.client);
+    ready() {
+        try {
+            this.proxy.ready(this.client);
+        } catch(err) {
+            console.error(this.toScriptingError(err));
+        }
     }
 
     load() {
-        this.proxy.load(this.client, this.behavior);
+        try {
+            this.proxy.load(this.client, this.behavior);
+        } catch(err) {
+            console.error(this.toScriptingError(err));
+        }
+    }
+
+    start() {
+        try {
+            this.proxy.start(this.client, this.behavior);
+        } catch(err) {
+            console.error(this.toScriptingError(err));
+        }
+    }
+
+    death() {
+        try {
+            this.proxy.death(this.client, this.behavior);
+        } catch(err) {
+            console.error(this.toScriptingError(err));
+        }
+    }
+
+    update() {
+        try {
+            this.proxy.update(this.client, this.behavior);
+        } catch(err) {
+            console.error(this.toScriptingError(err));
+        }
     }
 }
 

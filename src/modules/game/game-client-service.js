@@ -5,19 +5,20 @@ import GameBehavior from './game-behavior';
 import GameService from '../../services/game-service';
 
 class GameClientService {
-    constructor(collection) {
+    constructor(collection, eventService) {
         this.collections = collection;
+        this.events = eventService;
         this.sandbox = {};
     }
 
     createClient(app) {
         const client = new GameClient();
-        client.ID = this.collections('lobby').uid();
-        this.collections('lobby').push('client_identity', {
+        client.ID = this.collections('game.client_identity').uid();
+        this.collections('game').push('client_identity', {
             clientID: client.ID,
             longID: client.longID
         });
-        this.collections('game').push('client_app', {
+        this.collections('runtime').push('client_app', {
             clientID: client.ID,
             app
         });
@@ -26,7 +27,7 @@ class GameClientService {
 
     createBehavior(client) {
         const behavior = new GameBehavior(client);
-        this.collections('game').push('client_behavior', {
+        this.collections('runtime').push('client_behavior', {
             clientID: client.ID,
             behavior
         });
@@ -34,8 +35,8 @@ class GameClientService {
     }
 
     setupGameClients() {
-        _.each(this.collections('game').kind('client_app'), client => {
-            client.app.prepare();
+        _.each(this.collections('runtime').kind('client_app'), client => {
+            client.app.ready();
         });
     }
 }

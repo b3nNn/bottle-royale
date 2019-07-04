@@ -1,11 +1,9 @@
 import minimist from 'minimist';
 import _ from 'lodash';
-import BotBundleLoader from './modules/bundle/bot-bundle-loader';
 import GameService from './services/game-service';
 
 const argv = minimist(process.argv.slice(2));
 let bundles = [];
-const bots = [];
 
 const run = async () => {
     if (_.isArray(argv.bot)) {
@@ -14,21 +12,19 @@ const run = async () => {
         bundles.push(argv.bot);
     }
 
-    for (let bundleFilename of bundles) {
-        const botBundle = await BotBundleLoader.loadFromPath(bundleFilename);
-        bots.push(botBundle);
-    };
-    for (let bundle of bots) {
-        try {
-            await bundle.compile();
-            console.log('bundle loaded', bundle.path);
-        } catch (err) {
-            console.log('bundle load error', bundle.path, err);
-        }
+    GameService.game.events.on('matchmaking_start', () => {
+        console.log(`matchmaking is now live with ${GameService.matchmaking.getReadyClients().length} player(s)`);
+    });
+    GameService.game.events.on('matchmaking_ended', () => {
+        console.log(`matchmaking is finished after ${GameService.game.tick.getElapsed() / 1000000}s`);
+    });
+    try {
+        await GameService.loadBundles(bundles);
+        await GameService.startMatchmaking();
+    } catch (err) {
+        console.error('fatal error', err);
     }
-    GameService.startMatchmaking();
-    GameService.mainLoop();
-    console.log('collections', GameService.collections('game').all());
+    // console.log('collections', GameService.collections('game').all());
 };
 
 run();

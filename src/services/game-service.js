@@ -8,10 +8,9 @@ import EventService from '../modules/game/event-service';
 const collections = GameCollections();
 const gameService = new GameService(
     collections,
-    new GameClientService(collections),
-    new MatchmakingService(collections),
-    new GameEngine(collections),
-    new EventService(collections)
+    new GameClientService(collections, new EventService(collections, 'client_listener')),
+    new MatchmakingService(collections, new EventService(collections, 'matchmaking_listener')),
+    new GameEngine(collections, new EventService(collections, 'game_listener'))
     );
 
 export default gameService;
