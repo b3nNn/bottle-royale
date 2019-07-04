@@ -34,6 +34,15 @@ const GameCollections = () => {
                     return acc;
                 }, []);
             },
+            filterOne: (kind, filter) => {
+                const res = _.reduce(collections, (acc, item) => {
+                    if (item.collection === collection && item.kind === kind && filter(item) === true) {
+                        acc.push(item);
+                    }
+                    return acc;
+                }, []);
+                return (res.length === 0 ? null : res[0]);
+            },
             all: () => {
                 return _.reduce(collections, (acc, item) => {
                     if (item.collection === collection) {

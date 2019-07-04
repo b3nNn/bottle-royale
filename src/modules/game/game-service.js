@@ -34,11 +34,14 @@ class GameService {
     async startMatchmaking() {
         this.clients.setupGameClients();
         this.matchmaking.open();
+        this.matchmaking.start();
+        this.clients.bootstrapMatchmaking();
         this.game.start();
         if (!this.lastTick) {
             this.lastTick = this.game.tick.getElapsed();
         }
         await this.mainLoop();
+        this.matchmaking.close();
         this.game.events.each('matchmaking_ended', listener => {
             listener.callback();
         });

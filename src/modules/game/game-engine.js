@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Clock from '../../components/clock';
+import GameService from '../../services/game-service';
 
 class GameEngine {
     constructor(collections, eventService) {
@@ -42,9 +43,6 @@ class GameEngine {
             this.tick.stop();
             _.each(this.collections('runtime').kind('client_behavior'), cli => {
                 cli.behavior.setTags(['landed', 'dead']);
-            });
-            _.each(this.collections('runtime').kind('client_app'), client => {
-                client.app.death();
             });
             this.eventTriggers.death = true;
             this.isRunning = false;

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import GameService from '../../services/game-service';
 import ScriptedApplication from './scripted-application';
 import BotRuntimeProxy from './bot-runtime-proxy';
@@ -6,7 +7,7 @@ class BotApplication extends ScriptedApplication {
     constructor(script, path, dir) {
         super(script, path, dir);
         this.client = GameService.clients.createClient(this);
-        this.behavior = GameService.clients.createBehavior(this.client);
+        this.player = GameService.clients.createPlayer(this.client);
         this.proxy = new BotRuntimeProxy();
     }
 
@@ -22,9 +23,9 @@ class BotApplication extends ScriptedApplication {
         }
     }
 
-    load() {
+    load(matchmaking) {
         try {
-            this.proxy.load(this.client, this.behavior);
+            this.proxy.load(matchmaking);
         } catch(err) {
             console.error(this.toScriptingError(err));
         }
@@ -32,23 +33,15 @@ class BotApplication extends ScriptedApplication {
 
     start() {
         try {
-            this.proxy.start(this.client, this.behavior);
+            this.proxy.start(this.player);
         } catch(err) {
             console.error(this.toScriptingError(err));
         }
     }
 
-    death() {
+    update(time) {
         try {
-            this.proxy.death(this.client, this.behavior);
-        } catch(err) {
-            console.error(this.toScriptingError(err));
-        }
-    }
-
-    update() {
-        try {
-            this.proxy.update(this.client, this.behavior);
+            this.proxy.update(time);
         } catch(err) {
             console.error(this.toScriptingError(err));
         }

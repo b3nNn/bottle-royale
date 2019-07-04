@@ -11,27 +11,21 @@ class BotRuntimeProxy extends RuntimeProxy {
         }
     }
 
-    load(client, behavior) {
+    load(matchmaking) {
         if (this.runtime.load) {
-            this.runtime.load(client, behavior);
+            this.runtime.load(matchmaking);
         }
     }
 
-    start(client, behavior) {
+    start(player) {
         if (this.runtime.start) {
-            this.runtime.start(client, behavior);
+            this.runtime.start(player);
         }
     }
 
-    death(client, behavior) {
-        if (this.runtime.death) {
-            this.runtime.death(client, behavior);
-        }
-    }
-
-    update(client, behavior) {
+    update(time) {
         if (this.runtime.update) {
-            this.runtime.update(client, behavior);
+            this.runtime.update(time);
         }
     }
 }

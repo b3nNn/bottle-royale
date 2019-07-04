@@ -1,10 +1,12 @@
 const aliveStrategy = require('./alive-strategy.js');
+let cli;
 
 function setup(client) {
     // to some stuff, then connects
     client.connect("SNK b3n");
-    client.on('game_found', matchmacking => {
-        matchmacking.accept();
+    client.on('game_found', matchmaking => {
+        cli.log('game found');
+        matchmaking.accept(client);
     });
     client.on('error', err => {
         client.log('error ' + err);
@@ -15,23 +17,23 @@ function setup(client) {
     client.on('after_game_load', game => {
         client.log('after_game_load');
     });
+    cli = client;
 }
 
 module.exports = {
     ready: client => {
+        client.log('hello world =)');
         setup(client);
     },
-    load: (client, behavior, game) => {
+    load: matchmaking => {
+        cli.log('matchmacking started');
     },
-    start: (client, behavior, game) => {
-        client.log('start confirmed');
-        behavior.while(['alive'], aliveStrategy(behavior), () => {
-            client.log('Oups i\'m dead Oo');
+    start: player => {
+        cli.log('start');
+        player.behavior.while(['alive'], aliveStrategy(player.behavior), () => {
+            cli.log('Oups i\'m dead Oo');
         });
     },
-    death: (client, behavior, game) => {
-        client.log('death confirmed');
-    },
-    update: (client, behavior, game) => {
+    update: time => {
     }
 };

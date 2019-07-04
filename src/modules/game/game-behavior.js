@@ -2,8 +2,9 @@ import _ from 'lodash';
 import GameStrategy from './game-strategy';
 
 class GameBehavior {
-    constructor(client) {
+    constructor(client, behavior) {
         this.client = client;
+        this.behavior = behavior;
         this.strategies = {};
         this.tags = [];
         this.hooks = [];

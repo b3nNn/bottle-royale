@@ -43,11 +43,17 @@ class ScriptedApplication {
     loadRuntime(runtime) {}
 
     toScriptingError(err) {
+        let result;
         const matches = err.stack.match(/\(vm.js:[0-9]+:[0-9]+\)/g);
-        const latest = matches.pop();
-        const script = `${this.path}`;
-        const error = `${_.split(err.stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
-        return error;
+
+        if (!matches) {
+            result = err;
+        } else {
+            const latest = matches.pop();
+            const script = `${this.path}`;
+            result = `${_.split(err.stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
+        }
+        return result;
     }
 }
 
