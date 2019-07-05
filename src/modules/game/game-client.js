@@ -21,7 +21,7 @@ class GameClient {
     }
 
     log(str, additionnal) {
-        console.log(`[${this.longID}] ${str}`, additionnal);
+        console.log(`[${this.longID}] ${str}`, additionnal || '');
     }
 }
 

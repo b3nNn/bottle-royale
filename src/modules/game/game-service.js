@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import BotBundleLoader from '../bundle/bot-bundle-loader';
 import sleep from '../../components/sleep';
+import ClockTick from '../../components/clock-tick';
 
-const framerate = (1000 / 100);
+const framerate = (1000000 / 100);
 
 class GameService {
     constructor(collections, clientService, matchmakingService, gameEngine, eventService) {
@@ -13,6 +14,8 @@ class GameService {
         this.events = eventService;
         this.sandbox = {};
         this.lastTick = null;
+        this.debugTick = new ClockTick(1000000);
+        this.matchmakingBehaviors = [];
     }
 
     async loadBundles(bundles) {
@@ -49,27 +52,44 @@ class GameService {
 
     async mainLoop() {
         let now;
-        let current;
-        const clients = this.collections('runtime').kind('client_behavior');
         const time = {
+            framerate,
             elapsed: 0,
-            total: 0
+            total: 0,
+            prefs: {
+                updateTime: 0,
+                usage: 0
+            }
         };
+        this.matchmakingBehaviors = this.collections('runtime').kind('client_behavior');
 
         while (this.game.isRunning) {
             now = this.game.tick.getElapsed();
             time.elapsed = now - this.lastTick;
             time.total = now;
-            this.game.update(time);
-            _.each(clients, cli => {
-                cli.behavior.update(time);
-            });
-            current = (this.game.tick.getElapsed() - now) / 1000;
-            if (current < framerate) {
-                await sleep(framerate - current);
+            time.prefs.usage = (time.prefs.updateTime / time.framerate) * 100;
+            await this.update(time);
+            time.prefs.updateTime = (this.game.tick.getElapsed() - now);
+            // console.log('loop usage:', usage);
+            if (time.prefs.updateTime < time.framerate) {
+                await sleep((time.framerate - time.prefs.updateTime) / 1000);
             }
             this.lastTick = now;
         }
+    }
+
+    update(time) {
+        this.game.update(time);
+        this.updateBehaviors(time);
+        this.debugTick.each(() => {
+            console.log('loop time:', Math.round(time.prefs.updateTime), 'usage:', `${Math.round(time.prefs.usage)}%`, 'total:', Math.round(time.total / 1000000));
+        });
+    }
+
+    updateBehaviors(time) {
+        _.each(this.matchmakingBehaviors, client => {
+            client.behavior.update(time);
+        });
     }
 }
 

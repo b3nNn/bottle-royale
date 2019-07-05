@@ -24,8 +24,10 @@ class GameClientService {
 
     createBehavior(client) {
         const behavior = new GameBehavior(client);
+        behavior.ID = this.collections('game.client_behavior').uid();
         this.collections('runtime').push('client_behavior', {
             clientID: client.ID,
+            behaviorID: behavior.ID,
             behavior
         });
         return behavior;
