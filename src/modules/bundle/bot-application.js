@@ -8,7 +8,9 @@ class BotApplication extends ScriptedApplication {
         super(script, path, dir);
         this.client = GameService.clients.createClient(this);
         this.player = GameService.clients.createPlayer(this.client);
+        this.gameProxy = GameService.clients.createGameProxy(this.client);
         this.proxy = new BotRuntimeProxy();
+        this.setup(this.client);
     }
 
     loadRuntime(runtime) {
@@ -33,7 +35,7 @@ class BotApplication extends ScriptedApplication {
 
     start() {
         try {
-            this.proxy.start(this.player);
+            this.proxy.start(this.player, this.gameProxy);
         } catch(err) {
             console.error(this.toScriptingError(err));
         }

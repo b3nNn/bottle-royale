@@ -4,13 +4,15 @@ import GameClientService from '../modules/game/game-client-service';
 import MatchmakingService from '../modules/game/matchmacking-service';
 import GameEngine from '../modules/game/game-engine';
 import EventService from '../modules/game/event-service';
+import GameClientModules from '../modules/game/game-client-modules';
 
 const collections = GameCollections();
 const gameService = new GameService(
     collections,
     new GameClientService(collections, new EventService(collections, 'client_listener')),
     new MatchmakingService(collections, new EventService(collections, 'matchmaking_listener')),
-    new GameEngine(collections, new EventService(collections, 'game_listener'))
+    new GameEngine(collections, new EventService(collections, 'game_listener')),
+    GameClientModules
     );
 
 export default gameService;

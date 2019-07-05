@@ -17,9 +17,9 @@ class BotRuntimeProxy extends RuntimeProxy {
         }
     }
 
-    start(player) {
+    start(player, game) {
         if (this.runtime.start) {
-            this.runtime.start(player);
+            this.runtime.start(player, game);
         }
     }
 

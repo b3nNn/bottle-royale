@@ -7,8 +7,8 @@ class GameEngine {
         this.collections = collections;
         this.events = eventService;
         this.config = {
-            land_delay: 3000,
-            death_delay: 6000
+            land_delay: 30000,
+            death_delay: 60000
         };
         this.tick = new Clock();
         this.eventTriggers = {};
@@ -38,11 +38,17 @@ class GameEngine {
             _.each(this.collections('runtime').kind('client_behavior'), cli => {
                 cli.behavior.addTag('landed');
             });
+            this.events.each('landed', listener => {
+                listener.callback();
+            });
             this.eventTriggers.landed = true;
         } else if (!this.eventTriggers.death && ms > this.config.death_delay) {
             this.tick.stop();
             _.each(this.collections('runtime').kind('client_behavior'), cli => {
                 cli.behavior.setTags(['landed', 'dead']);
+            });
+            this.events.each('death', listener => {
+                listener.callback();
             });
             this.eventTriggers.death = true;
             this.isRunning = false;

@@ -10,18 +10,18 @@ class ScriptedApplication {
         this.script = script;
         this.compiled = null;
         this.runtime = null;
+        this.vm = null;
+    }
+
+    setup(client) {
         this.vm = new NodeVM({
-            console: 'inherit',
-            sandbox: GameService.sandbox,
+            console: 'off',
+            sandbox: {},
             require: {
                 external: true,
                 builtin: ['path'],
                 root: this.dir,
-                mock: {
-                    fs: {
-                        readFileSync() { return 'Nice try!'; }
-                    }
-                }
+                mock: GameService.clientModules(client)
             }
         });
     }

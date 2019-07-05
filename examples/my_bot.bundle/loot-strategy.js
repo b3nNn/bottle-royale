@@ -1,13 +1,14 @@
 const surviveStrategy = require('./survive-strategy');
 
-module.exports = behavior => {
-    const strategy = behavior.createStrategy('loot-strategy');
+module.exports = (client, player, game) => {
+    const strategy = player.behavior.createStrategy('loot-strategy');
     
     strategy.on('act', params => {
+        client.log('now looking for a weapon :3');
         strategy.until(['has_weapon'], [
             strategy.always('watch-for-stuff')
         ], next => {
-            next(surviveStrategy(behavior));
+            next(surviveStrategy(client, player, game));
         });
     });
     strategy.task('watch-for-stuff', task => {

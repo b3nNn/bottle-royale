@@ -4,6 +4,7 @@ import GameCollections from './game-collections';
 import GameBehavior from './game-behavior';
 import GameService from '../../services/game-service';
 import GamePlayer from './game-player';
+import GameEventsProxy from './game-events-proxy';
 
 class GameClientService {
     constructor(collection, eventService) {
@@ -42,6 +43,11 @@ class GameClientService {
             player
         });
         return player;
+    }
+
+    createGameProxy(client) {
+        const gameProxy = new GameEventsProxy(client);
+        return gameProxy;
     }
 
     connectClient(client, nickname) {

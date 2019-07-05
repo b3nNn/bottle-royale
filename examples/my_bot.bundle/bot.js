@@ -1,3 +1,4 @@
+const location = require('location');
 const aliveStrategy = require('./alive-strategy.js');
 let cli;
 
@@ -26,11 +27,18 @@ module.exports = {
         setup(client);
     },
     load: matchmaking => {
+        cli.log('location', location);
         cli.log('matchmacking started');
     },
-    start: player => {
-        cli.log('start');
-        player.behavior.while(['alive'], aliveStrategy(player.behavior), () => {
+    start: (player, game) => {
+        cli.log('let\'s have some fun');
+        game.on('landed', () => {
+            cli.log('landed confirmed');
+        });
+        game.on('became_active', () => {
+            cli.log('became_active confirmed');
+        });
+        player.behavior.while(['alive'], aliveStrategy(cli, player, game, location), () => {
             cli.log('Oups i\'m dead Oo');
         });
     },

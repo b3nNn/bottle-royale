@@ -6,15 +6,14 @@ import ClockTick from '../../components/clock-tick';
 const framerate = (1000000 / 100);
 
 class GameService {
-    constructor(collections, clientService, matchmakingService, gameEngine, eventService) {
+    constructor(collections, clientService, matchmakingService, gameEngine, clientModules) {
         this.collections = collections;
         this.clients = clientService;
         this.matchmaking = matchmakingService;
         this.game = gameEngine;
-        this.events = eventService;
-        this.sandbox = {};
+        this.clientModules = clientModules;
         this.lastTick = null;
-        this.debugTick = new ClockTick(1000000);
+        this.debugTick = new ClockTick(3000000);
         this.matchmakingBehaviors = [];
     }
 
