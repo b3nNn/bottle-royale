@@ -1,19 +1,15 @@
-module.exports = {
-    // to some stuff, then connects
-    ready: client => {
-        client.connect("foo_bar");
-        client.on('game_found', game => {
-            game.accept();
-        });
-        client.on('error', err => {
-            client.log('error ' + err);
-        });
-    },
-    load: (client, behavior) => {
-        const strategy = behavior.createStrategy('empty-strategy');
+const client = require('game-client');
+const player = require('game-player');
+
+client.connect("foo_bar");
+client.on('game_found', matchmaking => {
+    client.log('game found', client);
+    matchmaking.accept(client);
+    matchmaking.on('load', () => {
+        const strategy = player.behavior.createStrategy('empty-strategy');
     
-        behavior.while(['alive'], strategy, () => {
+        player.behavior.while(['alive'], strategy, () => {
             client.log('WTF i\'m dead too');
         });
-    }
-}
+    });
+});

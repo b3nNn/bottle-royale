@@ -1,47 +1,28 @@
 const location = require('location');
+const client = require('game-client');
+const player = require('game-player');
+const game = require('game-engine');
 const aliveStrategy = require('./alive-strategy.js');
-let cli;
 
-function setup(client) {
-    // to some stuff, then connects
-    client.connect("SNK b3n");
-    client.on('game_found', matchmaking => {
-        cli.log('game found');
-        matchmaking.accept(client);
+client.connect("SNK b3n");
+client.on('game_found', matchmaking => {
+    client.log('game found', client);
+    matchmaking.accept(client);
+    matchmaking.on('load', () => {
+        client.log('matchmacking loading', matchmaking);
     });
-    client.on('error', err => {
-        client.log('error ' + err);
-    });
-    client.on('before_game_load', game => {
-        client.log('before_game_load');
-    });
-    client.on('after_game_load', game => {
-        client.log('after_game_load');
-    });
-    cli = client;
-}
-
-module.exports = {
-    ready: client => {
-        client.log('hello world =)');
-        setup(client);
-    },
-    load: matchmaking => {
-        cli.log('location', location);
-        cli.log('matchmacking started');
-    },
-    start: (player, game) => {
-        cli.log('let\'s have some fun');
+    matchmaking.on('start', () => {
+        client.log('matchmacking started', matchmaking);
+        client.log('location', location);
+        client.log('let\'s have some fun');
         game.on('landed', () => {
-            cli.log('landed confirmed');
+            client.log('landed confirmed');
         });
         game.on('became_active', () => {
-            cli.log('became_active confirmed');
+            client.log('became_active confirmed');
         });
-        player.behavior.while(['alive'], aliveStrategy(cli, player, game, location), () => {
-            cli.log('Oups i\'m dead Oo');
+        player.behavior.while(['alive'], aliveStrategy(client, player, game, location), () => {
+            client.log('Oups i\'m dead Oo');
         });
-    },
-    update: time => {
-    }
-};
+    });
+});

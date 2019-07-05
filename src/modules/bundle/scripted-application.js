@@ -19,7 +19,7 @@ class ScriptedApplication {
             sandbox: {},
             require: {
                 external: true,
-                builtin: ['path'],
+                builtin: ['game-client'],
                 root: this.dir,
                 mock: GameService.clientModules(client)
             }
@@ -30,8 +30,7 @@ class ScriptedApplication {
         return new Promise((resolve, reject) => {
             try {
                 this.compiled = new VMScript(this.script);
-                this.runtime = this.vm.run(this.compiled, this.path);
-                this.loadRuntime(this.runtime);
+                this.vm.run(this.compiled, this.path);
                 resolve(this);
             } catch (err) {
                 console.error('Failed to compile script.', this.path, err);
@@ -39,8 +38,6 @@ class ScriptedApplication {
             }
         });
     }
-
-    loadRuntime(runtime) {}
 
     toScriptingError(err) {
         let result;

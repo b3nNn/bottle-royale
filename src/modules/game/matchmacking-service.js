@@ -58,7 +58,13 @@ class MatchmackingService {
                 accept: client => {
                     this.joinClient(this.current.ID, client.ID);
                 },
-                reject: () => {}
+                reject: () => {},
+                on: (event, callback, params) => {
+                    this.events.on(event, callback, params);
+                },
+                raise: (event, params) => {
+                    this.events.raise(event, params);
+                }
             });
             listener.callback(matchmaking);
         });

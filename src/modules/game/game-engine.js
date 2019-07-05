@@ -17,11 +17,11 @@ class GameEngine {
 
     start() {
         this.tick.start();
-        this.events.each('matchmaking_start', listener => {
+        GameService.matchmaking.events.each('start', listener => {
             listener.callback();
         });
-        _.each(this.collections('runtime').kind('client_app'), client => {
-            client.app.start();
+        this.events.each('matchmaking_start', listener => {
+            listener.callback();
         });
         _.each(this.collections('runtime').kind('client_behavior'), cli => {
             cli.behavior.addTag('alive');
@@ -31,9 +31,6 @@ class GameEngine {
 
     update(time) {
         const ms = time.total / 1000;
-        _.each(this.collections('runtime').kind('client_app'), client => {
-            client.app.update();
-        });
         if (!this.eventTriggers.landed && ms > this.config.land_delay) {
             _.each(this.collections('runtime').kind('client_behavior'), cli => {
                 cli.behavior.addTag('landed');

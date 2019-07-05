@@ -55,9 +55,6 @@ class GameClientService {
     }
 
     setupGameClients() {
-        _.each(this.collections('runtime').kind('client_app'), client => {
-            client.app.ready();
-        });
     }
 
     bootstrapMatchmaking() {
@@ -65,15 +62,14 @@ class GameClientService {
         const matchmaking = {
             players: GameService.matchmaking.getPlayers()
         };
-        const loads = this.collections('runtime').filter('client_app', app => readys.includes(app.clientID));
         const befors = this.events.filter('before_game_load', listener => readys.includes(listener.params.clientID));
         const afters = this.events.filter('after_game_load', listener => readys.includes(listener.params.clientID));
 
         _.each(befors, listener => {
             listener.callback(matchmaking);
         });
-        _.each(loads, client => {
-            client.app.load(matchmaking);
+        GameService.matchmaking.events.each('load', listener => {
+            listener.callback();
         });
         _.each(afters, listener => {
             listener.callback(matchmaking);
