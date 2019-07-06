@@ -1,20 +1,34 @@
 import _ from 'lodash';
+import nanoid from 'nanoid';
 import BotBundleLoader from '../bundle/bot-bundle-loader';
 import sleep from '../../components/sleep';
 import ClockTick from '../../components/clock-tick';
+import { GameCollections } from '../../services/game-service';
 
 const framerate = (1000000 / 100);
 
 class GameService {
     constructor(collections, clientService, matchmakingService, gameEngine, clientModules) {
+        this.serverID;
         this.collections = collections;
         this.clients = clientService;
         this.matchmaking = matchmakingService;
         this.game = gameEngine;
         this.clientModules = clientModules;
         this.lastTick = null;
-        this.debugTick = new ClockTick(3000000);
+        this.debugTick = new ClockTick(5000000);
         this.matchmakingBehaviors = [];
+    }
+
+    async init(options) {
+        const opts = options || {};
+
+        this.serverID = nanoid();
+        await GameCollections.init();
+        this.collections('game').push('server', {
+            serverID: this.serverID,
+            host: opts.host || undefined
+        });
     }
 
     async loadBundles(bundles) {

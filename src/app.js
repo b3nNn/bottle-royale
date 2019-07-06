@@ -12,13 +12,14 @@ const run = async () => {
         bundles.push(argv.bot);
     }
 
-    console.log('game service init', GameCollections);
     try {
-        await GameCollections.init();
+        await GameService.init({
+            host: argv.host || 'localhost'
+        });
     } catch(err) {
-        console.log('game service init err', err);
+        console.error('fatal error', err);
+        exist(-1);
     }
-    console.log('game service done');
 
     GameService.game.events.on('start', () => {
         console.log(`matchmaking is now live with ${GameService.matchmaking.getReadyClients().length} player(s)`);

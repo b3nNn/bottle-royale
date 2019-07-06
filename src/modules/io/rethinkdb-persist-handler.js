@@ -2,10 +2,12 @@ import _ from 'lodash';
 import PersistHandler from './persist-handler';
 import { Worker } from 'worker_threads';
 import rethinkdbdash from 'rethinkdbdash';
+import { GameService } from '../../services/game-service';
 
 const r = rethinkdbdash();
 
 const gameWhitelists = [
+    'server',
     'client',
     'player',
     'behavior',
@@ -14,6 +16,7 @@ const gameWhitelists = [
 ];
 
 const tableOptions = {
+    'server': { primaryKey: 'id' },
     'client': { primaryKey: 'id' },
     'player': { primaryKey: 'id' },
     'behavior': { primaryKey: 'id' },
@@ -25,9 +28,11 @@ class RethinkDBPersistHandler extends PersistHandler {
     constructor() {
         super();
         this.worker = null;
+        this.serverID = null;
     }
 
     async init() {
+        this.serverID = GameService.serverID;
         await this.initDatabase();
         await this.initWorker();
     }
@@ -49,7 +54,7 @@ class RethinkDBPersistHandler extends PersistHandler {
     initWorker() {
         return new Promise(resolve => {
             if (!this.worker) {
-                this.worker = new Worker('./src/modules/io/rethinkdb-worker.js', { workerData: {} });
+                this.worker = new Worker('./src/modules/io/rethinkdb-worker.js', { workerData: { serverID: this.serverID} });
                 this.worker.on('message', msg => {
                     const cmd = msg.split(' ')[0];
                     const params = msg.slice(cmd.length + 1);
@@ -79,14 +84,14 @@ class RethinkDBPersistHandler extends PersistHandler {
                 if (!obj) {
                     console.warn(`cannot serialize ${collection}.${kind}`);
                 } else {
-                    this.worker.postMessage(`push ${JSON.stringify({
+                    this.worker.postMessage(`insert ${JSON.stringify({
                         collection,
                         kind,
                         model: obj
                     })}`);
                 }
             }
-            console.log('[RethinkDB] create', collection, kind, obj);
+            // console.log('[RethinkDB] create', collection, kind, obj);
         }
     }
 
@@ -97,9 +102,15 @@ class RethinkDBPersistHandler extends PersistHandler {
                 obj = this.serialize(entry, kind);
                 if (!obj) {
                     console.warn(`cannot serialize ${collection}.${kind}`);
+                } else {
+                    this.worker.postMessage(`update ${JSON.stringify({
+                        collection,
+                        kind,
+                        model: obj
+                    })}`);
                 }
             }
-            console.log('[RethinkDB] update', collection, kind, obj);
+            // console.log('[RethinkDB] update', collection, kind, obj);
         }
     }
 

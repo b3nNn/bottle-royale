@@ -7,8 +7,8 @@ class GameEngine {
         this.collections = collections;
         this.events = eventService;
         this.config = {
-            land_delay: 3000,
-            death_delay: 6000
+            land_delay: 30000,
+            death_delay: 60000
         };
         this.tick = new Clock();
         this.eventTriggers = {};

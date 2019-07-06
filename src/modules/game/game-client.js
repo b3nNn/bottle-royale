@@ -10,6 +10,9 @@ class GameClient {
 
     connect(nickname) {
         this.nickname = nickname;
+        GameService.collections('game').filterOneUpdate('client', item => item.clientID === this.ID, client => {
+            client.nickname = nickname;
+        });
     }
 
     on(event, callback) {
@@ -26,6 +29,7 @@ class GameClient {
 
     serialize() {
         return {
+            serverID: GameService.serverID,
             clientID: this.ID,
             longID: this.longID,
             nickname: this.nickname

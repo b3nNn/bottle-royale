@@ -39,7 +39,8 @@ class MatchmackingService {
     joinClient(matchmakingID, clientID) {
         this.collections('game').push('client_matchmaking_accept', {
             clientID,
-            matchmakingID
+            matchmakingID,
+            serverID: GameService.serverID
         });
     }
 

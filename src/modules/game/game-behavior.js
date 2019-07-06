@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import GameStrategy from './game-strategy';
+import { GameService } from '../../services/game-service';
 
 class GameBehavior {
     constructor(client) {
@@ -74,6 +75,7 @@ class GameBehavior {
 
     serialize() {
         return {
+            serverID: GameService.serverID,
             behaviorID: this.ID,
             clientID: this.client.ID,
             tags: this.tags,
