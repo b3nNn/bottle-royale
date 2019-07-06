@@ -6,7 +6,11 @@ import GameEngine from '../modules/game/game-engine';
 import EventService from '../modules/game/event-service';
 import GameClientModules from '../modules/game/game-client-modules';
 
-const collections = GameCollections();
+import RethinkDBPersistHandler from '../modules/io/rethinkdb-persist-handler';
+
+const collections = GameCollections({
+    persistHandlers: [new RethinkDBPersistHandler()]
+});
 const gameService = new GameService(
     collections,
     new GameClientService(collections, new EventService(collections, 'client_listener')),
@@ -14,5 +18,4 @@ const gameService = new GameService(
     new GameEngine(collections, new EventService(collections, 'game_listener')),
     GameClientModules
     );
-
-export default gameService;
+export { gameService as GameService, collections as GameCollections };

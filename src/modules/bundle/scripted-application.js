@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import GameService from '../../services/game-service';
+import { GameService } from '../../services/game-service';
 
 const { NodeVM, VMScript } = require('vm2');
 

@@ -2,9 +2,8 @@ import _ from 'lodash';
 import GameStrategy from './game-strategy';
 
 class GameBehavior {
-    constructor(client, behavior) {
+    constructor(client) {
         this.client = client;
-        this.behavior = behavior;
         this.strategies = {};
         this.tags = [];
         this.hooks = [];
@@ -71,6 +70,15 @@ class GameBehavior {
                 }
             }
         });
+    }
+
+    serialize() {
+        return {
+            behaviorID: this.ID,
+            clientID: this.client.ID,
+            tags: this.tags,
+            strategies: []
+        };
     }
 }
 

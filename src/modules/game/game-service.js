@@ -38,12 +38,13 @@ class GameService {
         this.matchmaking.open();
         this.matchmaking.start();
         this.clients.bootstrapMatchmaking();
+        this.matchmaking.live();
         this.game.start();
         if (!this.lastTick) {
             this.lastTick = this.game.tick.getElapsed();
         }
         await this.mainLoop();
-        this.matchmaking.close();
+        this.matchmaking.end();
         this.game.events.each('matchmaking_ended', listener => {
             listener.callback();
         });
@@ -60,7 +61,7 @@ class GameService {
                 usage: 0
             }
         };
-        this.matchmakingBehaviors = this.collections('runtime').kind('client_behavior');
+        this.matchmakingBehaviors = this.collections('game').kind('behavior');
 
         while (this.game.isRunning) {
             now = this.game.tick.getElapsed();

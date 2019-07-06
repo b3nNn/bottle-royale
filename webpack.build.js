@@ -2,18 +2,15 @@ require('custom-env').env('', '../');
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: {
         app: "./src/app.js"
     },
-    node: {
-        fs: 'empty',
-        child_process: 'empty',
-        module: 'empty',
-        path: 'empty'
-    },
+    target: 'node',
+    externals: [nodeExternals()],
     module: {
         rules: [
             {
@@ -41,21 +38,22 @@ module.exports = {
             test: /\.css$/,
             use: ['style-loader', 'css-loader'],
         },
-        {
-            test: /\.coffee$/,
-            use: [ {
-                loader: 'coffee-loader',
-                options: { 
-                  transpile: {
-                    presets: ['env']
-                  }
-                }
-            } ]
-        }]
+        // {
+        //     test: /\.coffee$/,
+        //     use: [ {
+        //         loader: 'coffee-loader',
+        //         options: { 
+        //           transpile: {
+        //             presets: ['env']
+        //           }
+        //         }
+        //     }]
+        // }
+        ]
     },
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),

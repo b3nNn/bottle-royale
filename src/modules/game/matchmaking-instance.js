@@ -10,11 +10,24 @@ class MatchmakingInstance {
     }
 
     start() {
+        this.state = 'start';
+    }
+
+    live() {
         this.state = 'live';
     }
 
-    close() {
-        this.state = 'close';
+    end() {
+        this.state = 'end';
+    }
+
+    serialize() {
+        return {
+            matchmakingID: this.ID,
+            state: this.state,
+            playersLimit: this.playersLimit,
+            map: this.map
+        }
     }
 }
 

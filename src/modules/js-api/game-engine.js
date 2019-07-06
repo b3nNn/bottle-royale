@@ -1,4 +1,4 @@
-import GameService from '../../services/game-service';
+import { GameService } from '../../services/game-service';
 
 const GameEngine = client => {
     const engine = GameService.clients.createGameProxy(client);

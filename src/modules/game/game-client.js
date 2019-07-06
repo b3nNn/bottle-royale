@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import nanoid from 'nanoid';
-import GameService from '../../services/game-service';
+import { GameService } from '../../services/game-service';
 
 class GameClient {
     constructor() {
@@ -22,6 +22,14 @@ class GameClient {
 
     log(str, additionnal) {
         console.log(`[${this.longID}] ${str}`, additionnal || '');
+    }
+
+    serialize() {
+        return {
+            clientID: this.ID,
+            longID: this.longID,
+            nickname: this.nickname
+        }
     }
 }
 

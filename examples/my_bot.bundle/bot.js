@@ -9,10 +9,10 @@ client.on('game_found', matchmaking => {
     client.log('game found', client);
     matchmaking.accept(client);
     matchmaking.on('load', () => {
-        client.log('matchmacking loading', matchmaking);
+        client.log('matchmacking loading', matchmaking.serialize());
     });
     matchmaking.on('start', () => {
-        client.log('matchmacking started', matchmaking);
+        client.log('matchmacking started', matchmaking.serialize());
         client.log('location', location);
         client.log('let\'s have some fun');
         game.on('landed', () => {

@@ -1,6 +1,6 @@
 import minimist from 'minimist';
 import _ from 'lodash';
-import GameService from './services/game-service';
+import { GameService, GameCollections } from './services/game-service';
 
 const argv = minimist(process.argv.slice(2));
 let bundles = [];
@@ -11,6 +11,14 @@ const run = async () => {
     } else if (_.isString(argv.bot)) {
         bundles.push(argv.bot);
     }
+
+    console.log('game service init', GameCollections);
+    try {
+        await GameCollections.init();
+    } catch(err) {
+        console.log('game service init err', err);
+    }
+    console.log('game service done');
 
     GameService.game.events.on('start', () => {
         console.log(`matchmaking is now live with ${GameService.matchmaking.getReadyClients().length} player(s)`);

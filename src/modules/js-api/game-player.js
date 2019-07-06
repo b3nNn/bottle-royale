@@ -1,4 +1,4 @@
-import GameService from '../../services/game-service';
+import { GameService } from '../../services/game-service';
 
 const GamePlayer = client => {
     const player = GameService.clients.createPlayer(client);

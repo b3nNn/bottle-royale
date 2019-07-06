@@ -2,7 +2,7 @@ import _ from 'lodash';
 import GameClient from './game-client';
 import GameCollections from './game-collections';
 import GameBehavior from './game-behavior';
-import GameService from '../../services/game-service';
+import { GameService } from '../../services/game-service';
 import GamePlayer from './game-player';
 import GameEventsProxy from './game-events-proxy';
 
@@ -13,20 +13,27 @@ class GameClientService {
         this.sandbox = {};
     }
 
-    createClient(app) {
-        const client = new GameClient();
-        client.ID = this.collections('game.client_identity').uid();
-        this.collections('runtime').push('client_app', {
+    registerClientApp(client, app) {
+        this.collections('runtime').push('app', {
             clientID: client.ID,
             app
+        });
+    }
+
+    createClient() {
+        const client = new GameClient();
+        client.ID = this.collections('game.client').uid();
+        this.collections('game').push('client', {
+            clientID: client.ID,
+            client
         });
         return client;
     }
 
     createBehavior(client) {
         const behavior = new GameBehavior(client);
-        behavior.ID = this.collections('game.client_behavior').uid();
-        this.collections('runtime').push('client_behavior', {
+        behavior.ID = this.collections('game.behavior').uid();
+        this.collections('game').push('behavior', {
             clientID: client.ID,
             behaviorID: behavior.ID,
             behavior
@@ -37,7 +44,7 @@ class GameClientService {
     createPlayer(client) {
         const player = new GamePlayer(client, this.createBehavior(client));
         player.ID = this.collections('game.player').uid();
-        this.collections('runtime').push('client_player', {
+        this.collections('game').push('player', {
             playerID: player.ID,
             clientID: client.ID,
             player
