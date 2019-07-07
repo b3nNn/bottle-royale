@@ -8,7 +8,7 @@ import ClientModulesProvider from '../modules/game/client-modules-provider';
 import RethinkDBPersistHandler from '../modules/io/rethinkdb-persist-handler';
 
 const collections = GameCollections({
-    persistHandlers: []//new RethinkDBPersistHandler()]
+    persistHandlers: [new RethinkDBPersistHandler()]
 });
 const gameService = new GameService(
     collections,
