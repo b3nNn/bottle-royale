@@ -2,7 +2,7 @@ const lootStrategy = require('./loot-strategy');
 
 module.exports = (client, player, game, location) => {
     const strategy = player.behavior.createStrategy('alive-strategy');
-    
+    let counter = 0;
     strategy.on('act', params => {
         strategy.until(['landed'], [
             strategy.once('select-drop-location'),
@@ -15,10 +15,13 @@ module.exports = (client, player, game, location) => {
         });
     });
     strategy.task('select-drop-location', task => {
-        // behavior.client.log('hello from select-drop-location');
+        client.log('hello from select-drop-location');
+        if (++counter > 5) {
+            task.complete();
+        }
     });
     strategy.task('watch-for-enemy', task => {
-        // behavior.client.log('hello from watch-for-enemy');
+        client.log('hello from watch-for-enemy');
     });
     return strategy;
 };

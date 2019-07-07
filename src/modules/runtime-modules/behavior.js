@@ -38,6 +38,7 @@ class Behavior {
             from.name = to.name;
             from.hooks = _.concat(from.hooks, to.hooks);
             from.tasks = _.merge(from.tasks, to.tasks);
+            from.completeTasks = to.completeTasks;
         };
     }
 
