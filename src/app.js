@@ -18,7 +18,7 @@ const run = async () => {
         });
     } catch(err) {
         console.error('fatal error', err);
-        exist(-1);
+        process.exit(-1);
     }
 
     GameService.game.events.on('start', () => {

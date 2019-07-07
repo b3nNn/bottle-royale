@@ -2,6 +2,21 @@ import Player from './player';
 import Behavior from './behavior';
 import ModuleProvider from './module-provider';
 
+const BehaviorProxy = behavior => {
+    const _behavior = behavior;
+
+    const proxy = {
+        createStrategy: name => {
+            return _behavior.createStrategy(name);
+        },
+        while: (tags, strategy, callback) => {
+            return _behavior.while(tags, strategy, callback);
+        }
+    };
+
+    return proxy;
+}
+
 class PlayerModuleProvider extends ModuleProvider {
     constructor(collections) {
         super();
@@ -21,13 +36,14 @@ class PlayerModuleProvider extends ModuleProvider {
 
     createBehavior(client) {
         const behavior = new Behavior(client);
+        const proxy = BehaviorProxy(behavior);
         behavior.ID = this.collections('game.behavior').uid();
         this.collections('game').push('behavior', {
             clientID: client.ID,
             behaviorID: behavior.ID,
             behavior
         });
-        return behavior;
+        return proxy;
     }
 
     get(client) {

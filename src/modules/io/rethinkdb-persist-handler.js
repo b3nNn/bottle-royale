@@ -4,8 +4,6 @@ import { Worker } from 'worker_threads';
 import rethinkdbdash from 'rethinkdbdash';
 import { GameService } from '../../services/game-service';
 
-const r = rethinkdbdash();
-
 const gameWhitelists = [
     'server',
     'client',
@@ -29,15 +27,18 @@ class RethinkDBPersistHandler extends PersistHandler {
         super();
         this.worker = null;
         this.serverID = null;
+        this.r = null;
     }
 
     async init() {
+        this.r = rethinkdbdash();
         this.serverID = GameService.serverID;
         await this.initDatabase();
         await this.initWorker();
     }
 
     async initDatabase() {
+        const r = this.r;
         const dbs = await r.dbList().run();
         if (!dbs.includes('testing')) {
             await r.dbCreate('testing').run();

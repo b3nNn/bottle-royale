@@ -7,10 +7,6 @@ class EventService {
     }
 
     on(event, callback, params) {
-        // const clientID = (callback !== undefined && client.ID !== undefined ? client.ID : undefined);
-        // const e = (callback !== undefined ? event : client);
-        // const fn = (callback !== undefined ? callback : event);
-
         this.collections('runtime').push(this.kind, {
             event,
             callback,
@@ -30,10 +26,8 @@ class EventService {
         });
     }
 
-    raise(event, params) {
-        _.each(this.collections('runtime').kind(this.kind).filter(item => {
-            return item.event == event;
-        }), listener => {
+    fire(event, params) {
+        this.each(event, listener => {
             listener.callback(params);
         });
     }

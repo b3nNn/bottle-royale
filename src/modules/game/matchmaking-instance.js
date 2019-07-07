@@ -1,10 +1,36 @@
 import { GameService } from '../../services/game-service';
 
+const MatchmakingRequestProxy = matchmaking =>  {
+    const proxy = {
+        get state() {
+            return matchmaking.state
+        },
+        get playersLimit() {
+            return matchmaking.playersLimit
+        },
+        get map() {
+            return matchmaking.map
+        },
+        accept: client => {
+            GameService.matchmaking.joinMatchmakingClient(matchmaking, client);
+        },
+        reject: () => {},
+        on: (event, callback, params) => {
+            GameService.matchmaking.events.on(event, callback, params);
+        },
+        raise: (event, params) => {
+            GameService.matchmaking.events.fire(event, params);
+        }
+    };
+    return proxy;
+};
+
 class MatchmakingInstance {
     constructor() {
         this.state = 'init';
         this.playersLimit = 100;
         this.map = null;
+        this.requestProxy = MatchmakingRequestProxy(this);
     }
 
     open() {

@@ -36,10 +36,10 @@ class MatchmackingService {
         });
     }
 
-    joinClient(matchmakingID, clientID) {
+    joinMatchmakingClient(matchmaking, client) {
         this.collections('game').push('client_matchmaking_accept', {
-            clientID,
-            matchmakingID,
+            clientID: client.ID,
+            matchmakingID: matchmaking.ID,
             serverID: GameService.serverID
         });
     }
@@ -49,32 +49,11 @@ class MatchmackingService {
     }
 
     getPlayers() {
-        return _.map(this.collections('game').kind('player', player => readys.includes(player.clientID)), item => {
-            return {
-                ID: item.player.ID,
-                nickname: item.player.client.nickname
-            };
-        });
+        return this.collections('game').filter('player', player => readys.includes(player.clientID));
     }
 
     handleMatchmacking() {
-        let matchmaking;
-
-        GameService.clients.events.each('game_found', listener => {
-            matchmaking = _.merge(this.current, {
-                accept: client => {
-                    this.joinClient(this.current.ID, client.ID);
-                },
-                reject: () => {},
-                on: (event, callback, params) => {
-                    this.events.on(event, callback, params);
-                },
-                raise: (event, params) => {
-                    this.events.raise(event, params);
-                }
-            });
-            listener.callback(matchmaking);
-        });
+        GameService.clients.events.fire('game_found', this.current.requestProxy);
     }
 
     createMatchmacking() {

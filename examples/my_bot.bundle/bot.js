@@ -5,11 +5,12 @@ const game = require('game-events');
 const aliveStrategy = require('./alive-strategy.js');
 
 client.connect("SNK b3n");
+client.log('client connected', JSON.stringify(client));
 client.on('game_found', matchmaking => {
-    client.log('game found', JSON.stringify(client));
+    client.log('game found', JSON.stringify(matchmaking));
     matchmaking.accept(client);
     matchmaking.on('load', () => {
-        client.log('matchmacking loading', matchmaking);
+        client.log('matchmacking loading');
     });
     matchmaking.on('start', () => {
         client.log('matchmacking started', matchmaking);

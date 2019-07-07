@@ -17,12 +17,8 @@ class GameEngine {
 
     start() {
         this.tick.start();
-        GameService.matchmaking.events.each('start', listener => {
-            listener.callback();
-        });
-        this.events.each('matchmaking_start', listener => {
-            listener.callback();
-        });
+        GameService.matchmaking.events.fire('start');
+        this.events.fire('matchmaking_start');
         this.collections('game').kindUpdate('behavior', cli => {
             cli.behavior.addTag('alive');
         });
@@ -32,25 +28,18 @@ class GameEngine {
     update(time) {
         const ms = time.total / 1000;
 
-        GameService.collections('game').kindUpdate('game_player', (gamePlayer) => {
-            
-        });
         if (!this.eventTriggers.landed && ms > this.config.land_delay) {
             this.collections('game').kindUpdate('behavior', cli => {
                 cli.behavior.addTag('landed');
             });
-            this.events.each('landed', listener => {
-                listener.callback();
-            });
+            this.events.fire('landed');
             this.eventTriggers.landed = true;
         } else if (!this.eventTriggers.death && ms > this.config.death_delay) {
             this.tick.stop();
             this.collections('game').kindUpdate('behavior', cli => {
                 cli.behavior.setTags(['landed', 'dead']);
             });
-            this.events.each('death', listener => {
-                listener.callback();
-            });
+            this.events.fire('death');
             this.eventTriggers.death = true;
             this.isRunning = false;
         }

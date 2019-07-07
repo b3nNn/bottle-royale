@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { GameService } from '../../services/game-service';
 
-class GameClientService {
+class ClientService {
     constructor(collection, eventService) {
         this.collections = collection;
         this.events = eventService;
@@ -27,9 +27,6 @@ class GameClientService {
 
     bootstrapMatchmaking() {
         const readys = _.map(GameService.matchmaking.getReadyClients(), item => item.clientID);
-        const matchmaking = {
-            players: GameService.matchmaking.getPlayers()
-        };
         const befors = this.events.filter('before_game_load', listener => readys.includes(listener.params.clientID));
         const afters = this.events.filter('after_game_load', listener => readys.includes(listener.params.clientID));
 
@@ -45,4 +42,4 @@ class GameClientService {
     }
 }
 
-export default GameClientService;
+export default ClientService;
