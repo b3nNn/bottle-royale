@@ -7,7 +7,10 @@ class BotApplication extends ScriptedApplication {
         super(script, path, dir);
         this.client = GameService.clients.createClient();
         GameService.clients.registerClientApp(this.client, this);
-        this.setup(this.client);
+    }
+
+    setup() {
+        this.setupVM(this.client);
     }
 }
 

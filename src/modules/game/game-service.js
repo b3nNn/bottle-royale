@@ -40,15 +40,16 @@ class GameService {
         };
         for (let bundle of bots) {
             try {
+                bundle.apps.bot.setup();
                 await bundle.compile();
             } catch (err) {
+                console.log('errr', err, err.stack);
                 throw new Error(`bundles load error: ${err} at ${bundle.path}`);
             }
         }
     }
 
     async startMatchmaking() {
-        this.clients.setupGameClients();
         this.matchmaking.open();
         this.matchmaking.start();
         this.clients.bootstrapMatchmaking();

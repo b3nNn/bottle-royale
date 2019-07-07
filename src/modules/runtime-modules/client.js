@@ -2,7 +2,7 @@ import _ from 'lodash';
 import nanoid from 'nanoid';
 import { GameService } from '../../services/game-service';
 
-class GameClient {
+class Client {
     constructor() {
         this.longID = nanoid();
         this.nickname = null;
@@ -37,4 +37,4 @@ class GameClient {
     }
 }
 
-export default GameClient;
+export default Client;

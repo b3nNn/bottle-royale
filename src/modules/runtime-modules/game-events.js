@@ -1,6 +1,6 @@
 import { GameService } from '../../services/game-service';
 
-class GameEventsProxy {
+class GameEvents {
     constructor(client) {
         this.client = client;
     }
@@ -15,4 +15,4 @@ class GameEventsProxy {
 
 }
 
-export default GameEventsProxy;
+export default GameEvents;

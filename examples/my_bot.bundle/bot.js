@@ -1,19 +1,19 @@
 const location = require('location');
-const client = require('game-client');
-const player = require('game-player');
-const game = require('game-engine');
+const client = require('client');
+const player = require('player');
+const game = require('game-events');
 const aliveStrategy = require('./alive-strategy.js');
 
 client.connect("SNK b3n");
 client.on('game_found', matchmaking => {
-    client.log('game found', client);
+    client.log('game found', JSON.stringify(client));
     matchmaking.accept(client);
     matchmaking.on('load', () => {
-        client.log('matchmacking loading', matchmaking.serialize());
+        client.log('matchmacking loading', matchmaking);
     });
     matchmaking.on('start', () => {
-        client.log('matchmacking started', matchmaking.serialize());
-        client.log('location', location);
+        client.log('matchmacking started', matchmaking);
+        client.log('location', JSON.stringify(location));
         client.log('let\'s have some fun');
         game.on('landed', () => {
             client.log('landed confirmed');

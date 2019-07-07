@@ -31,6 +31,10 @@ class GameEngine {
 
     update(time) {
         const ms = time.total / 1000;
+
+        GameService.collections('game').kindUpdate('game_player', (gamePlayer) => {
+            
+        });
         if (!this.eventTriggers.landed && ms > this.config.land_delay) {
             this.collections('game').kindUpdate('behavior', cli => {
                 cli.behavior.addTag('landed');

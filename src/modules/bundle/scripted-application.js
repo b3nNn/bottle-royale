@@ -13,7 +13,7 @@ class ScriptedApplication {
         this.vm = null;
     }
 
-    setup(client) {
+    setupVM(client) {
         this.vm = new NodeVM({
             console: 'off',
             sandbox: {},
@@ -21,7 +21,7 @@ class ScriptedApplication {
                 external: true,
                 builtin: ['game-client'],
                 root: this.dir,
-                mock: GameService.clientModules(client)
+                mock: GameService.clientModules.get(client)
             }
         });
     }

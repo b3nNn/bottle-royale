@@ -1,6 +1,6 @@
 import { GameService } from '../../services/game-service';
 
-class GamePlayer {
+class Player {
     constructor(client, behavior) {
         this.client = client;
         this.behavior = behavior;
@@ -16,4 +16,4 @@ class GamePlayer {
     }
 }
 
-export default GamePlayer;
+export default Player;

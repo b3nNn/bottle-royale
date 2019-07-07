@@ -1,10 +1,5 @@
 import _ from 'lodash';
-import GameClient from './game-client';
-import GameCollections from './game-collections';
-import GameBehavior from './game-behavior';
 import { GameService } from '../../services/game-service';
-import GamePlayer from './game-player';
-import GameEventsProxy from './game-events-proxy';
 
 class GameClientService {
     constructor(collection, eventService) {
@@ -21,47 +16,13 @@ class GameClientService {
     }
 
     createClient() {
-        const client = new GameClient();
-        client.ID = this.collections('game.client').uid();
-        this.collections('game').push('client', {
+        const client = {
+            ID: this.collections('runtime.client').uid()
+        };
+        this.collections('runtime').push('client', {
             clientID: client.ID,
-            client
         });
         return client;
-    }
-
-    createBehavior(client) {
-        const behavior = new GameBehavior(client);
-        behavior.ID = this.collections('game.behavior').uid();
-        this.collections('game').push('behavior', {
-            clientID: client.ID,
-            behaviorID: behavior.ID,
-            behavior
-        });
-        return behavior;
-    }
-
-    createPlayer(client) {
-        const player = new GamePlayer(client, this.createBehavior(client));
-        player.ID = this.collections('game.player').uid();
-        this.collections('game').push('player', {
-            playerID: player.ID,
-            clientID: client.ID,
-            player
-        });
-        return player;
-    }
-
-    createGameProxy(client) {
-        const gameProxy = new GameEventsProxy(client);
-        return gameProxy;
-    }
-
-    connectClient(client, nickname) {
-        
-    }
-
-    setupGameClients() {
     }
 
     bootstrapMatchmaking() {

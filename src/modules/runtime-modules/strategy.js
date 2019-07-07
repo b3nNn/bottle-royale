@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-class GameStrategy {
+class Strategy {
     constructor(behavior, name) {
         this.behavior = behavior;
         this.name = name;
@@ -78,4 +78,4 @@ class GameStrategy {
     }
 }
 
-export default GameStrategy;
+export default Strategy;
