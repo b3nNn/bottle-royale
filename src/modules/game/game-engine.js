@@ -1,24 +1,51 @@
 import _ from 'lodash';
+import Clock from '../../components/clock';
+import { GameService } from '../../services/game-service';
 
 class GameEngine {
-    constructor(collections) {
+    constructor(collections, eventService, stormService) {
         this.collections = collections;
+        this.events = eventService;
+        this.config = {
+            land_delay: 30000,
+            death_delay: 90000
+        };
+        this.tick = new Clock();
+        this.eventTriggers = {};
+        this.storm = stormService;
+        this.isRunning = false;
     }
 
     start() {
-        _.each(this.collections('game').kind('client_behavior'), cli => {
+        this.tick.start();
+        GameService.matchmaking.events.fire('start');
+        this.events.fire('matchmaking_start');
+        this.collections('game').kindUpdate('behavior', cli => {
             cli.behavior.addTag('alive');
         });
-        setTimeout(() => {
-            _.each(this.collections('game').kind('client_behavior'), cli => {
+        this.storm.start();
+        this.isRunning = true;
+    }
+
+    update(time) {
+        const ms = time.total / 1000;
+
+        this.storm.update(time);
+        if (!this.eventTriggers.landed && ms > this.config.land_delay) {
+            this.collections('game').kindUpdate('behavior', cli => {
                 cli.behavior.addTag('landed');
             });
-        }, 3000);
-        setTimeout(() => {
-            _.each(this.collections('game').kind('client_behavior'), cli => {
+            this.events.fire('landed');
+            this.eventTriggers.landed = true;
+        } else if (!this.eventTriggers.death && ms > this.config.death_delay) {
+            this.tick.stop();
+            this.collections('game').kindUpdate('behavior', cli => {
                 cli.behavior.setTags(['landed', 'dead']);
             });
-        }, 6000);
+            this.events.fire('death');
+            this.eventTriggers.death = true;
+            this.isRunning = false;
+        }
     }
 }
 

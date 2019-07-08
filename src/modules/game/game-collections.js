@@ -1,10 +1,15 @@
 import _ from 'lodash';
 
-const GameCollections = () => {
+const GameCollections = options => {
+    const persistHandlers = options.persistHandlers || [];
     const collections = [];
     const ids = {};
 
-    const proxy = (collection) => {
+    const proxyBuilder = (collection) => {
+        const updateItem = (kind, entry) => {
+            _.each(persistHandlers, handler => handler.update(collection, kind, entry));
+        };
+
         return {
             uid: () => {
                 if (!ids[collection]) {
@@ -13,10 +18,11 @@ const GameCollections = () => {
                 return ++ids[collection];
             },
             push: (kind, entry) => {
-                collections.push(_.merge(entry, {
+                collections.push(_.merge({
                     collection: collection,
                     kind: kind
-                }))
+                }, entry));
+                _.each(persistHandlers, handler => handler.push(collection, kind, entry));
             },
             kind: kind => {
                 return _.reduce(collections, (acc, item) => {
@@ -26,6 +32,18 @@ const GameCollections = () => {
                     return acc;
                 }, []);
             },
+            kindUpdate: (kind, callback) => {
+                const all = _.reduce(collections, (acc, item) => {
+                    if (item.collection === collection && item.kind === kind) {
+                        acc.push(item);
+                    }
+                    return acc;
+                }, []);
+                _.each(all, item => {
+                    callback(item);
+                    updateItem(kind, item);
+                });
+            },
             filter: (kind, filter) => {
                 return _.reduce(collections, (acc, item) => {
                     if (item.collection === collection && item.kind === kind && filter(item) === true) {
@@ -33,6 +51,25 @@ const GameCollections = () => {
                     }
                     return acc;
                 }, []);
+            },
+            filterOne: (kind, filter, callback) => {
+                const res = _.reduce(collections, (acc, item) => {
+                    if (item.collection === collection && item.kind === kind && filter(item) === true) {
+                        acc.push(item);
+                    }
+                    return acc;
+                }, []);
+                callback(res.length === 0 ? null : res[0]);
+            },
+            filterOneUpdate: (kind, filter, callback) => {
+                const res = _.reduce(collections, (acc, item) => {
+                    if (item.collection === collection && item.kind === kind && filter(item) === true) {
+                        acc.push(item);
+                    }
+                    return acc;
+                }, []);
+                callback(res.length === 0 ? null : res[0]);
+                updateItem(kind, res.length === 0 ? null : res[0]);
             },
             all: () => {
                 return _.reduce(collections, (acc, item) => {
@@ -45,7 +82,12 @@ const GameCollections = () => {
         };
     };
 
-    return proxy;
+    proxyBuilder.init = async () => {
+        for (let handler of persistHandlers) {
+            await handler.init()
+        }
+    }
+    return proxyBuilder;
 }
 
 export default GameCollections;

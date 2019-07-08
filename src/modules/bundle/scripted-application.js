@@ -1,4 +1,5 @@
-import GameService from '../../services/game-service';
+import _ from 'lodash';
+import { GameService } from '../../services/game-service';
 
 const { NodeVM, VMScript } = require('vm2');
 
@@ -9,18 +10,18 @@ class ScriptedApplication {
         this.script = script;
         this.compiled = null;
         this.runtime = null;
+        this.vm = null;
+    }
+
+    setupVM(client) {
         this.vm = new NodeVM({
-            console: 'inherit',
-            sandbox: GameService.sandbox,
+            console: 'off',
+            sandbox: {},
             require: {
                 external: true,
-                builtin: ['path'],
+                builtin: ['game-client'],
                 root: this.dir,
-                mock: {
-                    fs: {
-                        readFileSync() { return 'Nice try!'; }
-                    }
-                }
+                mock: GameService.clientModules.get(client)
             }
         });
     }
@@ -29,8 +30,7 @@ class ScriptedApplication {
         return new Promise((resolve, reject) => {
             try {
                 this.compiled = new VMScript(this.script);
-                this.runtime = this.vm.run(this.compiled, this.path);
-                this.loadRuntime(this.runtime);
+                this.vm.run(this.compiled, this.path);
                 resolve(this);
             } catch (err) {
                 console.error('Failed to compile script.', this.path, err);
@@ -39,7 +39,19 @@ class ScriptedApplication {
         });
     }
 
-    loadRuntime(runtime) {}
+    toScriptingError(err) {
+        let result;
+        const matches = err.stack.match(/\(vm.js:[0-9]+:[0-9]+\)/g);
+
+        if (!matches) {
+            result = err;
+        } else {
+            const latest = matches.pop();
+            const script = `${this.path}`;
+            result = `${_.split(err.stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
+        }
+        return result;
+    }
 }
 
 
