@@ -107,15 +107,22 @@ client.on('game_found', matchmaking => {
 ### Gameplay events
 
 ```javascript
+const client = require('client');
+const player = require('player');
 const game = require('game-events');
 
-game.on('landed', () => {
-    client.log('landed confirmed');
+client.connect("SNK b3n");
+client.on('game_found', matchmaking => {
+    matchmaking.accept(client);
+    matchmaking.on('start', () => {
+        game.on('landed', () => {
+            client.log('landed confirmed');
+        });
+        game.on('death', () => {
+            client.log('death confirmed');
+        });
+    });
 });
-game.on('death', () => {
-    client.log('death confirmed');
-});
-
 ```
 
 > More coming next...
