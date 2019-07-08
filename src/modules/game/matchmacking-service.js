@@ -6,33 +6,33 @@ class MatchmackingService {
     constructor(collections, eventService) {
         this.collections = collections;
         this.events = eventService;
-        this.current = null;
+        this.instance = null;
     }
 
     open() {
-        this.current = this.createMatchmacking();
-        this.current.open();
+        this.instance = this.createMatchmacking();
+        this.instance.open();
         this.handleMatchmacking();
     }
 
     start() {
-        this.current.start();
-        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.current.ID, matchmaking => {
-            matchmaking.matchmaking.state = this.current.state;
+        this.instance.start();
+        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.instance.ID, matchmaking => {
+            matchmaking.matchmaking.state = this.instance.state;
         });
     }
 
     live() {
-        this.current.live();
-        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.current.ID, matchmaking => {
-            matchmaking.matchmaking.state = this.current.state;
+        this.instance.live();
+        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.instance.ID, matchmaking => {
+            matchmaking.matchmaking.state = this.instance.state;
         });
     }
 
     end() {
-        this.current.end();
-        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.current.ID, matchmaking => {
-            matchmaking.matchmaking.state = this.current.state;
+        this.instance.end();
+        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.instance.ID, matchmaking => {
+            matchmaking.matchmaking.state = this.instance.state;
         });
     }
 
@@ -45,7 +45,7 @@ class MatchmackingService {
     }
 
     getReadyClients() {
-        return this.collections('game').filter('client_matchmaking_accept', item => item.matchmakingID === this.current.ID);
+        return this.collections('game').filter('client_matchmaking_accept', item => item.matchmakingID === this.instance.ID);
     }
 
     getPlayers() {
@@ -53,13 +53,14 @@ class MatchmackingService {
     }
 
     handleMatchmacking() {
-        GameService.clients.events.fire('game_found', this.current.requestProxy);
+        GameService.clients.events.fire('game_found', this.instance.requestProxy);
     }
 
     createMatchmacking() {
         const matchmaking = new MatchmakingInstance();
         matchmaking.ID = this.collections('game.matchmaking').uid();
         this.collections('game').push('matchmaking', {
+            serverID: GameService.serverID,
             matchmakingID: matchmaking.ID,
             matchmaking
         });

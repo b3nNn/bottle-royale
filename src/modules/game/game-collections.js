@@ -86,7 +86,6 @@ const GameCollections = options => {
         for (let handler of persistHandlers) {
             await handler.init()
         }
-        console.log('GameCollections init done');    
     }
     return proxyBuilder;
 }

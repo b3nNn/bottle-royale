@@ -1,5 +1,6 @@
 import Client from './client';
 import ModuleProvider from './module-provider';
+import { GameService } from '../../services/game-service';
 
 class ClientModuleProvider extends ModuleProvider {
     constructor(collections) {
@@ -11,6 +12,7 @@ class ClientModuleProvider extends ModuleProvider {
         const client = new Client();
         client.ID = cli.ID;
         this.collections('game').push('client', {
+            serverID: GameService.serverID,
             clientID: client.ID,
             client
         });

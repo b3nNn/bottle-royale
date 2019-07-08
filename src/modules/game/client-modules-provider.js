@@ -3,6 +3,7 @@ import ClientModuleProvider from '../runtime-modules/client-module-provider';
 import PlayerModuleProvider from '../runtime-modules/player-module-provider';
 import PlayerLocationModuleProvider from '../runtime-modules/player-location-module-provider';
 import GameEventsModuleProvider from '../runtime-modules/game-events-module-provider';
+import StormModuleProvider from '../runtime-modules/storm-module-provider';
 
 class ClientModulesProvider {
     constructor(collections) {
@@ -11,7 +12,8 @@ class ClientModulesProvider {
             new ClientModuleProvider(collections),
             new PlayerModuleProvider(collections),
             new PlayerLocationModuleProvider(collections),
-            new GameEventsModuleProvider(collections)
+            new GameEventsModuleProvider(collections),
+            new StormModuleProvider(collections)
         ];
     }
 

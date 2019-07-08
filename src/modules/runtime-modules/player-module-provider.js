@@ -1,6 +1,7 @@
 import Player from './player';
 import Behavior from './behavior';
 import ModuleProvider from './module-provider';
+import { GameService } from '../../services/game-service';
 
 const BehaviorProxy = behavior => {
     const _behavior = behavior;
@@ -27,6 +28,7 @@ class PlayerModuleProvider extends ModuleProvider {
         const player = new Player(client, this.createBehavior(client));
         player.ID = this.collections('game.player').uid();
         this.collections('game').push('player', {
+            serverID: GameService.serverID,
             playerID: player.ID,
             clientID: client.ID,
             player
@@ -39,6 +41,7 @@ class PlayerModuleProvider extends ModuleProvider {
         const proxy = BehaviorProxy(behavior);
         behavior.ID = this.collections('game.behavior').uid();
         this.collections('game').push('behavior', {
+            serverID: GameService.serverID,
             clientID: client.ID,
             behaviorID: behavior.ID,
             behavior

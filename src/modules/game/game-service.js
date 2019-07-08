@@ -60,9 +60,7 @@ class GameService {
         }
         await this.mainLoop();
         this.matchmaking.end();
-        this.game.events.each('matchmaking_ended', listener => {
-            listener.callback();
-        });
+        this.game.events.fire('matchmaking_end');
     }
 
     async mainLoop() {

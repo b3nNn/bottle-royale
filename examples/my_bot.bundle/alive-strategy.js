@@ -15,13 +15,13 @@ module.exports = (client, player, game, location) => {
         });
     });
     strategy.task('select-drop-location', task => {
-        client.log('hello from select-drop-location');
+        // client.log('hello from select-drop-location');
         if (++counter > 5) {
             task.complete();
         }
     });
     strategy.task('watch-for-enemy', task => {
-        client.log('hello from watch-for-enemy');
+        // client.log('hello from watch-for-enemy');
     });
     return strategy;
 };

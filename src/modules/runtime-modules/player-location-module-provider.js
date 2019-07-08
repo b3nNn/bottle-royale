@@ -1,5 +1,6 @@
 import PlayerLocation from './player-location';
 import ModuleProvider from './module-provider';
+import { GameService } from '../../services/game-service';
 
 const PlayerLocationProxy = gamePlayerLocation => {
     const location = gamePlayerLocation;
@@ -23,6 +24,7 @@ class PlayerLocationModuleProvider extends ModuleProvider {
         const location = new PlayerLocation(client);
         location.ID = this.collections('game.player_location').uid();
         this.collections('game').push('player_location', {
+            serverID: GameService.serverID,
             locationID: location.ID,
             clientID: client.ID,
             location
