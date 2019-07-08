@@ -1,7 +1,8 @@
 import _ from 'lodash';
-import GameStrategy from './game-strategy';
+import Strategy from './strategy';
+import { GameService } from '../../services/game-service';
 
-class GameBehavior {
+class Behavior {
     constructor(client) {
         this.client = client;
         this.strategies = {};
@@ -24,7 +25,7 @@ class GameBehavior {
     }
 
     createStrategy(name) {
-        const strategy = new GameStrategy(this, name);
+        const strategy = new Strategy(this, name);
         if (this.strategies[name] !== undefined) {
             this.strategies[name] = strategy;
         }
@@ -37,6 +38,7 @@ class GameBehavior {
             from.name = to.name;
             from.hooks = _.concat(from.hooks, to.hooks);
             from.tasks = _.merge(from.tasks, to.tasks);
+            from.completeTasks = to.completeTasks;
         };
     }
 
@@ -57,7 +59,7 @@ class GameBehavior {
             return acc;
         }, []), hook => {
             // console.log('behavior update', this.client.ID, this.tags);
-            if (hook.strategy instanceof GameStrategy) {
+            if (hook.strategy instanceof Strategy) {
                 // console.log('while', _.values(hook.tags), hook.strategy.running, hook.fullFill, this.hasTags(hook.tags));
                 if (this.hasTags(hook.tags)) {
                     if (!hook.strategy.running) {
@@ -71,6 +73,16 @@ class GameBehavior {
             }
         });
     }
+
+    serialize() {
+        return {
+            serverID: GameService.serverID,
+            behaviorID: this.ID,
+            clientID: this.client.ID,
+            tags: this.tags,
+            strategies: []
+        };
+    }
 }
 
-export default GameBehavior;
+export default Behavior;
