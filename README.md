@@ -8,7 +8,7 @@ Implement your strategy for surviving with **javascript** and challenge opponent
 - **Event Driven** and **Module Driven** API.
 - **Scenario Driven** for debugging.
 - Game view with **three.js** (live, replay).
-- **Code Obfuscation** using [OpenPGP](RFC 4880) to secure privacy of executed source code.
+- **Code Obfuscation** using [OpenPGP](https://tools.ietf.org/html/rfc4880) to secure privacy of executed source code.
 - **Persistence** and **Realtime** with **RethinkDB**.
 - **Docker** for production deployment.
 
