@@ -1,13 +1,15 @@
-# 🚧🚧 (DRAFT) Bottle Royale - A Battle Royale Arena for JS Bots 🚧🚧
+# 🚧🚧 (DRAFT) Bottle Royale - A Battle Royale Arena for JS Programming Challenges 🚧🚧
 
 
 Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.
 
 # Features
 - Up to **100 bots** per game scripted with **javascript**.
-- **Event driven** client API and **scenario driven** for debugging.
+- **Event Driven** and **Module Driven** API.
+- **Scenario Driven** for debugging.
 - Game view with **three.js** (live, replay).
-- Data persistence with **RethinkDB**.
+- **Code Obfuscation** using [OpenPGP](https://tools.ietf.org/html/rfc4880) to secure privacy of executed source code.
+- **Persistence** and **Realtime** with **RethinkDB**.
 - **Docker** for production deployment.
 
 # Guides
@@ -50,18 +52,74 @@ export  default {
 ### Minimalist bot
 
 ```javascript
-const client = require('game-client');
-const player = require('game-player');
+const client = require('client');
+const player = require('player');
 
-client.connect("foo_bar");
+client.connect("SNK b3n");
 client.on('game_found', matchmaking => {
-    client.log('game found', client);
     matchmaking.accept(client);
-    matchmaking.on('load', () => {
+    matchmaking.on('start', () => {
         const strategy = player.behavior.createStrategy('empty-strategy');
-    
+        
         player.behavior.while(['alive'], strategy, () => {
             client.log('WTF i\'m dead too');
+        });
+    });
+});
+```
+
+### Location
+
+```javascript
+const location = require('location');
+const client = require('client');
+
+client.connect("SNK b3n");
+client.on('game_found', matchmaking => {
+    matchmaking.on('start', () => {
+        client.log('my current location is', location);
+    });
+});
+```
+
+### Storm phases detection
+
+```javascript
+const storm = require('storm');
+const client = require('client');
+
+client.connect("SNK b3n");
+client.on('game_found', matchmaking => {
+    matchmaking.on('start', () => {
+        storm.on('prepare', storm => {
+            client.log('the storm is preparing');
+        });
+        storm.on('stay', storm => {
+            client.log('the storm is staying');
+        });
+        storm.on('move', storm => {
+            client.log('the storm is moving');
+        });
+    });
+});
+```
+
+### Gameplay events
+
+```javascript
+const client = require('client');
+const player = require('player');
+const game = require('game-events');
+
+client.connect("SNK b3n");
+client.on('game_found', matchmaking => {
+    matchmaking.accept(client);
+    matchmaking.on('start', () => {
+        game.on('landed', () => {
+            client.log('landed confirmed');
+        });
+        game.on('death', () => {
+            client.log('death confirmed');
         });
     });
 });
