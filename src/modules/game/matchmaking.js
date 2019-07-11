@@ -25,7 +25,7 @@ const MatchmakingRequestProxy = matchmaking =>  {
     return proxy;
 };
 
-class MatchmakingInstance {
+class Matchmaking {
     constructor() {
         this.state = 'init';
         this.playersLimit = 100;
@@ -60,4 +60,4 @@ class MatchmakingInstance {
     }
 }
 
-export default MatchmakingInstance;
+export default Matchmaking;

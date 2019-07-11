@@ -10,7 +10,7 @@ const ClientStormProxy = storm =>  {
     return proxy;
 };
 
-class StormInstance {
+class Storm {
     constructor() {
         this.state = 'init';
         this.level = 0;
@@ -38,4 +38,4 @@ class StormInstance {
     }
 }
 
-export default StormInstance;
+export default Storm;

@@ -36,9 +36,11 @@ class PlayerLocationModuleProvider extends ModuleProvider {
         const location = this.createPlayerLocation(client);
         const proxy = PlayerLocationProxy(location);
 
-        return {
-            'location': proxy
-        };
+        return proxy;
+    }
+
+    getName() {
+        return 'location';
     }
 }
 

@@ -9,9 +9,11 @@ class GameEventsModuleProvider extends ModuleProvider {
     get(client) {
         const events = new GameEvents(client);
 
-        return {
-            'game-events': events
-        }
+        return events;
+    }
+
+    getName() {
+        return 'game';
     }
 }
 

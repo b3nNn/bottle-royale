@@ -3,6 +3,13 @@ import { GameService } from '../../services/game-service';
 
 const { NodeVM, VMScript } = require('vm2');
 
+const modules = {
+    'location': process.cwd() + '/src/modules/runtime-modules/player-location.js',
+    'player': process.cwd() + '/src/modules/runtime-modules/player.js',
+    'client': process.cwd() + '/src/modules/runtime-modules/client.js',
+    'game-events': process.cwd() + '/src/modules/runtime-modules/game-events.js',
+    'storm-events': process.cwd() + '/src/modules/runtime-modules/storm.js',
+}
 class ScriptedApplication {
     constructor(script, path, dir) {
         this.path = path;
@@ -16,14 +23,31 @@ class ScriptedApplication {
     setupVM(client) {
         this.vm = new NodeVM({
             console: 'off',
-            sandbox: {},
+            // sandbox: GameService.clientModules.get(client),
             require: {
-                external: true,
-                builtin: ['game-client'],
-                root: this.dir,
-                mock: GameService.clientModules.get(client)
+                external: {
+                    modules: [
+                        'location',
+                        'player',
+                        'client',
+                        'game-events',
+                        'storm-events'
+                    ]
+                },
+                builtin: ['*'],
+                import: ['game-events'],
+                // root: this.dir,
+                resolve: (name, params) => {
+                    console.log('test resolve', name, modules[name]);
+                    if (modules[name]) {
+                        return modules[name];
+                    }
+                    // console.log('test resolve', name, __dirname + '/../runtime-modules/player-location.js');
+                    // return __dirname + '/../runtime-modules/player-location.js';
+                }
             }
         });
+        this.vm.run("require('location')", __filename + '/../runtime-modules/player-location.js');
     }
 
     compile() {

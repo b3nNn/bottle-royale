@@ -4,6 +4,7 @@ class Player {
     constructor(client, behavior) {
         this.client = client;
         this.behavior = behavior;
+        this.vehicule = null;
     }
 
     serialize() {
@@ -11,7 +12,8 @@ class Player {
             serverID: GameService.serverID,
             playerID: this.ID,
             clientID: this.client.ID,
-            behaviorID: this.behavior.ID
+            behaviorID: this.behavior.ID,
+            vehicule: this.vehicule
         };
     }
 }

@@ -36,9 +36,11 @@ class StormModuleProvider extends ModuleProvider {
     get(client) {
         const storm = StormProxy(this.createStorm(client));
 
-        return {
-            'storm': storm
-        }
+        return storm;
+    }
+
+    getName() {
+        return 'storm';
     }
 }
 

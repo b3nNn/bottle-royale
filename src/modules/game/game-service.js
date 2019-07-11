@@ -8,13 +8,12 @@ import { GameCollections } from '../../services/game-service';
 const framerate = (1000000 / 100);
 
 class GameService {
-    constructor(collections, clientService, matchmakingService, gameEngine, clientModules) {
+    constructor(collections, clientService, matchmakingService, gameEngine) {
         this.serverID;
         this.collections = collections;
         this.clients = clientService;
         this.matchmaking = matchmakingService;
         this.game = gameEngine;
-        this.clientModules = clientModules;
         this.lastTick = null;
         this.debugTick = new ClockTick(5000000);
         this.matchmakingBehaviors = [];

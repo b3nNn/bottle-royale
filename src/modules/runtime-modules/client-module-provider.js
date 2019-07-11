@@ -22,9 +22,11 @@ class ClientModuleProvider extends ModuleProvider {
     get(cli) {
         const client = this.createClient(cli);
 
-        return {
-            'client': client
-        }
+        return client;
+    }
+
+    getName() {
+        return 'client';
     }
 }
 

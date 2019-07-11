@@ -3,7 +3,7 @@ import Clock from '../../components/clock';
 import { GameService } from '../../services/game-service';
 
 class GameEngine {
-    constructor(collections, eventService, stormService) {
+    constructor(collections, eventService, stormService, vehiculeService) {
         this.collections = collections;
         this.events = eventService;
         this.config = {
@@ -13,10 +13,17 @@ class GameEngine {
         this.tick = new Clock();
         this.eventTriggers = {};
         this.storm = stormService;
+        this.vehicules = vehiculeService;
         this.isRunning = false;
     }
 
     start() {
+        const travelPlane = this.vehicules.createTravelPlane();
+        const players = GameService.matchmaking.getPlayers();
+        _.each(players, (player, idx) => {
+            travelPlane.enterPlayer(idx, player.player);
+        });
+        // travelPlane.addPlayers(GameService.matchmaking.getPlayers());
         this.tick.start();
         GameService.matchmaking.events.fire('start');
         this.events.fire('matchmaking_start');
