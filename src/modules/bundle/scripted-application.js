@@ -1,7 +1,5 @@
 import _ from 'lodash';
 import { GameService } from '../../services/game-service';
-import AppRootPath from 'app-root-path';
-import BattleRoyaleNamespace from '../game/battle-royale-namespace';
 import { NodeVM, VMScript } from 'vm2';
 
 class ScriptedApplication {
@@ -16,8 +14,6 @@ class ScriptedApplication {
     }
 
     setupVM(client) {
-        const rootPath = AppRootPath;
-
         this.namespace = GameService.battleRoyaleNamespace.get(client);
         this.vm = new NodeVM({
             console: 'inherit',
@@ -26,8 +22,8 @@ class ScriptedApplication {
                 br: this.namespace
             },
             require: {
-                external: false,
-                root: `${rootPath}/dist/modules`,
+                external: true,
+                root: this.dir,
             }
         });
     }

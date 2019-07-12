@@ -10,7 +10,7 @@ import VehiculeService from '../modules/game/vehicule-service';
 import BattleRoyaleNamespace from '../modules/game/battle-royale-namespace';
 
 const collections = GameCollections({
-    persistHandlers: []//new RethinkDBPersistHandler()]
+    persistHandlers: [new RethinkDBPersistHandler()]
 });
 const gameService = new GameService(
     collections,

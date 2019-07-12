@@ -8,6 +8,8 @@ const gameWhitelists = [
     'server',
     'client',
     'player',
+    'player_location',
+    'storm',
     'behavior',
     'matchmaking',
     'client_matchmaking_accept'
@@ -17,17 +19,21 @@ const tableOptions = {
     'server': { primaryKey: 'id' },
     'client': { primaryKey: 'id' },
     'player': { primaryKey: 'id' },
+    'player_location': { primaryKey: 'id' },
+    'storm': { primaryKey: 'id' },
     'behavior': { primaryKey: 'id' },
     'matchmaking': { primaryKey: 'id' },
     'client_matchmaking_accept': { primaryKey: 'id' },
 };
 
 class RethinkDBPersistHandler extends PersistHandler {
-    constructor() {
+    constructor(options) {
+        const opts = options || {};
         super();
         this.worker = null;
         this.serverID = null;
         this.r = null;
+        this.debug = opts.debug;
     }
 
     async init() {
@@ -92,7 +98,9 @@ class RethinkDBPersistHandler extends PersistHandler {
                     })}`);
                 }
             }
-            // console.log('[RethinkDB] create', collection, kind, obj);
+            if (this.debug) {
+                console.log('[RethinkDB] create', collection, kind, obj);
+            }
         }
     }
 
@@ -111,7 +119,9 @@ class RethinkDBPersistHandler extends PersistHandler {
                     })}`);
                 }
             }
-            // console.log('[RethinkDB] update', collection, kind, obj);
+            if (this.debug) {
+                console.log('[RethinkDB] update', collection, kind, obj);
+            }
         }
     }
 
