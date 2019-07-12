@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import Player from './player';
 import Behavior from './behavior';
-import ModuleProvider from './module-provider';
+import ModuleFactory from './module-provider';
 import { GameService } from '../../services/game-service';
+import PlayerProxy from './player-proxy';
 
 const BehaviorProxy = behavior => {
     const _behavior = behavior;
@@ -19,36 +20,7 @@ const BehaviorProxy = behavior => {
     return proxy;
 }
 
-function PlayerClientProxy(player) {
-    const authorisedKeys = ['ID', 'behavior', 'vehicule', 'test_ID'];
-    const handler = {
-        get(obj, prop) {
-            console.log('proxy get', prop);
-            if (_.includes(authorisedKeys, prop)) {
-                return obj[prop];
-            }
-        },
-        set(obj, prop, value, receiver) {
-            console.log('proxy set', prop, value);
-            // throw new Error('module \'player\' is read only');
-            return true;
-        },
-        // defineProperty: (target, key, descriptor) => {
-        //     console.log('proxy defineProperty', key, descriptor);
-        //     // throw new Error('player module is read-only.')
-        //     return true;
-        // },
-        ownKeys: () => {
-            console.log('proxy ownKeys');
-            return authorisedKeys;
-        }
-    };
-    let proxy = new Proxy(player, handler);
-    // console.log('PROXY IS ', proxy.handler);
-    return proxy;
-}
-
-class PlayerModuleProvider extends ModuleProvider {
+class PlayerFactory extends ModuleFactory {
     constructor(collections) {
         super();
         this.collections = collections;
@@ -80,15 +52,10 @@ class PlayerModuleProvider extends ModuleProvider {
     }
 
     get(client) {
-        const player = this.createPlayer(client);
-        const playerClientProxy = PlayerClientProxy(player);
+        const playerClientProxy = PlayerProxy(client, this);
 
         return playerClientProxy;
     }
-
-    getName() {
-        return 'player';
-    }
 }
 
-export default PlayerModuleProvider;
+export default PlayerFactory;

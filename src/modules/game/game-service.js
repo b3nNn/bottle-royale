@@ -8,7 +8,7 @@ import { GameCollections } from '../../services/game-service';
 const framerate = (1000000 / 100);
 
 class GameService {
-    constructor(collections, clientService, matchmakingService, gameEngine) {
+    constructor(collections, clientService, matchmakingService, gameEngine, battleRoyaleNamespace) {
         this.serverID;
         this.collections = collections;
         this.clients = clientService;
@@ -17,6 +17,7 @@ class GameService {
         this.lastTick = null;
         this.debugTick = new ClockTick(5000000);
         this.matchmakingBehaviors = [];
+        this.battleRoyaleNamespace = battleRoyaleNamespace;
     }
 
     async init(options) {
@@ -28,6 +29,7 @@ class GameService {
             serverID: this.serverID,
             host: opts.host || undefined
         });
+        this.battleRoyaleNamespace.init();
     }
 
     async loadBundles(bundles) {
@@ -42,8 +44,7 @@ class GameService {
                 bundle.apps.bot.setup();
                 await bundle.compile();
             } catch (err) {
-                console.log('errr', err, err.stack);
-                throw new Error(`bundles load error: ${err} at ${bundle.path}`);
+                throw err;
             }
         }
     }

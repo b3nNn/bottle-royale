@@ -1,3 +1,5 @@
+'user strict'
+
 import _ from 'lodash';
 import nanoid from 'nanoid';
 import { GameService } from '../../services/game-service';

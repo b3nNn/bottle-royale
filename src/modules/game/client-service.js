@@ -33,9 +33,7 @@ class ClientService {
         _.each(befors, listener => {
             listener.callback(matchmaking);
         });
-        GameService.matchmaking.events.each('load', listener => {
-            listener.callback();
-        });
+        GameService.matchmaking.events.fire('load');
         _.each(afters, listener => {
             listener.callback(matchmaking);
         });

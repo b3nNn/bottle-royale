@@ -1,17 +1,19 @@
-'use strict'
+// const location = require('location');
 
-const location = require('location');
-const Client = require('client');
-const player = require('player');
-const GameEvents = require('game-events');
-const aliveStrategy = require('./alive-strategy.js');
-const StormEvents = require('storm-events');
+console.log('location test', br.Client);
+// const Client = require('client');
+// const player = require('player');
+// const GameEvents = require('game-events');
+// const aliveStrategy = require('./alive-strategy.js');
+// const StormEvents = require('storm-events');
 
-const client = new Client();
-const storm = new StormEvents();
-const game = new GameEvents();
-console.log('TEST 42 4242');
-console.log('test 42', client);
+// console.log('TEST 42 4242');
+// console.log('test 42', require('client'));
+const location = new br.PlayerLocation();
+const client = new br.Client();
+const storm = new br.StormEvents();
+const game = new br.GameEvents();
+const player = new br.Player();
 client.connect("SNK b3n");
 client.log('client connected', JSON.stringify(client));
 client.on('game_found', matchmaking => {

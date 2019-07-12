@@ -1,15 +1,9 @@
 import _ from 'lodash';
 import { GameService } from '../../services/game-service';
+import AppRootPath from 'app-root-path';
+import BattleRoyaleNamespace from '../game/battle-royale-namespace';
+import { NodeVM, VMScript } from 'vm2';
 
-const { NodeVM, VMScript } = require('vm2');
-
-const modules = {
-    'location': process.cwd() + '/src/modules/runtime-modules/player-location.js',
-    'player': process.cwd() + '/src/modules/runtime-modules/player.js',
-    'client': process.cwd() + '/src/modules/runtime-modules/client.js',
-    'game-events': process.cwd() + '/src/modules/runtime-modules/game-events.js',
-    'storm-events': process.cwd() + '/src/modules/runtime-modules/storm.js',
-}
 class ScriptedApplication {
     constructor(script, path, dir) {
         this.path = path;
@@ -18,36 +12,24 @@ class ScriptedApplication {
         this.compiled = null;
         this.runtime = null;
         this.vm = null;
+        this.namespace = null;
     }
 
     setupVM(client) {
+        const rootPath = AppRootPath;
+
+        this.namespace = GameService.battleRoyaleNamespace.get(client);
         this.vm = new NodeVM({
-            console: 'off',
-            // sandbox: GameService.clientModules.get(client),
+            console: 'inherit',
+            sandbox: {
+                GameService,
+                br: this.namespace
+            },
             require: {
-                external: {
-                    modules: [
-                        'location',
-                        'player',
-                        'client',
-                        'game-events',
-                        'storm-events'
-                    ]
-                },
-                builtin: ['*'],
-                import: ['game-events'],
-                // root: this.dir,
-                resolve: (name, params) => {
-                    console.log('test resolve', name, modules[name]);
-                    if (modules[name]) {
-                        return modules[name];
-                    }
-                    // console.log('test resolve', name, __dirname + '/../runtime-modules/player-location.js');
-                    // return __dirname + '/../runtime-modules/player-location.js';
-                }
+                external: false,
+                root: `${rootPath}/dist/modules`,
             }
         });
-        this.vm.run("require('location')", __filename + '/../runtime-modules/player-location.js');
     }
 
     compile() {
@@ -57,22 +39,25 @@ class ScriptedApplication {
                 this.vm.run(this.compiled, this.path);
                 resolve(this);
             } catch (err) {
-                console.error('Failed to compile script.', this.path, err);
-                reject(err);
+                const scriptError = this.toScriptingError(err);
+                reject(scriptError);
             }
         });
     }
 
     toScriptingError(err) {
         let result;
-        const matches = err.stack.match(/\(vm.js:[0-9]+:[0-9]+\)/g);
+        const stack = err.stack;
+        const matches = (stack === undefined ? null : err.stack.match(/\(vm.js:[0-9]+:[0-9]+\)/g));
 
         if (!matches) {
             result = err;
         } else {
-            const latest = matches.pop();
+            result = new Error();
+            // const latest = matches.pop();
             const script = `${this.path}`;
-            result = `${_.split(err.stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
+            result.stack = stack.replace(/vm.js/g, script);
+            // result.stack = `${_.split(stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
         }
         return result;
     }
