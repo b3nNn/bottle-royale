@@ -1,5 +1,4 @@
-# 🚧🚧 Bottle Royale - A Battle Royale Arena for JS Programming Challenges 🚧🚧
-
+# 🚧🚧 (DRAFT) Bottle Royale - A Battle Royale Arena for JS Programming Challenges 🚧🚧
 
 Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.
 
