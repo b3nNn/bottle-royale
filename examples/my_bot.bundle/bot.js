@@ -14,19 +14,19 @@ client.on('game_found', matchmaking => {
         client.log('matchmacking loading');
     });
     matchmaking.on('start', () => {
-        client.log('matchmacking loading', JSON.stringify(matchmaking));
+        client.log('matchmacking loading');
         storm.on('prepare', storm => {
-            client.log('the storm prepare', JSON.stringify(storm));
+            client.log('the storm prepare');
         });
         storm.on('stay', storm => {
-            client.log('the storm stay', JSON.stringify(storm));
+            client.log('the storm stay');
         });
         storm.on('move', storm => {
-            client.log('the storm move', JSON.stringify(storm));
+            client.log('the storm move');
         });
         player._ID = 42;
-        client.log(`matchmacking started`, JSON.stringify(player));
-        client.log('location', JSON.stringify(location));
+        client.log(`matchmacking started`);
+        client.log('location', location);
         client.log('let\'s have some fun', player.vehicule);
         game.on('landed', () => {
             client.log('landed confirmed');

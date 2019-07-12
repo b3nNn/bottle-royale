@@ -3,7 +3,7 @@ import Clock from '../../components/clock';
 import { GameService } from '../../services/game-service';
 
 class GameEngine {
-    constructor(collections, eventService, stormService, vehiculeService) {
+    constructor(collections, eventService, stormService, vehiculeService, mapService) {
         this.collections = collections;
         this.events = eventService;
         this.config = {
@@ -14,6 +14,7 @@ class GameEngine {
         this.eventTriggers = {};
         this.storm = stormService;
         this.vehicules = vehiculeService;
+        this.map = mapService;
         this.isRunning = false;
     }
 

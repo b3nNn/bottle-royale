@@ -15,7 +15,7 @@ module.exports = (client, player, game, location) => {
         });
     });
     strategy.task('select-drop-location', task => {
-        // client.log('hello from select-drop-location');
+        // client.log('hello from select-drop-location', player.vehicule);
         if (++counter > 5) {
             task.complete();
         }

@@ -8,6 +8,7 @@ import RethinkDBPersistHandler from '../modules/io/rethinkdb-persist-handler';
 import StormService from '../modules/game/storm-service';
 import VehiculeService from '../modules/game/vehicule-service';
 import BattleRoyaleNamespace from '../modules/game/battle-royale-namespace';
+import MapService from '../modules/game/map-service';
 
 const collections = GameCollections({
     persistHandlers: [new RethinkDBPersistHandler()]
@@ -19,7 +20,8 @@ const gameService = new GameService(
     new GameEngine(collections,
         new EventService(collections, 'game_listener'),
         new StormService(collections, new EventService(collections, 'storm_listener')),
-        new VehiculeService(collections)),
+        new VehiculeService(collections),
+        new MapService(collections)),
         new BattleRoyaleNamespace(collections)
     );
 export { gameService as GameService, collections as GameCollections };
