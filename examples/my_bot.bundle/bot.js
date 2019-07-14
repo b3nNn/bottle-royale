@@ -14,7 +14,6 @@ client.on('game_found', matchmaking => {
         client.log('matchmacking loading');
     });
     matchmaking.on('start', () => {
-        client.log('matchmacking loading');
         storm.on('prepare', storm => {
             client.log('the storm prepare');
         });

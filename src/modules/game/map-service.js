@@ -1,7 +1,7 @@
 class MapService {
     constructor(collections) {
         this.collections = collections;
-        this.dropTravel = null;
+        this.dropTravelPath = null;
         this.worldSize = { x: 1000.0, y: 1000.0};
         this.generateDropTravelPath();
     }

@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import Clock from '../../components/clock';
 import { GameService } from '../../services/game-service';
+import { GameObject } from './game-object';
 
 class GameEngine {
-    constructor(collections, eventService, stormService, vehiculeService, mapService) {
+    constructor(collections, eventService, stormService, vehiculesService, mapService, gameObjectService) {
         this.collections = collections;
         this.events = eventService;
         this.config = {
@@ -13,18 +14,25 @@ class GameEngine {
         this.tick = new Clock();
         this.eventTriggers = {};
         this.storm = stormService;
-        this.vehicules = vehiculeService;
+        this.vehicules = vehiculesService;
         this.map = mapService;
+        this.go = gameObjectService;
         this.isRunning = false;
     }
 
-    start() {
+    initMap () {
         const travelPlane = this.vehicules.createTravelPlane();
+        const planeGO = GameObject.instantiate(travelPlane);
+        planeGO.transform.setPosition(this.map.dropTravelPath.start.x, this.map.dropTravelPath.start.y, 0);
+        planeGO.transform.setRotation(this.map.dropTravelPath.vector.x, this.map.dropTravelPath.vector.y, 0);
         const players = GameService.matchmaking.getPlayers();
         _.each(players, (player, idx) => {
             travelPlane.enterPlayer(idx, player.player);
         });
-        // travelPlane.addPlayers(GameService.matchmaking.getPlayers());
+    }
+
+    start() {
+        this.initMap();
         this.tick.start();
         GameService.matchmaking.events.fire('start');
         this.events.fire('matchmaking_start');
@@ -39,6 +47,7 @@ class GameEngine {
         const ms = time.total / 1000;
 
         this.storm.update(time);
+        this.go.update(time);
         if (!this.eventTriggers.landed && ms > this.config.land_delay) {
             this.collections('game').kindUpdate('behavior', cli => {
                 cli.behavior.addTag('landed');

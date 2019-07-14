@@ -9,10 +9,13 @@ import StormService from '../modules/game/storm-service';
 import VehiculeService from '../modules/game/vehicule-service';
 import BattleRoyaleNamespace from '../modules/game/battle-royale-namespace';
 import MapService from '../modules/game/map-service';
+import GameObjectService from '../modules/game/game-object-service';
 
 const collections = GameCollections({
     persistHandlers: [new RethinkDBPersistHandler()]
 });
+const gameObjectService = new GameObjectService(collections);
+
 const gameService = new GameService(
     collections,
     new ClientService(collections, new EventService(collections, 'client_listener')),
@@ -21,7 +24,8 @@ const gameService = new GameService(
         new EventService(collections, 'game_listener'),
         new StormService(collections, new EventService(collections, 'storm_listener')),
         new VehiculeService(collections),
-        new MapService(collections)),
+        new MapService(collections),
+        gameObjectService),
         new BattleRoyaleNamespace(collections)
     );
 export { gameService as GameService, collections as GameCollections };
