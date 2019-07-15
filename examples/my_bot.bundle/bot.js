@@ -25,7 +25,6 @@ client.on('game_found', matchmaking => {
         });
         client.log(`matchmacking started`);
         client.log('location', location);
-        client.log('let\'s have some fun', player.vehicule);
         game.on('landed', () => {
             client.log('landed confirmed');
         });

@@ -14,7 +14,7 @@ const run = async () => {
 
     try {
         await GameService.init({
-            debug: false,
+            debug: true,
             host: argv.host || 'localhost'
         });
     } catch(err) {
@@ -34,7 +34,6 @@ const run = async () => {
     } catch (err) {
         console.error('fatal error', err);
     }
-    // console.log('collections', GameService.collections('game').all());
 };
 
 run();
