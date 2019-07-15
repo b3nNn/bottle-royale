@@ -15,6 +15,16 @@ class TravelPlane extends Vehicule {
             };
         }
     }
+
+    exitPlayer(player) {
+        if (player instanceof Player) {
+            const idx = _.findIndex(this.seatSlots, slot => slot.ID === player.ID);
+            if (idx >= 0) {
+                this.seatSlots.splice(idx, 1);
+            }
+            player.vehicule = null;
+        }
+    }
 }
 
 export default TravelPlane;

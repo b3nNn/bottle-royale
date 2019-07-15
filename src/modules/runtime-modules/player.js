@@ -7,6 +7,10 @@ class Player {
         this.vehicule = null;
     }
 
+    action(name, params) {
+        return GameService.game.execPlayerAction(this, name, params);
+    }
+
     serialize() {
         return {
             serverID: GameService.serverID,

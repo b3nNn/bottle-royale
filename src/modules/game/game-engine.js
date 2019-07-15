@@ -9,7 +9,6 @@ class GameEngine {
         this.collections = collections;
         this.events = eventService;
         this.config = {
-            land_delay: toSeconds(30),
             death_delay: toMinutes(5)
         };
         this.tick = new Clock();
@@ -34,6 +33,27 @@ class GameEngine {
         });
     }
 
+    execPlayerAction(player, action, params) {
+        let vehicule;
+        switch (action) {
+            case 'eject': {
+                if (player.vehicule && player.vehicule.exitPlayer) {
+                    vehicule = player.vehicule;
+                    player.gameObject.transform.position = _.clone(vehicule.gameObject.transform.position);
+                    player.gameObject.parent = null;
+                    vehicule.exitPlayer(player);
+                    this.collections('game').filterOneUpdate('behavior', be => be.behaviorID === player.behavior.ID, cli => {
+                        cli.behavior.addTag('landed');
+                    });
+                    this.events.fireFilter('landed', listener => listener.params.clientID === player.client.ID);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
     start() {
         this.initMap();
         this.go.start();
@@ -52,13 +72,7 @@ class GameEngine {
 
         this.storm.update(time);
         this.go.update(time);
-        if (!this.eventTriggers.landed && ms > this.config.land_delay) {
-            this.collections('game').kindUpdate('behavior', cli => {
-                cli.behavior.addTag('landed');
-            });
-            this.events.fire('landed');
-            this.eventTriggers.landed = true;
-        } else if (!this.eventTriggers.death && ms > this.config.death_delay) {
+        if (!this.eventTriggers.death && ms > this.config.death_delay) {
             this.tick.stop();
             this.collections('game').kindUpdate('behavior', cli => {
                 cli.behavior.setTags(['landed', 'dead']);

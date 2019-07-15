@@ -24,20 +24,24 @@ class GameObjectService {
             gameObject: go
         });
         this.sceneActives.push(go);
+        baseInstance.gameObject = go;
         return go;
     }
 
     start() {}
 
     update(time) {
+        _.each(this.collections('game').filter('game_object', go => go.gameObject.active === true), go => this.updateGameObject(time, go.gameObject));
         this.transformUpdateTick.each(() => {
             this.collections('game').filterUpdate('game_object', go => go.gameObject.active === true, go => this.updateGameObject(time, go.gameObject));
         });
         this.debugTick.each(() => {
-            console.log(`scene actives: ${this.sceneActives.length}`);
-            // _.each(this.sceneActives, go => {
-            //     console.log('-', go.name, go.transform.getPosition());
-            // });
+            if (GameService.debug) {
+                console.log(`scene actives: ${this.sceneActives.length}`);
+                _.each(this.sceneActives, go => {
+                    console.log('-', go.name, go.transform.getWorldPosition());
+                });
+            }
         });
     }
 
@@ -46,9 +50,9 @@ class GameObjectService {
 
         if (gameObject.instance instanceof Vehicule) {
             t.velocity = gameObject.instance.toSpeedMS();
-        }
-        if (t) {
-            t.position = t.position.add(t.rotation.x(t.velocity * Seconds(time.elapsed)));
+            if (t) {
+                t.position = t.position.add(t.rotation.x(t.velocity * Seconds(time.elapsed)));
+            }
         }
     }
 }

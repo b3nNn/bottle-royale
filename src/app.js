@@ -14,6 +14,7 @@ const run = async () => {
 
     try {
         await GameService.init({
+            debug: false,
             host: argv.host || 'localhost'
         });
     } catch(err) {

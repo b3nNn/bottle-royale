@@ -26,7 +26,9 @@ class Client {
     }
 
     log(str, additionnal) {
-        // console.log(`[bot-cli:${this.longID}] ${str}`, additionnal || '');
+        if (GameService.debug) {
+            console.log(`[client:${this.longID}] ${str}`, additionnal || '');
+        }
     }
 
     serialize() {

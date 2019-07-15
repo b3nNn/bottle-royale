@@ -10,6 +10,7 @@ const framerate = toSeconds(1 / 10);
 
 class GameService {
     constructor(collections, clientService, matchmakingService, gameEngine, battleRoyaleNamespace) {
+        this.debug;
         this.serverID;
         this.collections = collections;
         this.clients = clientService;
@@ -24,6 +25,7 @@ class GameService {
     async init(options) {
         const opts = options || {};
 
+        this.debug = opts.debug;
         this.serverID = nanoid();
         await GameCollections.init();
         this.collections('game').push('server', {
@@ -84,7 +86,6 @@ class GameService {
             time.prefs.usage = (time.prefs.updateTime / time.framerate) * 100;
             await this.update(time);
             time.prefs.updateTime = (this.game.tick.getElapsed() - now);
-            // console.log('loop usage:', usage);
             if (time.prefs.updateTime < time.framerate) {
                 await sleep((time.framerate - time.prefs.updateTime) / 1000);
             }
@@ -96,7 +97,9 @@ class GameService {
         this.game.update(time);
         this.updateBehaviors(time);
         this.debugTick.each(() => {
-            console.log('loop time:', Math.round(time.prefs.updateTime), 'usage:', `${Math.round(time.prefs.usage)}%`, 'total:', Math.round(time.total / 1000000));
+            if (this.debug) {
+                console.log('loop time:', Math.round(time.prefs.updateTime), 'usage:', `${Math.round(time.prefs.usage)}%`, 'total:', Math.round(time.total / 1000000));
+            }
         });
     }
 

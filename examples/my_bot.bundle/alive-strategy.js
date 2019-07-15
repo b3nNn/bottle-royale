@@ -2,7 +2,7 @@ const lootStrategy = require('./loot-strategy');
 
 module.exports = (client, player, game, location) => {
     const strategy = player.behavior.createStrategy('alive-strategy');
-    let counter = 0;
+    let counter = Math.round(Math.random() * 300);
     strategy.on('act', params => {
         strategy.until(['landed'], [
             strategy.once('select-drop-location'),
@@ -16,7 +16,8 @@ module.exports = (client, player, game, location) => {
     });
     strategy.task('select-drop-location', task => {
         // client.log('hello from select-drop-location', player.vehicule);
-        if (++counter > 5) {
+        if (--counter <= 0) {
+            player.action('eject');
             task.complete();
         }
     });

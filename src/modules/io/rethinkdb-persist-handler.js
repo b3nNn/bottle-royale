@@ -103,10 +103,10 @@ class RethinkDBPersistHandler extends PersistHandler {
     constructor(options) {
         const opts = options || {};
         super();
+        this.debug = opts.debug;
         this.worker = null;
         this.serverID = null;
         this.r = null;
-        this.debug = opts.debug;
         this.tableOpts = null;
     }
 
@@ -157,7 +157,7 @@ class RethinkDBPersistHandler extends PersistHandler {
                 this.worker = new Worker('./src/modules/io/rethinkdb-worker.js', { workerData: { serverID: this.serverID} });
                 this.worker.on('message', msg => {
                     const cmd = msg.split(' ').pop();
-                    
+
                     switch (cmd) {
                         case 'ready': {
                             resolve();

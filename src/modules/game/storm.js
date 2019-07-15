@@ -14,7 +14,7 @@ class Storm {
     constructor() {
         this.state = 'init';
         this.level = 0;
-        this.beginDelay = 10000000;
+        this.beginDelay = 60000000;
         this.prepareDelay = 5000000;
         this.stayDelay = 10000000;
         this.moveDelay = 5000000;

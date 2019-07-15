@@ -7,13 +7,15 @@ class ClockTick {
         this.lastTick = microtime.now();
     }
 
-    each(callback) {
+    each(callback, otherwise) {
         const now = microtime.now();
         const elapsed = now - this.lastTick;
 
         if (elapsed >= this.delay) {
             callback();
             this.lastTick = now;
+        } else if (otherwise) {
+            otherwise();
         }
     }
 }
