@@ -1,11 +1,11 @@
-const location = require('location');
-const client = require('client');
-const player = require('player');
-const game = require('game-events');
 const aliveStrategy = require('./alive-strategy.js');
-const storm = require('storm');
+const location = new br.PlayerLocation();
+const client = new br.Client();
+const storm = new br.StormEvents();
+const game = new br.GameEvents();
+const player = new br.Player();
 
-client.connect("SNK b3n");
+client.connect("SNK citizendotexe");
 client.log('client connected', JSON.stringify(client));
 client.on('game_found', matchmaking => {
     client.log('game found', JSON.stringify(matchmaking));
@@ -15,17 +15,16 @@ client.on('game_found', matchmaking => {
     });
     matchmaking.on('start', () => {
         storm.on('prepare', storm => {
-            client.log('the storm prepare', JSON.stringify(storm));
+            client.log('the storm prepare');
         });
         storm.on('stay', storm => {
-            client.log('the storm stay', JSON.stringify(storm));
+            client.log('the storm stay');
         });
         storm.on('move', storm => {
-            client.log('the storm move', JSON.stringify(storm));
+            client.log('the storm move');
         });
-        client.log('matchmacking started', matchmaking);
-        client.log('location', JSON.stringify(location));
-        client.log('let\'s have some fun');
+        client.log(`matchmacking started`);
+        client.log('location', location);
         game.on('landed', () => {
             client.log('landed confirmed');
         });

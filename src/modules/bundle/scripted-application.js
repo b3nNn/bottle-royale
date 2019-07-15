@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { GameService } from '../../services/game-service';
-
-const { NodeVM, VMScript } = require('vm2');
+import { NodeVM, VMScript } from 'vm2';
 
 class ScriptedApplication {
     constructor(script, path, dir) {
@@ -11,17 +10,20 @@ class ScriptedApplication {
         this.compiled = null;
         this.runtime = null;
         this.vm = null;
+        this.namespace = null;
     }
 
     setupVM(client) {
+        this.namespace = GameService.battleRoyaleNamespace.get(client);
         this.vm = new NodeVM({
-            console: 'off',
-            sandbox: {},
+            console: 'inherit',
+            sandbox: {
+                GameService,
+                br: this.namespace
+            },
             require: {
                 external: true,
-                builtin: ['game-client'],
                 root: this.dir,
-                mock: GameService.clientModules.get(client)
             }
         });
     }
@@ -33,22 +35,25 @@ class ScriptedApplication {
                 this.vm.run(this.compiled, this.path);
                 resolve(this);
             } catch (err) {
-                console.error('Failed to compile script.', this.path, err);
-                reject(err);
+                const scriptError = this.toScriptingError(err);
+                reject(scriptError);
             }
         });
     }
 
     toScriptingError(err) {
         let result;
-        const matches = err.stack.match(/\(vm.js:[0-9]+:[0-9]+\)/g);
+        const stack = err.stack;
+        const matches = (stack === undefined ? null : err.stack.match(/\(vm.js:[0-9]+:[0-9]+\)/g));
 
         if (!matches) {
             result = err;
         } else {
-            const latest = matches.pop();
+            result = new Error();
+            // const latest = matches.pop();
             const script = `${this.path}`;
-            result = `${_.split(err.stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
+            result.stack = stack.replace(/vm.js/g, script);
+            // result.stack = `${_.split(stack, latest).shift()}${latest}`.replace(/vm.js/g, script);
         }
         return result;
     }

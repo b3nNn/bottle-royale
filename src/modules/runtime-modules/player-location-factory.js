@@ -1,20 +1,9 @@
 import PlayerLocation from './player-location';
-import ModuleProvider from './module-provider';
+import ModuleFactory from './module-factory';
 import { GameService } from '../../services/game-service';
+import PlayerLocationProxy from './player-location-proxy';
 
-const PlayerLocationProxy = gamePlayerLocation => {
-    const location = gamePlayerLocation;
-
-    const proxy = {
-        get region() {
-            return location.region;
-        }
-    };
-
-    return proxy;
-}
-
-class PlayerLocationModuleProvider extends ModuleProvider {
+class PlayerLocationFactory extends ModuleFactory {
     constructor(collections) {
         super();
         this.collections = collections;
@@ -33,13 +22,8 @@ class PlayerLocationModuleProvider extends ModuleProvider {
     }
 
     get(client) {
-        const location = this.createPlayerLocation(client);
-        const proxy = PlayerLocationProxy(location);
-
-        return {
-            'location': proxy
-        };
+        return PlayerLocationProxy(client, this);
     }
 }
 
-export default PlayerLocationModuleProvider;
+export default PlayerLocationFactory;

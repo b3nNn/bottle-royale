@@ -1,8 +1,9 @@
 import Client from './client';
-import ModuleProvider from './module-provider';
+import ModuleFactory from './module-factory';
 import { GameService } from '../../services/game-service';
+import ClientProxy from './client-proxy';
 
-class ClientModuleProvider extends ModuleProvider {
+class ClientModuleFactory extends ModuleFactory {
     constructor(collections) {
         super();
         this.collections = collections;
@@ -21,11 +22,9 @@ class ClientModuleProvider extends ModuleProvider {
 
     get(cli) {
         const client = this.createClient(cli);
-
-        return {
-            'client': client
-        }
+        const proxy = ClientProxy(client, this);
+        return proxy;
     }
 }
 
-export default ClientModuleProvider;
+export default ClientModuleFactory;

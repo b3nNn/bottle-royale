@@ -1,46 +1,56 @@
 const { parentPort, workerData } = require('worker_threads');
 const r = require('rethinkdbdash')();
-
+const { parse } = require('flatted/cjs');
 const serverID = workerData.serverID;
 
 const run = async () => {
     parentPort.postMessage('ready');
-    parentPort.on('message', msg => {
-        const cmd = msg.split(' ')[0];
-        const params = JSON.parse(msg.slice(cmd.length + 1));
+    parentPort.on('message', async msg => {
+        const idx = msg.indexOf(' ');
+        const cmd = msg.substr(0, idx);
+        const params = parse(msg.substr(idx + 1));
+        // console.log('TEST', cmd, params.kind, params.model);
         switch (cmd) {
             case 'insert': {
-                r.db('testing').table(params.kind).insert(params.model).run();
+                await r.db('testing').table(params.kind).insert(params.model).run();
                 break;
             }
             case 'update': {
                 let filter;
+                let getAll;
                 switch(params.kind) {
                     case 'client': {
-                        filter = {
-                            clientID: params.model.clientID,
-                            serverID
+                        getAll = {
+                            index: 'remote_id',
+                            params: [serverID, params.model.clientID]
                         };
                         break;
                     }
                     case 'matchmaking': {
-                        filter = {
-                            matchmakingID: params.model.matchmakingID,
-                            serverID
+                        getAll = {
+                            index: 'remote_id',
+                            params: [serverID, params.model.matchmakingID]
                         };
                         break;
                     }
                     case 'behavior': {
-                        filter = {
-                            behaviorID: params.model.behaviorID,
-                            serverID
+                        getAll = {
+                            index: 'remote_id',
+                            params: [serverID, params.model.behaviorID]
                         };
                         break;
                     }
                     case 'player': {
-                        filter = {
-                            playerID: params.model.playerID,
-                            serverID
+                        getAll = {
+                            index: 'remote_id',
+                            params: [serverID, params.model.playerID]
+                        };
+                        break;
+                    }
+                    case 'game_object': {
+                        getAll = {
+                            index: 'remote_id',
+                            params: [serverID, params.model.gameObjectID]
                         };
                         break;
                     }
@@ -52,7 +62,9 @@ const run = async () => {
                         break;
                 }
                 if (filter) {
-                    r.db('testing').table(params.kind).filter(filter).update(params.model).run();
+                    await r.db('testing').table(params.kind).filter(filter).update(params.model).run();
+                } else if (getAll) {
+                    await r.db('testing').table(params.kind).getAll(getAll.params, {index: getAll.index}).update(params.model).run();
                 }
                 break;
             }

@@ -32,6 +32,12 @@ class EventService {
         });
     }
 
+    fireFilter(event, filter, params) {
+        _.each(this.filter(event, filter), listener => {
+            listener.callback(params);
+        });
+    }
+
     filter(event, filter) {
         return _.reduce(this.collections('runtime').kind(this.kind), (acc, item) => {
             if (item.event == event && filter(item) === true) {

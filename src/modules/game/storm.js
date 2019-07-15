@@ -10,11 +10,11 @@ const ClientStormProxy = storm =>  {
     return proxy;
 };
 
-class StormInstance {
+class Storm {
     constructor() {
         this.state = 'init';
         this.level = 0;
-        this.beginDelay = 10000000;
+        this.beginDelay = 60000000;
         this.prepareDelay = 5000000;
         this.stayDelay = 10000000;
         this.moveDelay = 5000000;
@@ -36,6 +36,13 @@ class StormInstance {
     levelUp() { 
         this.level++;
     }
+
+    serialize() {
+        return {
+            state: this.state,
+            level: this.level
+        };
+    }
 }
 
-export default StormInstance;
+export default Storm;

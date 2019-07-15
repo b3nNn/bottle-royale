@@ -1,6 +1,5 @@
 # 🚧🚧 (DRAFT) Bottle Royale - A Battle Royale Arena for JS Programming Challenges 🚧🚧
 
-
 Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.
 
 # Features
@@ -24,12 +23,13 @@ Provide your scripts which use the **JS API** inside a bundle **directory**. See
 ### Start a match
 Start a match by running the start command:
 ```sh
-npm run start -- --bot examples/my_bot.bundle --bot examples/foo_bar.bundle
+npm run watch:app -- --bot examples/my_bot.bundle --bot examples/foo_bar.bundle
 ```
 or with a game configuration file:
 ```sh
-npm run start -- --bot examples/my_bot.bundle --bot examples/foo_bar.bundle --config game.config.js
+npm run watch:app -- --bot examples/my_bot.bundle --bot examples/foo_bar.bundle --config game.config.js
 ```
+Display logs using `--debug` and/or `--debug-persistence` parameters.
 
 ### Game Configuration
 
@@ -52,10 +52,10 @@ export  default {
 ### Minimalist bot
 
 ```javascript
-const client = require('client');
-const player = require('player');
+const client = new br.Client();
+const player = new br.Player();
 
-client.connect("SNK b3n");
+client.connect("SNK citizendotexe");
 client.on('game_found', matchmaking => {
     matchmaking.accept(client);
     matchmaking.on('start', () => {
@@ -71,10 +71,10 @@ client.on('game_found', matchmaking => {
 ### Location
 
 ```javascript
-const location = require('location');
-const client = require('client');
+const client = new br.Client();
+const location = new br.PlayerLocation();
 
-client.connect("SNK b3n");
+client.connect("SNK citizendotexe");
 client.on('game_found', matchmaking => {
     matchmaking.on('start', () => {
         client.log('my current location is', location);
@@ -85,10 +85,10 @@ client.on('game_found', matchmaking => {
 ### Storm phases detection
 
 ```javascript
-const storm = require('storm');
-const client = require('client');
+const client = new br.Client();
+const storm = new br.StormEvents();
 
-client.connect("SNK b3n");
+client.connect("SNK citizendotexe");
 client.on('game_found', matchmaking => {
     matchmaking.on('start', () => {
         storm.on('prepare', storm => {
@@ -107,11 +107,10 @@ client.on('game_found', matchmaking => {
 ### Gameplay events
 
 ```javascript
-const client = require('client');
-const player = require('player');
-const game = require('game-events');
+const client = new br.Client();
+const game = new br.GameEvents();
 
-client.connect("SNK b3n");
+client.connect("SNK citizendotexe");
 client.on('game_found', matchmaking => {
     matchmaking.accept(client);
     matchmaking.on('start', () => {

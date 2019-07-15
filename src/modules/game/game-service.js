@@ -4,31 +4,37 @@ import BotBundleLoader from '../bundle/bot-bundle-loader';
 import sleep from '../../components/sleep';
 import ClockTick from '../../components/clock-tick';
 import { GameCollections } from '../../services/game-service';
+import { toSeconds } from './time';
 
-const framerate = (1000000 / 100);
+const framerate = toSeconds(1 / 10);
 
 class GameService {
-    constructor(collections, clientService, matchmakingService, gameEngine, clientModules) {
+    constructor(collections, clientService, matchmakingService, gameEngine, battleRoyaleNamespace) {
+        this.debug;
+        this.debugPersistence;
         this.serverID;
         this.collections = collections;
         this.clients = clientService;
         this.matchmaking = matchmakingService;
         this.game = gameEngine;
-        this.clientModules = clientModules;
         this.lastTick = null;
         this.debugTick = new ClockTick(5000000);
         this.matchmakingBehaviors = [];
+        this.battleRoyaleNamespace = battleRoyaleNamespace;
     }
 
     async init(options) {
         const opts = options || {};
 
+        this.debug = opts.debug;
+        this.debugPersistence = opts.debugPersistence;
         this.serverID = nanoid();
-        await GameCollections.init();
+        await GameCollections.init(opts);
         this.collections('game').push('server', {
             serverID: this.serverID,
             host: opts.host || undefined
         });
+        this.battleRoyaleNamespace.init();
     }
 
     async loadBundles(bundles) {
@@ -43,8 +49,7 @@ class GameService {
                 bundle.apps.bot.setup();
                 await bundle.compile();
             } catch (err) {
-                console.log('errr', err, err.stack);
-                throw new Error(`bundles load error: ${err} at ${bundle.path}`);
+                throw err;
             }
         }
     }
@@ -83,7 +88,6 @@ class GameService {
             time.prefs.usage = (time.prefs.updateTime / time.framerate) * 100;
             await this.update(time);
             time.prefs.updateTime = (this.game.tick.getElapsed() - now);
-            // console.log('loop usage:', usage);
             if (time.prefs.updateTime < time.framerate) {
                 await sleep((time.framerate - time.prefs.updateTime) / 1000);
             }
@@ -95,7 +99,9 @@ class GameService {
         this.game.update(time);
         this.updateBehaviors(time);
         this.debugTick.each(() => {
-            console.log('loop time:', Math.round(time.prefs.updateTime), 'usage:', `${Math.round(time.prefs.usage)}%`, 'total:', Math.round(time.total / 1000000));
+            if (this.debug) {
+                console.log('loop time:', Math.round(time.prefs.updateTime), 'usage:', `${Math.round(time.prefs.usage)}%`, 'total:', Math.round(time.total / 1000000));
+            }
         });
     }
 

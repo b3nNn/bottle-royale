@@ -1,4 +1,4 @@
-import StormInstance from './storm-instance';
+import Storm from './storm';
 import { GameService } from '../../services/game-service';
 
 class StormService {
@@ -64,7 +64,7 @@ class StormService {
     }
 
     createStorm() {
-        const storm = new StormInstance();
+        const storm = new Storm();
         storm.ID = this.collections('game.storm').uid();
         this.collections('game').push('storm', {
             serverID: GameService.serverID,
