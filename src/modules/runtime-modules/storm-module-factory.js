@@ -11,7 +11,7 @@ class StormModuleFactory extends ModuleFactory {
 
     createStorm(client) {
         const storm = new Storm(client);
-        this.collections('game').push('storm', {
+        this.collections('game').push('storm_events', {
             serverID: GameService.serverID,
             clientID: client.ID,
             storm

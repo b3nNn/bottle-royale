@@ -22,10 +22,10 @@ const run = async () => {
     }
 
     GameService.game.events.on('matchmaking_start', () => {
-        console.log(`matchmaking is now live with ${GameService.matchmaking.getReadyClients().length} player(s)`);
+        console.log(`[server:${GameService.serverID}] matchmaking is now live with ${GameService.matchmaking.getReadyClients().length} player(s)`);
     });
     GameService.game.events.on('matchmaking_end', () => {
-        console.log(`matchmaking is finished after ${GameService.game.tick.getElapsed() / 1000000}s`);
+        console.log(`[server:${GameService.serverID}] matchmaking is finished after ${GameService.game.tick.getElapsed() / 1000000}s`);
     });
     try {
         await GameService.loadBundles(bundles);

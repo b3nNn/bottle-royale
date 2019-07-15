@@ -26,7 +26,7 @@ class Client {
     }
 
     log(str, additionnal) {
-        console.log(`[${this.longID}] ${str}`, additionnal || '');
+        // console.log(`[bot-cli:${this.longID}] ${str}`, additionnal || '');
     }
 
     serialize() {

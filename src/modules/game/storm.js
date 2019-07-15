@@ -36,6 +36,13 @@ class Storm {
     levelUp() { 
         this.level++;
     }
+
+    serialize() {
+        return {
+            state: this.state,
+            level: this.level
+        };
+    }
 }
 
 export default Storm;

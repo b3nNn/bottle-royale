@@ -2,14 +2,15 @@ import _ from 'lodash';
 import Clock from '../../components/clock';
 import { GameService } from '../../services/game-service';
 import { GameObject } from './game-object';
+import { toSeconds, toMinutes } from './time';
 
 class GameEngine {
     constructor(collections, eventService, stormService, vehiculesService, mapService, gameObjectService) {
         this.collections = collections;
         this.events = eventService;
         this.config = {
-            land_delay: 30000,
-            death_delay: 90000
+            land_delay: toSeconds(30),
+            death_delay: toMinutes(5)
         };
         this.tick = new Clock();
         this.eventTriggers = {};
@@ -35,6 +36,7 @@ class GameEngine {
 
     start() {
         this.initMap();
+        this.go.start();
         this.tick.start();
         GameService.matchmaking.events.fire('start');
         this.events.fire('matchmaking_start');

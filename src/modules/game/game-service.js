@@ -4,8 +4,9 @@ import BotBundleLoader from '../bundle/bot-bundle-loader';
 import sleep from '../../components/sleep';
 import ClockTick from '../../components/clock-tick';
 import { GameCollections } from '../../services/game-service';
+import { toSeconds } from './time';
 
-const framerate = (1000000 / 100);
+const framerate = toSeconds(1 / 10);
 
 class GameService {
     constructor(collections, clientService, matchmakingService, gameEngine, battleRoyaleNamespace) {

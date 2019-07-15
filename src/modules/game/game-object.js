@@ -10,7 +10,7 @@ class Transform {
         this.rotation = Vector.create([0, 0, 0]);
     }
 
-    getPosition() {
+    getWorldPosition() {
         if (this.go.parent) {
             return this.go.parent.transform.position.add(this.position);
         } else {
@@ -25,6 +25,15 @@ class Transform {
     setRotation(x, y, z) {
         this.rotation = Vector.create([x, y, z]);
     }
+
+    serialize() {
+        return {
+            velocity: this.velocity,
+            worldPosition: this.getWorldPosition(),
+            localPosition: this.position,
+            rotation: this.rotation
+        };
+    }
 }
 
 class GameObject {
@@ -35,11 +44,24 @@ class GameObject {
         this.transform = new Transform(this);
         this.instance = baseInstance;
         this.parent = parent;
-        console.log('GAMEOBJECT', baseInstance, t, this.name);
     }
 
     static instantiate(baseInstance) {
         return GameService.game.go.createGameObject(baseInstance);
+    }
+
+    destroy() {
+        GameService.game.go.destroyGameObject(this);
+    }
+
+    serialize() {
+        return {
+            gameObjectID: this.ID,
+            serverID: GameService.serverID,
+            name: this.name,
+            active: this.active,
+            transform: this.transform.serialize()
+        };
     }
 }
 

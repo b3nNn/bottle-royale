@@ -52,6 +52,20 @@ const GameCollections = options => {
                     return acc;
                 }, []);
             },
+            filterUpdate: (kind, filter, callback) => {
+                const res = _.reduce(collections, (acc, item) => {
+                    if (item.collection === collection && item.kind === kind && filter(item) === true) {
+                        acc.push(item);
+                    }
+                    return acc;
+                }, []);
+                _.each(res, item => {
+                    if (callback) {
+                        callback(item);
+                    }
+                    updateItem(kind, item);
+                });
+            },
             filterOne: (kind, filter, callback) => {
                 const res = _.reduce(collections, (acc, item) => {
                     if (item.collection === collection && item.kind === kind && filter(item) === true) {

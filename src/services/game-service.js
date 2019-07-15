@@ -12,7 +12,7 @@ import MapService from '../modules/game/map-service';
 import GameObjectService from '../modules/game/game-object-service';
 
 const collections = GameCollections({
-    persistHandlers: [new RethinkDBPersistHandler()]
+    persistHandlers: [new RethinkDBPersistHandler({debug: false})]
 });
 const gameObjectService = new GameObjectService(collections);
 
