@@ -12,7 +12,6 @@ const run = async () => {
         bundles.push(argv.bot);
     }
 
-    console.log('TEST', argv);
     try {
         await GameService.init({
             debug: argv.debug === true,
