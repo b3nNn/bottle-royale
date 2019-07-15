@@ -1,5 +1,5 @@
-const client = require('game-client');
-const player = require('game-player');
+const client = new br.Client();
+const player = new br.Player();
 
 client.connect("foo_bar");
 client.on('game_found', matchmaking => {

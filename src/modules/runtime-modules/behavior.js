@@ -11,7 +11,7 @@ class Behavior {
     }
 
     addTag(tag) {
-        this.tags.push(tag);
+        this.tags = _.concat(this.tags, tag)
     }
 
     hasTags(tags) {

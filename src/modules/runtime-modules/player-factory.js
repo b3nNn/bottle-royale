@@ -1,24 +1,35 @@
+import _ from 'lodash';
 import Player from './player';
 import Behavior from './behavior';
-import ModuleProvider from './module-provider';
+import ModuleFactory from './module-provider';
 import { GameService } from '../../services/game-service';
+import PlayerProxy from './player-proxy';
 
-const BehaviorProxy = behavior => {
-    const _behavior = behavior;
-
-    const proxy = {
-        createStrategy: name => {
-            return _behavior.createStrategy(name);
+const BehaviorProxy = client => {
+    const _client = client;
+    const authorisedKeys = ['tags'];
+    const handler = {
+        construct(target, args) {
+            return factory.createBehavior(_client);
         },
-        while: (tags, strategy, callback) => {
-            return _behavior.while(tags, strategy, callback);
+        get(obj, prop) {
+            if (_.includes(authorisedKeys, prop)) {
+                return obj[prop];
+            }
+        },
+        set(obj, prop, value, receiver) {
+            throw new Error('module \'behavior\' is read only');
+            return true;
+        },
+        ownKeys: () => {
+            return authorisedKeys;
         }
     };
-
+    let proxy = new Proxy(Behavior, handler);
     return proxy;
 }
 
-class PlayerModuleProvider extends ModuleProvider {
+class PlayerFactory extends ModuleFactory {
     constructor(collections) {
         super();
         this.collections = collections;
@@ -38,7 +49,6 @@ class PlayerModuleProvider extends ModuleProvider {
 
     createBehavior(client) {
         const behavior = new Behavior(client);
-        const proxy = BehaviorProxy(behavior);
         behavior.ID = this.collections('game.behavior').uid();
         this.collections('game').push('behavior', {
             serverID: GameService.serverID,
@@ -46,16 +56,14 @@ class PlayerModuleProvider extends ModuleProvider {
             behaviorID: behavior.ID,
             behavior
         });
-        return proxy;
+        return behavior;
     }
 
     get(client) {
-        const player = this.createPlayer(client);
+        const playerClientProxy = PlayerProxy(client, this);
 
-        return {
-            'player': player
-        }
+        return playerClientProxy;
     }
 }
 
-export default PlayerModuleProvider;
+export default PlayerFactory;

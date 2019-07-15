@@ -5,6 +5,8 @@ import PlayerLocationModuleProvider from '../runtime-modules/player-location-mod
 import GameEventsModuleProvider from '../runtime-modules/game-events-module-provider';
 import StormModuleProvider from '../runtime-modules/storm-module-provider';
 
+import PlayerLocation from '../runtime-modules/player-location';
+
 class ClientModulesProvider {
     constructor(collections) {
         this.collections = collections;
@@ -21,10 +23,7 @@ class ClientModulesProvider {
         const modules = {};
 
         _.each(this.providers, provider => {
-            const module = provider.get(client);
-            if (module) {
-                _.merge(modules, module);
-            }
+            modules[provider.getName()] = provider.get(client)
         });
         return modules;
     }

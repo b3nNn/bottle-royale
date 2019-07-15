@@ -14,6 +14,8 @@ const run = async () => {
 
     try {
         await GameService.init({
+            debug: argv.debug === true,
+            debugPersistence: argv['debug-persistence'] === true,
             host: argv.host || 'localhost'
         });
     } catch(err) {
@@ -22,10 +24,10 @@ const run = async () => {
     }
 
     GameService.game.events.on('matchmaking_start', () => {
-        console.log(`matchmaking is now live with ${GameService.matchmaking.getReadyClients().length} player(s)`);
+        console.log(`[server:${GameService.serverID}] matchmaking is now live with ${GameService.matchmaking.getReadyClients().length} player(s)`);
     });
     GameService.game.events.on('matchmaking_end', () => {
-        console.log(`matchmaking is finished after ${GameService.game.tick.getElapsed() / 1000000}s`);
+        console.log(`[server:${GameService.serverID}] matchmaking is finished after ${GameService.game.tick.getElapsed() / 1000000}s`);
     });
     try {
         await GameService.loadBundles(bundles);
@@ -33,7 +35,6 @@ const run = async () => {
     } catch (err) {
         console.error('fatal error', err);
     }
-    // console.log('collections', GameService.collections('game').all());
 };
 
 run();

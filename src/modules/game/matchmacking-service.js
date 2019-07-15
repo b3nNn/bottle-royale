@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { GameService } from '../../services/game-service';
-import MatchmakingInstance from './matchmaking-instance';
+import Matchmaking from './matchmaking';
 
 class MatchmackingService {
     constructor(collections, eventService) {
@@ -49,6 +49,7 @@ class MatchmackingService {
     }
 
     getPlayers() {
+        const readys = _.map(this.getReadyClients(), item => item.clientID);
         return this.collections('game').filter('player', player => readys.includes(player.clientID));
     }
 
@@ -57,7 +58,7 @@ class MatchmackingService {
     }
 
     createMatchmacking() {
-        const matchmaking = new MatchmakingInstance();
+        const matchmaking = new Matchmaking();
         matchmaking.ID = this.collections('game.matchmaking').uid();
         this.collections('game').push('matchmaking', {
             serverID: GameService.serverID,

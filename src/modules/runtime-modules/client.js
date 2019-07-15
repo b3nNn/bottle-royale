@@ -11,7 +11,9 @@ class Client {
     connect(nickname) {
         this.nickname = nickname;
         GameService.collections('game').filterOneUpdate('client', item => item.clientID === this.ID, client => {
-            client.nickname = nickname;
+            if (client) {
+                client.nickname = nickname;
+            }
         });
     }
 
@@ -24,7 +26,9 @@ class Client {
     }
 
     log(str, additionnal) {
-        console.log(`[${this.longID}] ${str}`, additionnal || '');
+        if (GameService.debug) {
+            console.log(`[client:${this.longID}] ${str}`, additionnal || '');
+        }
     }
 
     serialize() {

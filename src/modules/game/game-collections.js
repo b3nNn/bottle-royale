@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { GameService } from '../../services/game-service';
 
 const GameCollections = options => {
     const persistHandlers = options.persistHandlers || [];
@@ -52,6 +53,20 @@ const GameCollections = options => {
                     return acc;
                 }, []);
             },
+            filterUpdate: (kind, filter, callback) => {
+                const res = _.reduce(collections, (acc, item) => {
+                    if (item.collection === collection && item.kind === kind && filter(item) === true) {
+                        acc.push(item);
+                    }
+                    return acc;
+                }, []);
+                _.each(res, item => {
+                    if (callback) {
+                        callback(item);
+                    }
+                    updateItem(kind, item);
+                });
+            },
             filterOne: (kind, filter, callback) => {
                 const res = _.reduce(collections, (acc, item) => {
                     if (item.collection === collection && item.kind === kind && filter(item) === true) {
@@ -84,7 +99,9 @@ const GameCollections = options => {
 
     proxyBuilder.init = async () => {
         for (let handler of persistHandlers) {
-            await handler.init()
+            await handler.init({
+                debug: GameService.debugPersistence
+            });
         }
     }
     return proxyBuilder;
