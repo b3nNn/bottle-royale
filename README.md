@@ -2,6 +2,10 @@
 
 Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.
 
+<p align="center">
+	<img src="https://drive.google.com/uc?export=view&id=1kYO3YjYbErXG-fKSyKNF0vDBu7Y86x2g" width="450px" title="Bottle Royale" />
+</p>
+
 # Features
 - Up to **100 bots** per game scripted with **javascript**.
 - **Event Driven** and **Module Driven** API.
