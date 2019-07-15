@@ -11,6 +11,7 @@ const framerate = toSeconds(1 / 10);
 class GameService {
     constructor(collections, clientService, matchmakingService, gameEngine, battleRoyaleNamespace) {
         this.debug;
+        this.debugPersistence;
         this.serverID;
         this.collections = collections;
         this.clients = clientService;
@@ -26,8 +27,9 @@ class GameService {
         const opts = options || {};
 
         this.debug = opts.debug;
+        this.debugPersistence = opts.debugPersistence;
         this.serverID = nanoid();
-        await GameCollections.init();
+        await GameCollections.init(opts);
         this.collections('game').push('server', {
             serverID: this.serverID,
             host: opts.host || undefined

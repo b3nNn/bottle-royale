@@ -4,8 +4,6 @@ import { GameObject } from './game-object';
 import ClockTick from '../../components/clock-tick';
 import { Seconds, toSeconds, toMilliseconds } from './time';
 import Vehicule from './vehicule';
-import Player from '../runtime-modules/player';
-import { stringify } from 'flatted';
 
 class GameObjectService {
     constructor(collections) {

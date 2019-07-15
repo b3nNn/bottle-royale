@@ -100,7 +100,7 @@ const GameCollections = options => {
     proxyBuilder.init = async () => {
         for (let handler of persistHandlers) {
             await handler.init({
-                debug: GameService.debug
+                debug: GameService.debugPersistence
             });
         }
     }

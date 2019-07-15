@@ -100,17 +100,19 @@ const tableOptions = r => {
 };
 
 class RethinkDBPersistHandler extends PersistHandler {
-    constructor(options) {
-        const opts = options || {};
+    constructor() {
         super();
-        this.debug = opts.debug;
+        this.debug = false;
         this.worker = null;
         this.serverID = null;
         this.r = null;
         this.tableOpts = null;
     }
 
-    async init() {
+    async init(options) {
+        const opts = options || {};
+
+        this.debug = opts.debug;
         this.r = rethinkdbdash();
         this.tableOpts = tableOptions(this.r);
         this.serverID = GameService.serverID;

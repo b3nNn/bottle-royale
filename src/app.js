@@ -12,9 +12,11 @@ const run = async () => {
         bundles.push(argv.bot);
     }
 
+    console.log('TEST', argv);
     try {
         await GameService.init({
-            debug: true,
+            debug: argv.debug === true,
+            debugPersistence: argv['debug-persistence'] === true,
             host: argv.host || 'localhost'
         });
     } catch(err) {
