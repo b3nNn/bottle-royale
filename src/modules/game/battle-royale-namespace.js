@@ -1,6 +1,3 @@
-// import Client from '../runtime-modules/client';
-// import StormEvents from '../runtime-modules/storm';
-// import GameEvents from '../runtime-modules/game-events';
 import ModuleFactory from '../runtime-modules/module-factory';
 import PlayerLocationFactory from '../runtime-modules/player-location-factory';
 import StormModuleFactory from '../runtime-modules/storm-module-factory';

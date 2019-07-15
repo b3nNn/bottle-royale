@@ -9,7 +9,6 @@ const run = async () => {
         const idx = msg.indexOf(' ');
         const cmd = msg.substr(0, idx);
         const params = parse(msg.substr(idx + 1));
-        // console.log('TEST', cmd, params.kind, params.model);
         switch (cmd) {
             case 'insert': {
                 await r.db('testing').table(params.kind).insert(params.model).run();
