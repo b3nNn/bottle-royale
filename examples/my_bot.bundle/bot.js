@@ -23,7 +23,6 @@ client.on('game_found', matchmaking => {
         storm.on('move', storm => {
             client.log('the storm move');
         });
-        player._ID = 42;
         client.log(`matchmacking started`);
         client.log('location', location);
         client.log('let\'s have some fun', player.vehicule);

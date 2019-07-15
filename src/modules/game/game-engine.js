@@ -23,10 +23,12 @@ class GameEngine {
     initMap () {
         const travelPlane = this.vehicules.createTravelPlane();
         const planeGO = GameObject.instantiate(travelPlane);
-        planeGO.transform.setPosition(this.map.dropTravelPath.start.x, this.map.dropTravelPath.start.y, 0);
+        planeGO.transform.setPosition(this.map.dropTravelPath.start.x * this.map.worldSize.x, this.map.dropTravelPath.start.y * this.map.worldSize.y, 0);
         planeGO.transform.setRotation(this.map.dropTravelPath.vector.x, this.map.dropTravelPath.vector.y, 0);
         const players = GameService.matchmaking.getPlayers();
         _.each(players, (player, idx) => {
+            let go = GameObject.instantiate(player.player);
+            go.parent = planeGO;
             travelPlane.enterPlayer(idx, player.player);
         });
     }

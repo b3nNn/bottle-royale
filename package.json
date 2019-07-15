@@ -41,6 +41,7 @@
     "cors": "^2.8.5",
     "custom-env": "^1.0.1",
     "express": "^4.17.1",
+    "flatted": "^2.0.1",
     "lodash": "^4.17.11",
     "microtime": "^3.0.0",
     "minimist": "^1.2.0",

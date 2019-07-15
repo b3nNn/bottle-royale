@@ -3,29 +3,11 @@ import { GameService } from '../../services/game-service';
 import { GameObject } from './game-object';
 import ClockTick from '../../components/clock-tick';
 import { Seconds, toSeconds } from './time';
+import Vehicule from './vehicule';
+import Player from '../runtime-modules/player';
+import { stringify } from 'flatted';
 
-const authorisedKeys = ['ID', 'transform'];
-
-const GameObjectProxy = go => {
-    const _go = go;
-    const handler = {
-        get(obj, prop) {
-            if (_.includes(authorisedKeys, prop)) {
-                return obj[prop];
-            }
-        },
-        set(obj, prop, value, receiver) {
-            throw new Error('module \'GameObject\' is read only');
-            return true;
-        },
-        ownKeys: () => {
-            return authorisedKeys;
-        }
-    };
-    const proxy = new Proxy(_go, handler);
-
-    return proxy;
-}
+const authorisedKeys = ['ID', 'transform', 'instance', 'name', 'parent'];
 
 class GameObjectService {
     constructor(collections) {
@@ -41,9 +23,8 @@ class GameObjectService {
             serverID: GameService.serverID,
             gameObject: go
         });
-        const proxy = GameObjectProxy(go);
-        this.sceneActives.push(proxy);
-        return proxy;
+        this.sceneActives.push(go);
+        return go;
     }
 
 
@@ -53,14 +34,20 @@ class GameObjectService {
         });
         this.debugTick.each(() => {
             console.log(`scene actives: ${this.sceneActives.length}`);
+            _.each(this.sceneActives, go => {
+                console.log('-', go.name, go.transform.getPosition());
+            });
         });
     }
 
     updateGameObject(time, gameObject) {
         const t = gameObject.transform;
 
+        if (gameObject.instance instanceof Vehicule) {
+            t.velocity = gameObject.instance.toSpeedMS();
+        }
         if (t) {
-            t.position = t.position.add(t.rotation.x(Seconds(time.elapsed)));
+            t.position = t.position.add(t.rotation.x(t.velocity * Seconds(time.elapsed)));
         }
     }
 }

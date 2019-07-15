@@ -1,12 +1,10 @@
 import _ from 'lodash';
 import Player from '../runtime-modules/player';
+import Vehicule from './vehicule';
 
-class TravelPlane {
+class TravelPlane extends Vehicule {
     constructor() {
-        this.seatSlots = [];
-        for (let it = 0; it < 100; it++) {
-            this.seatSlots[it] = null;
-        }
+        super(100, 100);
     }
 
     enterPlayer(seatSlotsIndex, player) {
