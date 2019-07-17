@@ -1,7 +1,7 @@
 // import GameService from '../modules/game/game-service';
 import GameCollections from '../modules/game/game-collections';
-import ClientService from '../modules/game/client-service';
-import MatchmakingService from './matchmacking-service';
+// import ClientService from '../modules/game/client-service';
+// import MatchmakingService from './matchmaking-service';
 // import GameEngine from './game-engine-service';
 import EventService from '../modules/game/event-service';
 import RethinkDBPersistHandler from '../modules/io/rethinkdb-persist-handler';

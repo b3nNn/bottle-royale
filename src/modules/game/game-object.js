@@ -47,11 +47,12 @@ class GameObject {
     }
 
     static instantiate(baseInstance) {
-        return GameService.game.go.createGameObject(baseInstance);
+        // return GameService.game.go.createGameObject(baseInstance);
+        return undefined;
     }
 
     destroy() {
-        GameService.game.go.destroyGameObject(this);
+        // GameService.game.go.destroyGameObject(this);
     }
 
     serialize() {

@@ -35,7 +35,7 @@ class Application {
                 } else if (this.services[inject]) {
                     args.push(this.services[inject]);
                 } else {
-                    throw new Error(`unknown service provider ${inject}`);
+                    throw new Error(`unknown service provider ${inject} from ${provider.name}, got ${JSON.stringify(_.keys(this.services))}`);
                 }
             }
         }

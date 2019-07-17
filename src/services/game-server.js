@@ -4,10 +4,12 @@ import nanoid from 'nanoid';
 import BattleRoyaleNamespace from '../modules/runtime-modules/battle-royale-namespace';
 
 class GameServer {
-    constructor(collections, clientService) {
+    constructor(collections, clientService, matchmaking, gameEngine) {
         this.ID = nanoid();
         this.collections = collections;
         this.clients = clientService;
+        this.matchmaking = matchmaking;
+        this.game = gameEngine;
         this.br = new BattleRoyaleNamespace(this);
         this.isRunning = true;
         this.bundles = [];
@@ -36,8 +38,22 @@ class GameServer {
             }
         }
     }
+
+    async startMatchmaking() {
+        this.matchmaking.open();
+        this.matchmaking.start();
+        this.clients.bootstrapMatchmaking();
+        this.matchmaking.live();
+        this.game.start();
+        // if (!this.lastTick) {
+        //     this.lastTick = this.game.tick.getElapsed();
+        // }
+        // await this.mainLoop();
+        // this.matchmaking.end();
+        // this.game.events.fire('matchmaking_end');
+    }
 }
 
-GameServer.$inject = ['Collections', 'ClientService'];
+GameServer.$inject = ['Collections', 'ClientService', 'Matchmaking', 'GameEngine'];
 
 export default GameServer;

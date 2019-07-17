@@ -17,20 +17,24 @@ class GameEngineService {
         this.vehicules = vehiculesService;
         this.map = mapService;
         this.go = gameObjectService;
+        this.matchmaking = matchmakingService;
         this.isRunning = false;
     }
 
     initMap () {
         const travelPlane = this.vehicules.createTravelPlane();
         const planeGO = GameObject.instantiate(travelPlane);
-        planeGO.transform.setPosition(this.map.dropTravelPath.start.x * this.map.worldSize.x, this.map.dropTravelPath.start.y * this.map.worldSize.y, 0);
-        planeGO.transform.setRotation(this.map.dropTravelPath.vector.x, this.map.dropTravelPath.vector.y, 0);
-        const players = GameService.matchmaking.getPlayers();
-        _.each(players, (player, idx) => {
-            let go = GameObject.instantiate(player.player);
-            go.parent = planeGO;
-            travelPlane.enterPlayer(idx, player.player);
-        });
+
+        if (planeGO) {
+            planeGO.transform.setPosition(this.map.dropTravelPath.start.x * this.map.worldSize.x, this.map.dropTravelPath.start.y * this.map.worldSize.y, 0);
+            planeGO.transform.setRotation(this.map.dropTravelPath.vector.x, this.map.dropTravelPath.vector.y, 0);
+            const players = GameService.matchmaking.getPlayers();
+            _.each(players, (player, idx) => {
+                let go = GameObject.instantiate(player.player);
+                go.parent = planeGO;
+                travelPlane.enterPlayer(idx, player.player);
+            });
+        }
     }
 
     execPlayerAction(player, action, params) {
@@ -58,7 +62,7 @@ class GameEngineService {
         this.initMap();
         this.go.start();
         this.tick.start();
-        GameService.matchmaking.events.fire('start');
+        this.matchmaking.events.fire('start');
         this.events.fire('matchmaking_start');
         this.collections('game').kindUpdate('behavior', cli => {
             cli.behavior.addTag('alive');
@@ -84,6 +88,6 @@ class GameEngineService {
     }
 }
 
-GameEngineService.$inject = ['Collections', 'EventsFactory'];//, stormService, vehiculesService, mapService, gameObjectService];
+GameEngineService.$inject = ['Collections', 'EventsFactory', 'Storm', 'Vehicules', 'Map', 'GameObjects', 'Matchmaking'];
 
 export default GameEngineService;

@@ -9,7 +9,7 @@ class VehiculeService {
         const plane = new TravelPlane();
         plane.ID = this.collections('game.travel_plane').uid();
         this.collections('game').push('travel_plane', {
-            serverID: GameService.serverID,
+            serverID: 0,
             planeID: plane.ID,
             plane
         });

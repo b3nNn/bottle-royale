@@ -26,13 +26,13 @@ class ClientService {
         _.each(befors, listener => {
             listener.callback(matchmaking);
         });
-        GameService.matchmaking.events.fire('load');
+        // GameService.matchmaking.events.fire('load');
         _.each(afters, listener => {
             listener.callback(matchmaking);
         });
     }
 }
 
-ClientService.$inject = ['Collections', 'EventsFactory'];
+ClientService.$inject = ['Collections', 'EventsFactory', 'Matchmaking'];
 
 export default ClientService;

@@ -1,10 +1,10 @@
 import Storm from '../modules/game/storm';
 
 class StormService {
-    constructor(collections, eventsFactory, gameServer) {
+    constructor(collections, eventsFactory) {
         this.collections = collections;
         this.events = eventsFactory.createProvider('storm_service_listener');
-        this.gameServer = gameServer;
+        // this.gameServer = gameServer;
         this.instance = null;
         this.expireAt = null;
     }
@@ -67,7 +67,7 @@ class StormService {
         const storm = new Storm();
         storm.ID = this.collections('game.storm').uid();
         this.collections('game').push('storm', {
-            serverID: this.gameServer.ID,
+            serverID: 0,
             stormID: storm.ID,
             storm
         });
@@ -75,6 +75,6 @@ class StormService {
     }
 }
 
-StormService.$inject = ['Collections', 'EventsFactory', 'GameServer'];
+StormService.$inject = ['Collections', 'EventsFactory'];
 
 export default StormService;

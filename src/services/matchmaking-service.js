@@ -2,10 +2,11 @@ import _ from 'lodash';
 // import { GameService } from '../../services/game-service';
 import Matchmaking from '../modules/game/matchmaking';
 
-class MatchmackingService {
+class MatchmakingService {
     constructor(collections, eventsFactory) {
         this.collections = collections;
         this.events = eventsFactory.createProvider('matchmaking_service_listener');
+        // this.gameServer = gameServer;
         this.instance = null;
     }
 
@@ -40,7 +41,7 @@ class MatchmackingService {
         this.collections('game').push('client_matchmaking_accept', {
             clientID: client.ID,
             matchmakingID: matchmaking.ID,
-            serverID: GameService.serverID
+            serverID: this.gameServer.serverID
         });
     }
 
@@ -54,14 +55,14 @@ class MatchmackingService {
     }
 
     handleMatchmacking() {
-        GameService.clients.events.fire('game_found', this.instance.requestProxy);
+        // GameService.clients.events.fire('game_found', this.instance.requestProxy);
     }
 
     createMatchmacking() {
         const matchmaking = new Matchmaking();
         matchmaking.ID = this.collections('game.matchmaking').uid();
         this.collections('game').push('matchmaking', {
-            serverID: GameService.serverID,
+            serverID: 0,
             matchmakingID: matchmaking.ID,
             matchmaking
         });
@@ -69,6 +70,6 @@ class MatchmackingService {
     }
 }
 
-MatchmackingService.$inject = ['Collections', 'EventsFactory'];
+MatchmakingService.$inject = ['Collections', 'EventsFactory'];
 
-export default MatchmackingService;
+export default MatchmakingService;
