@@ -1,5 +1,4 @@
-import TravelPlane from './travel-plane';
-import { GameService } from '../../services/game-service';
+import TravelPlane from '../modules/game/travel-plane';
 
 class VehiculeService {
     constructor(collections) {
@@ -17,5 +16,7 @@ class VehiculeService {
         return plane;
     }
 }
+
+VehiculeService.$inject = ['Collections'];
 
 export default VehiculeService;

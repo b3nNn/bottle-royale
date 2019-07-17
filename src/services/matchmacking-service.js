@@ -1,6 +1,6 @@
 import _ from 'lodash';
 // import { GameService } from '../../services/game-service';
-import Matchmaking from './matchmaking';
+import Matchmaking from '../modules/game/matchmaking';
 
 class MatchmackingService {
     constructor(collections, eventsFactory) {

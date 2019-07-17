@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import Clock from '../../components/clock';
-import { GameService } from '../../services/game-service';
-import { GameObject } from './game-object';
-import { toSeconds, toMinutes } from './time';
+import Clock from '../components/clock';
+// import { GameService } from './game-service';
+import { GameObject } from '../modules/game/game-object';
+import { toSeconds, toMinutes } from '../modules/game/time';
 
-class GameEngine {
-    constructor(collections, eventService, stormService, vehiculesService, mapService, gameObjectService) {
+class GameEngineService {
+    constructor(collections, eventsFactory, stormService, vehiculesService, mapService, gameObjectService, matchmakingService) {
         this.collections = collections;
-        this.events = eventService;
+        this.events = eventsFactory.createProvider('game_engine_service_listener');
         this.config = {
             death_delay: toMinutes(5)
         };
@@ -84,4 +84,6 @@ class GameEngine {
     }
 }
 
-export default GameEngine;
+GameEngineService.$inject = ['Collections', 'EventsFactory'];//, stormService, vehiculesService, mapService, gameObjectService];
+
+export default GameEngineService;

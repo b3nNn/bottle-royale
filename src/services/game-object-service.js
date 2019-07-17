@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { GameService } from '../../services/game-service';
-import { GameObject } from './game-object';
-import ClockTick from '../../components/clock-tick';
-import { Seconds, toSeconds, toMilliseconds } from './time';
-import Vehicule from './vehicule';
+import { GameService } from './game-service';
+import { GameObject } from '../modules/game/game-object';
+import ClockTick from '../components/clock-tick';
+import { Seconds, toSeconds, toMilliseconds } from '../modules/game/time';
+import Vehicule from '../modules/game/vehicule';
 
 class GameObjectService {
     constructor(collections) {
@@ -54,5 +54,7 @@ class GameObjectService {
         }
     }
 }
+
+GameObjectService.$inject = ['Collections'];
 
 export default GameObjectService;

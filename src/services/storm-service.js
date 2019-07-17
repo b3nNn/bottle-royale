@@ -1,10 +1,9 @@
-import Storm from './storm';
-import { GameService } from '../../services/game-service';
+import Storm from '../modules/game/storm';
 
 class StormService {
-    constructor(collections, eventFactory, gameServer) {
+    constructor(collections, eventsFactory, gameServer) {
         this.collections = collections;
-        this.events = eventFactory.createProvider('storm_service_listener');
+        this.events = eventsFactory.createProvider('storm_service_listener');
         this.gameServer = gameServer;
         this.instance = null;
         this.expireAt = null;

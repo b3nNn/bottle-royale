@@ -14,8 +14,9 @@ class GameServer {
         this.loadedBundles = [];
     }
 
-    addBundles(bundles) {
+    async addBundles(bundles) {
         this.bundles = _.concat(this.bundles, bundles);
+        return this.bundles;
     }
 
     async init() {
@@ -28,7 +29,6 @@ class GameServer {
                 bundle.load();
                 client = this.clients.createClient();
                 namespace = this.br.get(client);
-                // console.log('init bundle', this.bundles);
                 bundle.apps.bot.setup(client, namespace);
                 await bundle.compile();
             } catch (err) {

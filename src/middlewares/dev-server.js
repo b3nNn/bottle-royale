@@ -7,9 +7,9 @@ class DevServer {
     }
 
     async run() {
-        this.app.events.on('bundles:inlines_loaded', bundles => {
-            this.gameServer.addBundles(_.clone(bundles));
-            this.gameServer.init();
+        this.app.events.on('bundles:inlines_loaded', async bundles => {
+            await this.gameServer.addBundles(_.clone(bundles));
+            await this.gameServer.init();
         });
     }
 

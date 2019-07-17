@@ -51,4 +51,6 @@ class MapService {
     }
 }
 
+MapService.$inject = ['Collections'];
+
 export default MapService;
