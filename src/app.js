@@ -1,11 +1,34 @@
 import minimist from 'minimist';
 import _ from 'lodash';
-import { GameService } from './services/game-service';
+// import { GameService } from './services/game-service';
 import Application from './modules/core/application';
+import EventsFactory from './services/events-factory';
+import GameServer from './services/game-server';
+import MatchmackingService from './modules/game/matchmacking-service';
+import mainLoop from './modules/game/main-loop';
+import GameCollections from './modules/game/game-collections';
+import StormService from './modules/game/storm-service';
+import RethinkDBPersistHandler from './modules/io/rethinkdb-persist-handler';
+
+import MatchmakingMiddleware from './middlewares/matchmaking';
+import GameStormEngine from './middlewares/game-storm-engine';
+import InlineBundleLoader from './middlewares/inline-bundle-loader';
 
 const argv = minimist(process.argv.slice(2));
-const app = new Application(argv);
-await app.run();
+(async () => {
+    const app = new Application(argv);
+    app.service('Collections', GameCollections, {
+        persistHandlers: [new RethinkDBPersistHandler({debug: false})]
+    });
+    app.service('EventsFactory', EventsFactory);
+    app.service('GameServer', GameServer);
+    app.service('Matchmaking', MatchmackingService);
+    app.service('Storm', StormService);
+    app.middleware(MatchmakingMiddleware);
+    app.middleware(GameStormEngine);
+    app.middleware(InlineBundleLoader);
+    await app.run(mainLoop);
+})();
 
 // let bundles = [];
 

@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import { GameService } from '../../services/game-service';
+// import { GameService } from '../../services/game-service';
 import Matchmaking from './matchmaking';
 
 class MatchmackingService {
-    constructor(collections, eventService) {
+    constructor(collections, eventsFactory) {
         this.collections = collections;
-        this.events = eventService;
+        this.events = eventsFactory.createProvider('matchmaking_service_listener');
         this.instance = null;
     }
 
@@ -68,5 +68,7 @@ class MatchmackingService {
         return matchmaking;
     }
 }
+
+MatchmackingService.$inject = ['Collections', 'EventsFactory'];
 
 export default MatchmackingService;

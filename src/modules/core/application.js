@@ -3,14 +3,22 @@ import _ from 'lodash';
 class Application {
     constructor(argv) {
         this.argv = argv;
-        this.middlewares = {};
+        this.middlewares = [];
         this.services = {};
+        this.serviceDefinitions = [];
         this.middlewareDefinitions = [];
     }
 
-    middleware(name, provider) {
-        this.middlewareDefinitions.push({
+    service(name, provider, constructorParams) {
+        this.serviceDefinitions.push({
             name,
+            provider,
+            constructorParams
+        });
+    }
+
+    middleware(provider) {
+        this.middlewareDefinitions.push({
             provider
         });
     }
@@ -20,7 +28,9 @@ class Application {
 
         if (provider.$inject) {
             for (let inject of provider.$inject) {
-                if (this.services[inject]) {
+                if (inject === 'App') {
+                    args.push(this);
+                } else if (this.services[inject]) {
                     args.push(this.services[inject]);
                 } else {
                     throw new Error(`unknown service provider ${inject}`);
@@ -32,9 +42,18 @@ class Application {
 
     async init() {
         try {
+            for (let def of this.serviceDefinitions) {
+                if (_.isFunction(def.provider.constructor)) {
+                    this.services[def.name] = new def.provider(...this.getInjectArguments(def.provider));
+                } else if (_.isFunction(def.provider)) {
+                    this.services[def.name] = new def.provider(...this.getInjectArguments(def.provider));
+                }
+            }
             for (let def of this.middlewareDefinitions) {
                 if (_.isFunction(def.provider.constructor)) {
-                    def.provider.constructor.call(this, this.getInjectArguments(def.provider));
+                    this.middlewares.push(new def.provider(...this.getInjectArguments(def.provider)));
+                } else if (_.isFunction(def.provider)) {
+                    this.middlewares.push(new def.provider(...this.getInjectArguments(def.provider)));
                 }
             }
         } catch (err) {
@@ -42,8 +61,16 @@ class Application {
         }
     }
 
-    async run() {
-        this.init();
+    async run(callback) {
+        await this.init();
+        _.each(this.middlewares, async middleware => await middleware.run());
+        if (callback) {
+            await callback(...this.getInjectArguments(callback));
+        }
+    }
+
+    async update(time) {
+        _.each(_.values(this.middlewares), middleware => middleware.update(time));
     }
 }
 

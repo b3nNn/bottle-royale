@@ -1,9 +1,9 @@
-import ModuleFactory from '../runtime-modules/module-factory';
-import PlayerLocationFactory from '../runtime-modules/player-location-factory';
-import StormModuleFactory from '../runtime-modules/storm-module-factory';
-import ClientModuleFactory from '../runtime-modules/client-module-factory';
-import GameEventsFactory from '../runtime-modules/game-events-factory';
-import PlayerFactory from '../runtime-modules/player-factory';
+import ModuleFactory from './module-factory';
+import PlayerLocationFactory from './player-location-factory';
+import StormModuleFactory from './storm-module-factory';
+import ClientModuleFactory from './client-module-factory';
+import GameEventsFactory from './game-events-factory';
+import PlayerFactory from './player-factory';
 
 class BattleRoyaleNamespace extends ModuleFactory {
     constructor(collections) {

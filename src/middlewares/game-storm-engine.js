@@ -1,20 +1,21 @@
-import Storm from './storm';
-import { GameService } from '../../services/game-service';
-
-class StormService {
-    constructor(collections, eventFactory, gameServer) {
-        this.collections = collections;
-        this.events = eventFactory.createProvider('storm_service_listener');
-        this.gameServer = gameServer;
-        this.instance = null;
-        this.expireAt = null;
+class GameStormEngine {
+    constructor(stormService) {
+        this.storm = stormService;
     }
 
-    start() {
-        this.instance = this.createStorm();
+    run() {
+        console.log('GameStormEngine middleware runnning');
     }
 
     update(time) {
+        console.log('GameStormEngine middleware update', time.total, this.storm.instance);
+        this.updateInstance(time);
+    }
+
+    updateInstance(time) {
+        if (!this.instance) {
+            return;
+        }
         switch (this.instance.state) {
             case 'init': {
                 if (time.total > this.instance.beginDelay) {
@@ -63,19 +64,8 @@ class StormService {
                 break;
         }
     }
-
-    createStorm() {
-        const storm = new Storm();
-        storm.ID = this.collections('game.storm').uid();
-        this.collections('game').push('storm', {
-            serverID: this.gameServer.ID,
-            stormID: storm.ID,
-            storm
-        });
-        return storm;
-    }
 }
 
-StormService.$inject = ['Collections', 'EventsFactory', 'GameServer'];
+GameStormEngine.$inject = ['Storm'];
 
-export default StormService;
+export default GameStormEngine;
