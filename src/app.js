@@ -9,10 +9,13 @@ import mainLoop from './modules/game/main-loop';
 import GameCollections from './modules/game/game-collections';
 import StormService from './modules/game/storm-service';
 import RethinkDBPersistHandler from './modules/io/rethinkdb-persist-handler';
+import BundlesServices from './services/bundles-service';
+import ClientService from './services/client-service';
 
 import MatchmakingMiddleware from './middlewares/matchmaking';
 import GameStormEngine from './middlewares/game-storm-engine';
 import InlineBundleLoader from './middlewares/inline-bundle-loader';
+import DevServer from './middlewares/dev-server';
 
 const argv = minimist(process.argv.slice(2));
 (async () => {
@@ -21,12 +24,15 @@ const argv = minimist(process.argv.slice(2));
         persistHandlers: [new RethinkDBPersistHandler({debug: false})]
     });
     app.service('EventsFactory', EventsFactory);
+    app.service('ClientService', ClientService);
     app.service('GameServer', GameServer);
     app.service('Matchmaking', MatchmackingService);
     app.service('Storm', StormService);
+    app.service('Bundles', BundlesServices);
     app.middleware(MatchmakingMiddleware);
     app.middleware(GameStormEngine);
     app.middleware(InlineBundleLoader);
+    app.middleware(DevServer);
     await app.run(mainLoop);
 })();
 

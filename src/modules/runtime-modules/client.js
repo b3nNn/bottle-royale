@@ -10,25 +10,25 @@ class Client {
 
     connect(nickname) {
         this.nickname = nickname;
-        GameService.collections('game').filterOneUpdate('client', item => item.clientID === this.ID, client => {
-            if (client) {
-                client.nickname = nickname;
-            }
-        });
+        // GameService.collections('game').filterOneUpdate('client', item => item.clientID === this.ID, client => {
+        //     if (client) {
+        //         client.nickname = nickname;
+        //     }
+        // });
     }
 
     on(event, callback) {
-        GameService.clients.events.on(event, callback, { clientID: this.ID });
+        // GameService.clients.events.on(event, callback, { clientID: this.ID });
     }
 
     off(event) {
-        GameService.clients.events.off(event);
+        // GameService.clients.events.off(event);
     }
 
     log(str, additionnal) {
-        if (GameService.debug) {
+        // if (GameService.debug) {
             console.log(`[client:${this.longID}] ${str}`, additionnal || '');
-        }
+        // }
     }
 
     serialize() {

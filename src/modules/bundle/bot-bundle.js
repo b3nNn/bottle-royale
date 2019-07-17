@@ -4,11 +4,15 @@ import DiscordApplication from './discord-application';
 class BotBundle {
     constructor(path, scripts) {
         this.path = path;
-        this.apps = {
-            bot: new BotApplication(scripts.bot, `${process.cwd()}/${this.path}/bot.js`, `${process.cwd()}/${this.path}`),
-            discord: new DiscordApplication(scripts.discord)
-        };
+        this.apps = {};
         this.scripts = scripts;
+    }
+
+    load() {
+        this.apps = {
+            bot: new BotApplication(this.scripts.bot, `${process.cwd()}/${this.path}/bot.js`, `${process.cwd()}/${this.path}`),
+            discord: new DiscordApplication(this.scripts.discord)
+        };
     }
 
     compile() {

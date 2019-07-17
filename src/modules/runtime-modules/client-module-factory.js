@@ -4,16 +4,17 @@ import { GameService } from '../../services/game-service';
 import ClientProxy from './client-proxy';
 
 class ClientModuleFactory extends ModuleFactory {
-    constructor(collections) {
+    constructor(gameServer) {
         super();
-        this.collections = collections;
+        this.gameServer = gameServer;
+        this.collections = gameServer.collections;
     }
 
     createClient(cli) {
         const client = new Client();
         client.ID = cli.ID;
         this.collections('game').push('client', {
-            serverID: GameService.serverID,
+            serverID: this.gameServer.ID,
             clientID: client.ID,
             client
         });

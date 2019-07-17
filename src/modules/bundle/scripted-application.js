@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { GameService } from '../../services/game-service';
+// import { GameService } from '../../services/game-service';
 import { NodeVM, VMScript } from 'vm2';
 
 class ScriptedApplication {
@@ -13,12 +13,12 @@ class ScriptedApplication {
         this.namespace = null;
     }
 
-    setupVM(client) {
-        this.namespace = GameService.battleRoyaleNamespace.get(client);
+    setupVM(namespace) {
+        this.namespace = namespace;
         this.vm = new NodeVM({
             console: 'inherit',
             sandbox: {
-                GameService,
+                // GameService,
                 br: this.namespace
             },
             require: {
@@ -28,17 +28,15 @@ class ScriptedApplication {
         });
     }
 
-    compile() {
-        return new Promise((resolve, reject) => {
-            try {
-                this.compiled = new VMScript(this.script);
-                this.vm.run(this.compiled, this.path);
-                resolve(this);
-            } catch (err) {
-                const scriptError = this.toScriptingError(err);
-                reject(scriptError);
-            }
-        });
+    async compile() {
+        try {
+            this.compiled = new VMScript(this.script);
+            await this.vm.run(this.compiled, this.path);
+            return this;
+        } catch (err) {
+            const scriptError = this.toScriptingError(err);
+            throw scriptError;
+        }
     }
 
     toScriptingError(err) {

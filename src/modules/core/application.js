@@ -1,8 +1,10 @@
 import _ from 'lodash';
+import EventEmitter from 'events';
 
 class Application {
     constructor(argv) {
         this.argv = argv;
+        this.events = new EventEmitter();
         this.middlewares = [];
         this.services = {};
         this.serviceDefinitions = [];

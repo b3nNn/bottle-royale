@@ -30,16 +30,17 @@ const BehaviorProxy = client => {
 }
 
 class PlayerFactory extends ModuleFactory {
-    constructor(collections) {
+    constructor(gameServer) {
         super();
-        this.collections = collections;
+        this.gameServer = gameServer;
+        this.collections = gameServer.collections;
     }
 
     createPlayer(client) {
         const player = new Player(client, this.createBehavior(client));
         player.ID = this.collections('game.player').uid();
         this.collections('game').push('player', {
-            serverID: GameService.serverID,
+            serverID: this.gameServer.ID,
             playerID: player.ID,
             clientID: client.ID,
             player
@@ -51,7 +52,7 @@ class PlayerFactory extends ModuleFactory {
         const behavior = new Behavior(client);
         behavior.ID = this.collections('game.behavior').uid();
         this.collections('game').push('behavior', {
-            serverID: GameService.serverID,
+            serverID: this.gameServer.ID,
             clientID: client.ID,
             behaviorID: behavior.ID,
             behavior

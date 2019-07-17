@@ -8,7 +8,7 @@ class MatchmakingMiddleware {
     }
 
     update(time) {
-        console.log('Matchmaking middleware update', time.total);
+        // console.log('Matchmaking middleware update', time.total);
     }
 }
 

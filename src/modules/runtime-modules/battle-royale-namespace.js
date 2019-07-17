@@ -6,9 +6,9 @@ import GameEventsFactory from './game-events-factory';
 import PlayerFactory from './player-factory';
 
 class BattleRoyaleNamespace extends ModuleFactory {
-    constructor(collections) {
+    constructor(gameServer) {
         super();
-        this.collections = collections;
+        this.gameServer = gameServer;
         this.playerLocationFactory = null;
         this.stormModuleFactory = null;
         this.clientModuleFactory = null;
@@ -17,11 +17,11 @@ class BattleRoyaleNamespace extends ModuleFactory {
     }
 
     init() {
-        this.playerLocationFactory = new PlayerLocationFactory(this.collections);
-        this.stormModuleFactory = new StormModuleFactory(this.collections);
-        this.clientModuleFactory = new ClientModuleFactory(this.collections);
-        this.gameEventsFactory = new GameEventsFactory(this.collections);
-        this.playerFactory = new PlayerFactory(this.collections);
+        this.playerLocationFactory = new PlayerLocationFactory(this.gameServer);
+        this.stormModuleFactory = new StormModuleFactory(this.gameServer);
+        this.clientModuleFactory = new ClientModuleFactory(this.gameServer);
+        this.gameEventsFactory = new GameEventsFactory(this.gameServer);
+        this.playerFactory = new PlayerFactory(this.gameServer);
     }
 
     get(client) {

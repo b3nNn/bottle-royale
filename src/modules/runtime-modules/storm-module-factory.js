@@ -4,15 +4,16 @@ import { GameService } from '../../services/game-service';
 import StormProxy from './storm-proxy';
 
 class StormModuleFactory extends ModuleFactory {
-    constructor(collections) {
+    constructor(gameServer) {
         super();
-        this.collections = collections;
+        this.gameServer = gameServer;
+        this.collections = gameServer.collections;
     }
 
     createStorm(client) {
         const storm = new Storm(client);
         this.collections('game').push('storm_events', {
-            serverID: GameService.serverID,
+            serverID: this.gameServer.ID,
             clientID: client.ID,
             storm
         });

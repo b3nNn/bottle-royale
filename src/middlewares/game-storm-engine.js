@@ -8,7 +8,7 @@ class GameStormEngine {
     }
 
     update(time) {
-        console.log('GameStormEngine middleware update', time.total, this.storm.instance);
+        // console.log('GameStormEngine middleware update', time.total, this.storm.instance);
         this.updateInstance(time);
     }
 
