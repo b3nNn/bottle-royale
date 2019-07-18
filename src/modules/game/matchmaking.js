@@ -1,5 +1,3 @@
-import { GameService } from '../../services/game-service';
-
 const MatchmakingRequestProxy = matchmaking =>  {
     const proxy = {
         get state() {
@@ -12,14 +10,14 @@ const MatchmakingRequestProxy = matchmaking =>  {
             return matchmaking.map
         },
         accept: client => {
-            GameService.matchmaking.joinMatchmakingClient(matchmaking, client);
+            // GameService.matchmaking.joinMatchmakingClient(matchmaking, client);
         },
         reject: () => {},
         on: (event, callback, params) => {
-            GameService.matchmaking.events.on(event, callback, params);
+            // GameService.matchmaking.events.on(event, callback, params);
         },
         raise: (event, params) => {
-            GameService.matchmaking.events.fire(event, params);
+            // GameService.matchmaking.events.fire(event, params);
         }
     };
     return proxy;

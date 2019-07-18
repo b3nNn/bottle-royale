@@ -1,5 +1,5 @@
-import BotApplication from './bot-application';
-import DiscordApplication from './discord-application';
+import BotApplication from '../core/bot-application';
+import DiscordApplication from '../core/discord-application';
 
 class BotBundle {
     constructor(path, scripts) {

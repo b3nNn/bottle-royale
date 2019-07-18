@@ -1,12 +1,11 @@
 import minimist from 'minimist';
 import _ from 'lodash';
-// import { GameService } from './services/game-service';
 import Application from './modules/core/application';
 import EventsFactory from './services/events-factory';
 import GameServer from './services/game-server';
 import MatchmakingService from './services/matchmaking-service';
-import mainLoop from './modules/game/main-loop';
-import GameCollections from './modules/game/game-collections';
+import mainLoop from './modules/core/main-loop';
+import GameCollections from './modules/io/game-collections';
 import StormService from './services/storm-service';
 import RethinkDBPersistHandler from './modules/io/rethinkdb-persist-handler';
 import BundlesServices from './services/bundles-service';

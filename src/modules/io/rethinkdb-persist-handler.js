@@ -2,7 +2,6 @@ import _ from 'lodash';
 import PersistHandler from './persist-handler';
 import { Worker } from 'worker_threads';
 import rethinkdbdash from 'rethinkdbdash';
-import { GameService } from '../../services/game-service';
 import { stringify } from 'flatted';
 
 const gameWhitelists = [
@@ -115,7 +114,7 @@ class RethinkDBPersistHandler extends PersistHandler {
         this.debug = opts.debug;
         this.r = rethinkdbdash();
         this.tableOpts = tableOptions(this.r);
-        this.serverID = GameService.serverID;
+        this.serverID = 0;
         await this.initDatabase();
         await this.initWorker();
     }

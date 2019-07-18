@@ -1,5 +1,3 @@
-import { GameService } from '../../services/game-service';
-
 class PlayerLocation {
     constructor(client) {
         this.client = client;
@@ -8,7 +6,7 @@ class PlayerLocation {
 
     serialize() {
         return {
-            serverID: GameService.serverID,
+            serverID: 0,
             clientID: this.ID,
         }
     }

@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { Vector } from 'sylvester';
-import { GameService } from '../../services/game-service';
 
 class Transform {
     constructor(gameObject) {
@@ -58,7 +57,7 @@ class GameObject {
     serialize() {
         return {
             gameObjectID: this.ID,
-            serverID: GameService.serverID,
+            serverID: 0,
             name: this.name,
             active: this.active,
             transform: this.transform.serialize()

@@ -1,7 +1,6 @@
 import GameEvents from './game-events';
 import ModuleFactory from './module-provider';
 import GameEventsProxy from './game-events-proxy';
-import { GameService } from '../../services/game-service';
 
 class GameEventsFactory extends ModuleFactory {
     constructor(gameServer) {

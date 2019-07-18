@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import nanoid from 'nanoid';
-import { GameService } from '../../services/game-service';
 
 class Client {
     constructor() {
@@ -33,7 +32,7 @@ class Client {
 
     serialize() {
         return {
-            serverID: GameService.serverID,
+            serverID: 0,
             clientID: this.ID,
             longID: this.longID,
             nickname: this.nickname

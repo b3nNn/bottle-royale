@@ -1,6 +1,5 @@
 import Client from './client';
 import ModuleFactory from './module-factory';
-import { GameService } from '../../services/game-service';
 import ClientProxy from './client-proxy';
 
 class ClientModuleFactory extends ModuleFactory {

@@ -1,6 +1,5 @@
 import PlayerLocation from './player-location';
 import ModuleFactory from './module-factory';
-import { GameService } from '../../services/game-service';
 import PlayerLocationProxy from './player-location-proxy';
 
 class PlayerLocationFactory extends ModuleFactory {

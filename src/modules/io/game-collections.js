@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { GameService } from '../../services/game-service';
 
 const GameCollections = options => {
     const opts = options || {};
@@ -102,7 +101,7 @@ const GameCollections = options => {
     proxyBuilder.init = async () => {
         for (let handler of persistHandlers) {
             await handler.init({
-                debug: GameService.debugPersistence
+                debug: false
             });
         }
     }

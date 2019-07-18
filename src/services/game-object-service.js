@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { GameService } from './game-service';
 import { GameObject } from '../modules/game/game-object';
 import ClockTick from '../components/clock-tick';
 import { Seconds, toSeconds, toMilliseconds } from '../modules/game/time';

@@ -2,7 +2,6 @@ import _ from 'lodash';
 import Player from './player';
 import Behavior from './behavior';
 import ModuleFactory from './module-provider';
-import { GameService } from '../../services/game-service';
 import PlayerProxy from './player-proxy';
 
 const BehaviorProxy = client => {

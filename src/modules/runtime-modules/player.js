@@ -1,5 +1,3 @@
-import { GameService } from '../../services/game-service';
-
 class Player {
     constructor(client, behavior) {
         this.client = client;
@@ -8,7 +6,7 @@ class Player {
     }
 
     action(name, params) {
-        return GameService.game.execPlayerAction(this, name, params);
+        // return GameService.game.execPlayerAction(this, name, params);
     }
 
     serialize() {

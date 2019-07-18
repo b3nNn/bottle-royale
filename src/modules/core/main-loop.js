@@ -1,6 +1,6 @@
 import sleep from '../../components/sleep';
 import Clock from '../../components/clock';
-import { toSeconds } from './time';
+import { toSeconds } from '../game/time';
 
 const framerate = toSeconds(1 / 10);
 
