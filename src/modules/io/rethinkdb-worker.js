@@ -1,3 +1,5 @@
+const _ = require('lodash');
+const moment = require('moment');
 const { parentPort, workerData } = require('worker_threads');
 const r = require('rethinkdbdash')();
 const { parse } = require('flatted/cjs');
@@ -11,7 +13,10 @@ const run = async () => {
         const params = parse(msg.substr(idx + 1));
         switch (cmd) {
             case 'insert': {
-                await r.db('testing').table(params.kind).insert(params.model).run();
+                await r.db('testing').table(params.kind).insert(_.merge(params.model, {
+                    created_at: moment().utc().format(),
+                    updated_at: moment().utc().format()
+                })).run();
                 break;
             }
             case 'update': {
@@ -61,7 +66,9 @@ const run = async () => {
                         break;
                 }
                 if (filter) {
-                    await r.db('testing').table(params.kind).filter(filter).update(params.model).run();
+                    await r.db('testing').table(params.kind).filter(filter).update(_.merge(params.model, {
+                        updated_at: moment().utc().format()
+                    })).run();
                 } else if (getAll) {
                     await r.db('testing').table(params.kind).getAll(getAll.params, {index: getAll.index}).update(params.model).run();
                 }

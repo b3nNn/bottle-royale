@@ -5,6 +5,7 @@ class Application {
     constructor(argv) {
         this.argv = argv || {};
         this.config = {
+            host: this.argv.host,
             debug: this.argv.debug,
             debugPersistence: this.argv['debug-persistence']
         };
