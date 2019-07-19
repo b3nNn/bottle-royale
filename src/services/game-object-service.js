@@ -45,10 +45,7 @@ class GameObjectService {
         });
         this.debugTick.each(() => {
             if (this.debug) {
-                console.log(`scene actives: ${this.sceneActives.length}`);
-                _.each(this.sceneActives, go => {
-                    console.log('-', go.name, go.transform.getWorldPosition());
-                });
+                console.log(`[server:${this.gameServer.ID}] scene actives: ${this.sceneActives.length} object: [${_.reduce(this.sceneActives, (acc, go) => { acc.push(go.name); return acc; }, [])}]`);
             }
         });
     }

@@ -1,13 +1,9 @@
 class MatchmakingMiddleware {
-    constructor() {
+    constructor() {}
 
-    }
+    run() {}
 
-    run() {
-    }
-
-    update(time) {
-    }
+    update(time) {}
 }
 
 export default MatchmakingMiddleware;

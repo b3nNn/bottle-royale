@@ -73,7 +73,7 @@ class GameEngineService {
         this.initMap(matchmaking);
         this.tick.start();
         this.matchmaking.events.fire('start');
-        this.events.fire('matchmaking_start');
+        this.events.fire('matchmaking:start', matchmaking);
         this.collections('game').kindUpdate('behavior', cli => {
             cli.behavior.addTag('alive');
         });

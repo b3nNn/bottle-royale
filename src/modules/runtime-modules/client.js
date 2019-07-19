@@ -6,11 +6,9 @@ class Client {
         this.service = service;
         this.longID = nanoid();
         this.nickname = null;
-        // console.log('CLIENT()', service, this.service);
     }
 
     connect(nickname) {
-        // console.log('CONNECT CLIENT', nickname, this.service);
         this.nickname = nickname;
         this.service.connect(this);
     }

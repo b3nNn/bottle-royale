@@ -5,8 +5,6 @@ class MatchmakingService {
     constructor(collections, eventsFactory) {
         this.collections = collections;
         this.events = eventsFactory.createProvider('matchmaking_service_listener');
-        // this.gameServer = gameServer;
-        // this.instances = [];
     }
 
     createInstance(gameServer) {

@@ -1,6 +1,5 @@
 import Client from './client';
 import ModuleFactory from './module-factory';
-import ClientProxy from './client-proxy';
 import ClientModuleProxy from './client-module-proxy';
 
 class ClientModuleFactory extends ModuleFactory {
