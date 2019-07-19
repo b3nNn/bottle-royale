@@ -48,7 +48,7 @@ class PlayerFactory extends ModuleFactory {
     }
 
     createBehavior(client) {
-        const behavior = new Behavior(client);
+        const behavior = new Behavior(this.gameServer.engine, client);
         behavior.ID = this.collections('game.behavior').uid();
         this.collections('game').push('behavior', {
             serverID: this.gameServer.ID,

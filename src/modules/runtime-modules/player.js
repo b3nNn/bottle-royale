@@ -12,7 +12,7 @@ class Player {
 
     serialize() {
         return {
-            serverID: GameService.serverID,
+            serverID: this.service.gameServer.ID,
             playerID: this.ID,
             clientID: this.client.ID,
             behaviorID: this.behavior.ID,

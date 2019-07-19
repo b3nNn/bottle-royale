@@ -26,6 +26,8 @@ class GameServer {
         let client;
         let namespace;
 
+        await this.collections.init();
+        this.engine.init(this);
         this.br.init();
         for (let bundle of this.bundles) {
             try {
@@ -38,7 +40,6 @@ class GameServer {
                 throw err;
             }
         }
-        this.engine.init(this);
     }
 
     async startMatchmaking() {
