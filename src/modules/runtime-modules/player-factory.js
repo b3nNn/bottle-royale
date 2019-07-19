@@ -36,7 +36,7 @@ class PlayerFactory extends ModuleFactory {
     }
 
     createPlayer(client) {
-        const player = new Player(client, this.createBehavior(client));
+        const player = new Player(this.gameServer.engine, client, this.createBehavior(client));
         player.ID = this.collections('game.player').uid();
         this.collections('game').push('player', {
             serverID: this.gameServer.ID,

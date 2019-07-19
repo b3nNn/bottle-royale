@@ -9,7 +9,7 @@ class GameServer {
         this.collections = collections;
         this.clients = clientService;
         this.matchmaking = matchmaking;
-        this.game = gameEngine;
+        this.engine = gameEngine;
         this.br = new BattleRoyaleNamespace(this);
         this.isRunning = true;
         this.bundles = [];
@@ -37,20 +37,28 @@ class GameServer {
                 throw err;
             }
         }
+        this.engine.init(this);
     }
 
     async startMatchmaking() {
-        this.matchmaking.open();
-        this.matchmaking.start();
-        this.clients.bootstrapMatchmaking();
-        this.matchmaking.live();
-        this.game.start();
+        let instance = this.matchmaking.createInstance(this);
+        this.matchmaking.open(instance);
+        this.clients.handleMatchmaking(instance);
+        this.matchmaking.start(instance);
+        this.clients.bootstrapMatchmaking(instance);
+        this.matchmaking.live(instance);
+        this.engine.start(instance);
         // if (!this.lastTick) {
         //     this.lastTick = this.game.tick.getElapsed();
         // }
         // await this.mainLoop();
         // this.matchmaking.end();
         // this.game.events.fire('matchmaking_end');
+    }
+
+    async endMatchmaking() {
+        this.matchmaking.end();
+        this.engine.events.fire('matchmaking_end');
     }
 }
 

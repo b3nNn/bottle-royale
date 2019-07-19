@@ -14,9 +14,8 @@ class InlineBundleLoader {
         } else if (_.isString(this.app.argv.bot)) {
             bundles.push(this.app.argv.bot);
         }
-        console.log('loading bundles', bundles);
         const loadeds = await this.bundles.loadBundles(bundles);
-        this.app.events.emit('bundles:inlines_loaded', loadeds);
+        this.app.events.emit('bundles:loaded', loadeds);
         this.loadeds = loadeds;
         // try {
         //     await GameService.init({

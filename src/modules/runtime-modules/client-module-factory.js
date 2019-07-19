@@ -10,7 +10,7 @@ class ClientModuleFactory extends ModuleFactory {
     }
 
     createClient(cli) {
-        const client = new Client();
+        const client = new Client(this.gameServer.clients);
         client.ID = cli.ID;
         this.collections('game').push('client', {
             serverID: this.gameServer.ID,

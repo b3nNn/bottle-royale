@@ -18,18 +18,24 @@ class ClientService {
         return client;
     }
 
-    bootstrapMatchmaking() {
-        const readys = _.map(this.matchmaking.getReadyClients(), item => item.clientID);
-        const befors = this.events.filter('before_game_load', listener => readys.includes(listener.params.clientID));
-        const afters = this.events.filter('after_game_load', listener => readys.includes(listener.params.clientID));
+    connect(client) {
+        this.collections('game').filterOneUpdate('client', item => item.clientID === client.ID, cli => {
+            if (cli) {
+                cli.nickname = client.nickname;
+            }
+        });
+    }
 
-        _.each(befors, listener => {
-            listener.callback(matchmaking);
-        });
-        // GameService.matchmaking.events.fire('load');
-        _.each(afters, listener => {
-            listener.callback(matchmaking);
-        });
+    handleMatchmaking(instance) {
+        this.events.fire('game_found', instance.requestProxy);
+    }
+
+    bootstrapMatchmaking(matchmaking) {
+        const readys = _.map(this.matchmaking.getReadyClients(matchmaking), item => item.clientID);
+
+        this.events.fireFilter('before_game_load', listener => readys.includes(listener.params.clientID), matchmaking);
+        matchmaking.service.events.fire('load');
+        this.events.fireFilter('after_game_load', listener => readys.includes(listener.params.clientID), matchmaking);
     }
 }
 

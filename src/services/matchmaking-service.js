@@ -7,33 +7,39 @@ class MatchmakingService {
         this.collections = collections;
         this.events = eventsFactory.createProvider('matchmaking_service_listener');
         // this.gameServer = gameServer;
-        this.instance = null;
+        // this.instances = [];
     }
 
-    open() {
-        this.instance = this.createMatchmacking();
-        this.instance.open();
-        this.handleMatchmacking();
+    createInstance(gameServer) {
+        return this.createMatchmacking(gameServer);
     }
 
-    start() {
-        this.instance.start();
-        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.instance.ID, matchmaking => {
-            matchmaking.matchmaking.state = this.instance.state;
+    open(instance) {
+        instance.open();
+        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === instance.ID, matchmaking => {
+            matchmaking.matchmaking.state = instance.state;
+        });
+        // this.handleMatchmacking();
+    }
+
+    start(instance) {
+        instance.start();
+        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === instance.ID, matchmaking => {
+            matchmaking.matchmaking.state = instance.state;
         });
     }
 
-    live() {
-        this.instance.live();
-        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.instance.ID, matchmaking => {
-            matchmaking.matchmaking.state = this.instance.state;
+    live(instance) {
+        instance.live();
+        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === instance.ID, matchmaking => {
+            matchmaking.matchmaking.state = instance.state;
         });
     }
 
-    end() {
-        this.instance.end();
-        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === this.instance.ID, matchmaking => {
-            matchmaking.matchmaking.state = this.instance.state;
+    end(instance) {
+        instance.end();
+        this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === instance.ID, matchmaking => {
+            matchmaking.matchmaking.state = instance.state;
         });
     }
 
@@ -41,28 +47,24 @@ class MatchmakingService {
         this.collections('game').push('client_matchmaking_accept', {
             clientID: client.ID,
             matchmakingID: matchmaking.ID,
-            serverID: this.gameServer.serverID
+            serverID: matchmaking.gameServer.ID
         });
     }
 
-    getReadyClients() {
-        return this.collections('game').filter('client_matchmaking_accept', item => item.matchmakingID === this.instance.ID);
+    getReadyClients(instance) {
+        return this.collections('game').filter('client_matchmaking_accept', item => item.matchmakingID === instance.ID);
     }
 
-    getPlayers() {
-        const readys = _.map(this.getReadyClients(), item => item.clientID);
+    getPlayers(instance) {
+        const readys = _.map(this.getReadyClients(instance), item => item.clientID);
         return this.collections('game').filter('player', player => readys.includes(player.clientID));
     }
 
-    handleMatchmacking() {
-        // GameService.clients.events.fire('game_found', this.instance.requestProxy);
-    }
-
-    createMatchmacking() {
-        const matchmaking = new Matchmaking();
+    createMatchmacking(gameServer) {
+        const matchmaking = new Matchmaking(this, gameServer);
         matchmaking.ID = this.collections('game.matchmaking').uid();
         this.collections('game').push('matchmaking', {
-            serverID: 0,
+            serverID: gameServer.ID,
             matchmakingID: matchmaking.ID,
             matchmaking
         });

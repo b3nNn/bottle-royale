@@ -6,17 +6,22 @@ import Vehicule from '../modules/game/vehicule';
 
 class GameObjectService {
     constructor(collections) {
+        this.gameServer;
         this.sceneActives = [];
         this.collections = collections;
         this.debugTick = new ClockTick(toSeconds(5));
         this.transformUpdateTick = new ClockTick(toMilliseconds(1000 / 3));
     }
 
+    init(gameServer) {
+        this.gameServer = gameServer;
+    }
+
     createGameObject(baseInstance) {
-        const go = new GameObject(baseInstance);
+        const go = new GameObject(this, baseInstance);
         go.ID = this.collections('game').uid('game.game_object');
         this.collections('game').push('game_object', {
-            serverID: GameService.serverID,
+            serverID: this.gameServer.ID,
             gameObjectID: go.ID,
             gameObject: go
         });
@@ -25,7 +30,9 @@ class GameObjectService {
         return go;
     }
 
-    start() {}
+    instanciate(baseInstance) {
+        return this.createGameObject(baseInstance);
+    }
 
     update(time) {
         _.each(this.collections('game').filter('game_object', go => go.gameObject.active === true), go => this.updateGameObject(time, go.gameObject));
@@ -33,7 +40,7 @@ class GameObjectService {
             this.collections('game').filterUpdate('game_object', go => go.gameObject.active === true, go => this.updateGameObject(time, go.gameObject));
         });
         this.debugTick.each(() => {
-            if (GameService.debug) {
+            if (1) {
                 console.log(`scene actives: ${this.sceneActives.length}`);
                 _.each(this.sceneActives, go => {
                     console.log('-', go.name, go.transform.getWorldPosition());

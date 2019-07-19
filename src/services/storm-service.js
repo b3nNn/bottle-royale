@@ -4,9 +4,13 @@ class StormService {
     constructor(collections, eventsFactory) {
         this.collections = collections;
         this.events = eventsFactory.createProvider('storm_service_listener');
-        // this.gameServer = gameServer;
+        this.gameServer = null;
         this.instance = null;
         this.expireAt = null;
+    }
+
+    init(gameServer) {
+        this.gameServer = gameServer;
     }
 
     start() {
@@ -14,6 +18,9 @@ class StormService {
     }
 
     update(time) {
+        if (!this.instance) {
+            return;
+        }
         switch (this.instance.state) {
             case 'init': {
                 if (time.total > this.instance.beginDelay) {
@@ -67,7 +74,7 @@ class StormService {
         const storm = new Storm();
         storm.ID = this.collections('game.storm').uid();
         this.collections('game').push('storm', {
-            serverID: 0,
+            serverID: this.gameServer.ID,
             stormID: storm.ID,
             storm
         });

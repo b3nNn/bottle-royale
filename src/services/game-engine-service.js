@@ -1,15 +1,15 @@
 import _ from 'lodash';
 import Clock from '../components/clock';
-// import { GameService } from './game-service';
 import { GameObject } from '../modules/game/game-object';
 import { toSeconds, toMinutes } from '../modules/game/time';
 
 class GameEngineService {
     constructor(collections, eventsFactory, stormService, vehiculesService, mapService, gameObjectService, matchmakingService) {
+        this.gameServer = null;
         this.collections = collections;
         this.events = eventsFactory.createProvider('game_engine_service_listener');
         this.config = {
-            death_delay: toMinutes(5)
+            death_delay: toSeconds(5)
         };
         this.tick = new Clock();
         this.eventTriggers = {};
@@ -21,19 +21,27 @@ class GameEngineService {
         this.isRunning = false;
     }
 
-    initMap () {
+    init(gameServer) {
+        this.gameServer = gameServer;
+        this.go.init(this.gameServer);
+        this.storm.init(this.gameServer);
+    }
+
+    initMap (matchmaking) {
         const travelPlane = this.vehicules.createTravelPlane();
-        const planeGO = GameObject.instantiate(travelPlane);
+        const planeGO = this.go.instanciate(travelPlane);
 
         if (planeGO) {
             planeGO.transform.setPosition(this.map.dropTravelPath.start.x * this.map.worldSize.x, this.map.dropTravelPath.start.y * this.map.worldSize.y, 0);
             planeGO.transform.setRotation(this.map.dropTravelPath.vector.x, this.map.dropTravelPath.vector.y, 0);
-            const players = GameService.matchmaking.getPlayers();
+            const players = matchmaking.getPlayers();
             _.each(players, (player, idx) => {
-                let go = GameObject.instantiate(player.player);
+                let go = this.go.instanciate(player.player);
                 go.parent = planeGO;
                 travelPlane.enterPlayer(idx, player.player);
             });
+        } else {
+            throw new Error('World initialisation error');
         }
     }
 
@@ -58,9 +66,8 @@ class GameEngineService {
         }
     }
 
-    start() {
-        this.initMap();
-        this.go.start();
+    start(matchmaking) {
+        this.initMap(matchmaking);
         this.tick.start();
         this.matchmaking.events.fire('start');
         this.events.fire('matchmaking_start');
@@ -72,7 +79,7 @@ class GameEngineService {
     }
 
     update(time) {
-        const ms = time.total / 1000;
+        const ms = time.total;
 
         this.storm.update(time);
         this.go.update(time);

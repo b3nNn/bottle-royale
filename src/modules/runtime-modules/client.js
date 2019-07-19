@@ -2,22 +2,20 @@ import _ from 'lodash';
 import nanoid from 'nanoid';
 
 class Client {
-    constructor() {
+    constructor(service) {
+        this.service = service;
         this.longID = nanoid();
         this.nickname = null;
     }
 
     connect(nickname) {
         this.nickname = nickname;
-        // GameService.collections('game').filterOneUpdate('client', item => item.clientID === this.ID, client => {
-        //     if (client) {
-        //         client.nickname = nickname;
-        //     }
-        // });
+        this.service.connect(this);
     }
 
     on(event, callback) {
-        // GameService.clients.events.on(event, callback, { clientID: this.ID });
+        console.log('CLIENT ON', event);
+        this.service.events.on(event, callback, { clientID: this.ID });
     }
 
     off(event) {

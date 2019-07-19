@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import nanoid from 'nanoid';
-import BotBundleLoader from '../bundle/bot-bundle-loader';
+import BotBundleLoader from '../core/bot-bundle-loader';
 import sleep from '../../components/sleep';
 import ClockTick from '../../components/clock-tick';
 import { GameCollections } from '../../services/game-service';

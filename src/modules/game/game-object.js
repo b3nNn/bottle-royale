@@ -36,22 +36,18 @@ class Transform {
 }
 
 class GameObject {
-    constructor(baseInstance = null, parent = null) {
+    constructor(service, baseInstance = null, parent = null) {
         const t = (baseInstance !== null && baseInstance.constructor ? baseInstance.constructor.name : 'gameobject');
         this.name = _.uniqueId(`${_.snakeCase(t)}_`);
         this.active = true;
         this.transform = new Transform(this);
+        this.service = service;
         this.instance = baseInstance;
         this.parent = parent;
     }
 
-    static instantiate(baseInstance) {
-        // return GameService.game.go.createGameObject(baseInstance);
-        return undefined;
-    }
-
     destroy() {
-        // GameService.game.go.destroyGameObject(this);
+        this.service.destroyGameObject(this);
     }
 
     serialize() {
