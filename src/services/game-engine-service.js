@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Clock from '../components/clock';
-import { GameObject } from '../modules/game/game-object';
 import { toSeconds, toMinutes } from '../modules/game/time';
 
 class GameEngineService {
@@ -9,7 +8,7 @@ class GameEngineService {
         this.collections = collections;
         this.events = eventsFactory.createProvider('game_engine_service_listener');
         this.config = {
-            death_delay: toSeconds(5)
+            death_delay: toMinutes(5)
         };
         this.tick = new Clock();
         this.eventTriggers = {};
@@ -19,6 +18,10 @@ class GameEngineService {
         this.go = gameObjectService;
         this.matchmaking = matchmakingService;
         this.isRunning = false;
+    }
+
+    configure(config) {
+        this.debug = config.debug;
     }
 
     init(gameServer) {

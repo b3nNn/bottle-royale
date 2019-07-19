@@ -3,7 +3,10 @@ import EventEmitter from 'events';
 
 class Application {
     constructor(argv) {
-        this.argv = argv;
+        this.argv = argv || {};
+        this.config = {
+            debug: this.argv.debug
+        };
         this.events = new EventEmitter();
         this.middlewares = [];
         this.services = {};
@@ -49,6 +52,9 @@ class Application {
                     this.services[def.name] = new def.provider(...this.getInjectArguments(def.provider));
                 } else if (_.isFunction(def.provider)) {
                     this.services[def.name] = new def.provider(...this.getInjectArguments(def.provider));
+                }
+                if (this.services[def.name] && _.isFunction(this.services[def.name].configure)) {
+                    this.services[def.name].configure(this.config, this.argv);
                 }
             }
             for (let def of this.middlewareDefinitions) {

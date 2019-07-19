@@ -1,5 +1,4 @@
 import _ from 'lodash';
-// import { GameService } from '../../services/game-service';
 import Matchmaking from '../modules/game/matchmaking';
 
 class MatchmakingService {
@@ -19,7 +18,6 @@ class MatchmakingService {
         this.collections('game').filterOneUpdate('matchmaking', item => item.matchmakingID === instance.ID, matchmaking => {
             matchmaking.matchmaking.state = instance.state;
         });
-        // this.handleMatchmacking();
     }
 
     start(instance) {

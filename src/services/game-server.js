@@ -5,6 +5,7 @@ import BattleRoyaleNamespace from '../modules/runtime-modules/battle-royale-name
 
 class GameServer {
     constructor(collections, clientService, matchmaking, gameEngine) {
+        this.debug = true;
         this.ID = nanoid();
         this.collections = collections;
         this.clients = clientService;
@@ -48,12 +49,6 @@ class GameServer {
         this.clients.bootstrapMatchmaking(instance);
         this.matchmaking.live(instance);
         this.engine.start(instance);
-        // if (!this.lastTick) {
-        //     this.lastTick = this.game.tick.getElapsed();
-        // }
-        // await this.mainLoop();
-        // this.matchmaking.end();
-        // this.game.events.fire('matchmaking_end');
     }
 
     async endMatchmaking() {

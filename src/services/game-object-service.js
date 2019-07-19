@@ -13,6 +13,10 @@ class GameObjectService {
         this.transformUpdateTick = new ClockTick(toMilliseconds(1000 / 3));
     }
 
+    configure(config) {
+        this.debug = config.debug;
+    }
+
     init(gameServer) {
         this.gameServer = gameServer;
     }
@@ -40,7 +44,7 @@ class GameObjectService {
             this.collections('game').filterUpdate('game_object', go => go.gameObject.active === true, go => this.updateGameObject(time, go.gameObject));
         });
         this.debugTick.each(() => {
-            if (1) {
+            if (this.debug) {
                 console.log(`scene actives: ${this.sceneActives.length}`);
                 _.each(this.sceneActives, go => {
                     console.log('-', go.name, go.transform.getWorldPosition());

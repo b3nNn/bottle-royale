@@ -7,6 +7,7 @@ class DevServer {
         this.app = App;
         this.gameServer = GameServer;
         this.engine = GameEngine;
+        this.debugPerfs = App.argv['show-perfs'] || false;
         this.debugTick = new ClockTick(toSeconds(5));
     }
 
@@ -27,7 +28,7 @@ class DevServer {
             client.behavior.update(time);
         });
         this.debugTick.each(() => {
-            if (this.debug) {
+            if (this.debugPerfs) {
                 console.log('loop time:', Math.round(time.prefs.updateTime), 'usage:', `${Math.round(time.prefs.usage)}%`, 'total:', Math.round(time.total / 1000000));
             }
         });

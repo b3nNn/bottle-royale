@@ -4,11 +4,9 @@ class GameStormEngine {
     }
 
     run() {
-        console.log('GameStormEngine middleware runnning');
     }
 
     update(time) {
-        // console.log('GameStormEngine middleware update', time.total, this.storm.instance);
         this.updateInstance(time);
     }
 

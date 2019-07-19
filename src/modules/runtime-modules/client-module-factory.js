@@ -1,12 +1,14 @@
 import Client from './client';
 import ModuleFactory from './module-factory';
 import ClientProxy from './client-proxy';
+import ClientModuleProxy from './client-module-proxy';
 
 class ClientModuleFactory extends ModuleFactory {
     constructor(gameServer) {
         super();
         this.gameServer = gameServer;
         this.collections = gameServer.collections;
+        this.clientModules = [];
     }
 
     createClient(cli) {
@@ -20,9 +22,17 @@ class ClientModuleFactory extends ModuleFactory {
         return client;
     }
 
-    get(cli) {
-        const client = this.createClient(cli);
-        const proxy = ClientProxy(client, this);
+    getClientModuleProxy(client) {
+        return this.clientModules[client.ID];
+    }
+
+    get(client) {
+        let proxy = this.getClientModuleProxy(client);
+        
+        if (!proxy) {
+            proxy = ClientModuleProxy(client, this);
+            this.clientModules[client.ID] = proxy;
+        }
         return proxy;
     }
 }

@@ -8,6 +8,11 @@ class ClientService {
         this.sandbox = {};
     }
 
+    configure(config, argv) {
+        this.debug = config.debug;
+        this.debugClients = argv['debug-clients'] || false;
+    }
+
     createClient() {
         const client = {
             ID: this.collections('runtime.client').uid()
