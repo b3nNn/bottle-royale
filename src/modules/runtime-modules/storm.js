@@ -1,15 +1,13 @@
-import { GameService } from '../../services/game-service';
-
 class Storm {
     constructor(client) {
         this.client = client;
     }
 
     on(event, callback) {
-        GameService.game.storm.events.on(event, callback, { clientID: this.client.ID });
+        // GameService.game.storm.events.on(event, callback, { clientID: this.client.ID });
     }
     off(event, callback) {
-        GameService.game.storm.events.on(event, callback);
+        // GameService.game.storm.events.on(event, callback);
     }
 }
 

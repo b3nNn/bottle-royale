@@ -1,28 +1,37 @@
 import Client from './client';
 import ModuleFactory from './module-factory';
-import { GameService } from '../../services/game-service';
-import ClientProxy from './client-proxy';
+import ClientModuleProxy from './client-module-proxy';
 
 class ClientModuleFactory extends ModuleFactory {
-    constructor(collections) {
+    constructor(gameServer) {
         super();
-        this.collections = collections;
+        this.gameServer = gameServer;
+        this.collections = gameServer.collections;
+        this.clientModules = [];
     }
 
     createClient(cli) {
-        const client = new Client();
+        const client = new Client(this.gameServer.clients);
         client.ID = cli.ID;
         this.collections('game').push('client', {
-            serverID: GameService.serverID,
+            serverID: this.gameServer.ID,
             clientID: client.ID,
             client
         });
         return client;
     }
 
-    get(cli) {
-        const client = this.createClient(cli);
-        const proxy = ClientProxy(client, this);
+    getClientModuleProxy(client) {
+        return this.clientModules[client.ID];
+    }
+
+    get(client) {
+        let proxy = this.getClientModuleProxy(client);
+        
+        if (!proxy) {
+            proxy = ClientModuleProxy(client, this);
+            this.clientModules[client.ID] = proxy;
+        }
         return proxy;
     }
 }

@@ -1,39 +1,35 @@
 import _ from 'lodash';
 import nanoid from 'nanoid';
-import { GameService } from '../../services/game-service';
 
 class Client {
-    constructor() {
+    constructor(service) {
+        this.service = service;
         this.longID = nanoid();
         this.nickname = null;
     }
 
     connect(nickname) {
         this.nickname = nickname;
-        GameService.collections('game').filterOneUpdate('client', item => item.clientID === this.ID, client => {
-            if (client) {
-                client.nickname = nickname;
-            }
-        });
+        this.service.connect(this);
     }
 
     on(event, callback) {
-        GameService.clients.events.on(event, callback, { clientID: this.ID });
+        this.service.events.on(event, callback, { clientID: this.ID });
     }
 
     off(event) {
-        GameService.clients.events.off(event);
+        this.service.event.off(event, { clientID: this.ID });
     }
 
     log(str, additionnal) {
-        if (GameService.debug) {
+        if (this.service.debugClients) {
             console.log(`[client:${this.longID}] ${str}`, additionnal || '');
         }
     }
 
     serialize() {
         return {
-            serverID: GameService.serverID,
+            serverID: 0,
             clientID: this.ID,
             longID: this.longID,
             nickname: this.nickname

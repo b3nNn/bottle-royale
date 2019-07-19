@@ -1,8 +1,5 @@
 import _ from 'lodash';
 import Player from './player';
-import Behavior from './behavior';
-import ModuleProvider from './module-provider';
-import { GameService } from '../../services/game-service';
 
 const PlayerProxy = (client, factory) => {
     const _client = client;
@@ -21,12 +18,10 @@ const PlayerProxy = (client, factory) => {
             return true;
         },
         ownKeys: () => {
-            console.log('proxy ownKeys');
             return authorisedKeys;
         }
     };
     let proxy = new Proxy(Player, handler);
-    // console.log('PROXY IS ', proxy.handler);
     return proxy;
 }
 

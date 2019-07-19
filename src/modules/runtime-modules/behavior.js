@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Strategy from './strategy';
-import { GameService } from '../../services/game-service';
 
 class Behavior {
     constructor(client) {

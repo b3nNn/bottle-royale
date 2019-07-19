@@ -1,11 +1,12 @@
 import _ from 'lodash';
-import { GameService } from '../../services/game-service';
 
 const GameCollections = options => {
-    const persistHandlers = options.persistHandlers || [];
+    const opts = options || {};
+
+    const persistHandlers = opts.persistHandlers || [];
     const collections = [];
     const ids = {};
-
+    
     const proxyBuilder = (collection) => {
         const updateItem = (kind, entry) => {
             _.each(persistHandlers, handler => handler.update(collection, kind, entry));
@@ -100,7 +101,7 @@ const GameCollections = options => {
     proxyBuilder.init = async () => {
         for (let handler of persistHandlers) {
             await handler.init({
-                debug: GameService.debugPersistence
+                debug: false
             });
         }
     }

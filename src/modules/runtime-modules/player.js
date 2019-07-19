@@ -1,14 +1,13 @@
-import { GameService } from '../../services/game-service';
-
 class Player {
-    constructor(client, behavior) {
+    constructor(service, client, behavior) {
+        this.service = service;
         this.client = client;
         this.behavior = behavior;
         this.vehicule = null;
     }
 
     action(name, params) {
-        return GameService.game.execPlayerAction(this, name, params);
+        return this.service.execPlayerAction(this, name, params);
     }
 
     serialize() {

@@ -33,7 +33,7 @@ or with a game configuration file:
 ```sh
 npm run watch:app -- --bot examples/my_bot.bundle --bot examples/foo_bar.bundle --config game.config.js
 ```
-Display logs using `--debug` and/or `--debug-persistence` parameters.
+Display logs using `--debug`, or filter specific log by using `--show-prefs`, `--debug-clients`, `--debug-persistence` parameters.
 
 ### Game Configuration
 

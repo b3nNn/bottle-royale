@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { Vector } from 'sylvester';
-import { GameService } from '../../services/game-service';
 
 class Transform {
     constructor(gameObject) {
@@ -37,27 +36,24 @@ class Transform {
 }
 
 class GameObject {
-    constructor(baseInstance = null, parent = null) {
+    constructor(service, baseInstance = null, parent = null) {
         const t = (baseInstance !== null && baseInstance.constructor ? baseInstance.constructor.name : 'gameobject');
         this.name = _.uniqueId(`${_.snakeCase(t)}_`);
         this.active = true;
         this.transform = new Transform(this);
+        this.service = service;
         this.instance = baseInstance;
         this.parent = parent;
     }
 
-    static instantiate(baseInstance) {
-        return GameService.game.go.createGameObject(baseInstance);
-    }
-
     destroy() {
-        GameService.game.go.destroyGameObject(this);
+        this.service.destroyGameObject(this);
     }
 
     serialize() {
         return {
             gameObjectID: this.ID,
-            serverID: GameService.serverID,
+            serverID: 0,
             name: this.name,
             active: this.active,
             transform: this.transform.serialize()

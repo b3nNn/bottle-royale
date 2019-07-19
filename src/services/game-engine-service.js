@@ -1,13 +1,12 @@
 import _ from 'lodash';
-import Clock from '../../components/clock';
-import { GameService } from '../../services/game-service';
-import { GameObject } from './game-object';
-import { toSeconds, toMinutes } from './time';
+import Clock from '../components/clock';
+import { toSeconds, toMinutes } from '../modules/game/time';
 
-class GameEngine {
-    constructor(collections, eventService, stormService, vehiculesService, mapService, gameObjectService) {
+class GameEngineService {
+    constructor(collections, eventsFactory, stormService, vehiculesService, mapService, gameObjectService, matchmakingService) {
+        this.gameServer = null;
         this.collections = collections;
-        this.events = eventService;
+        this.events = eventsFactory.createProvider('game_engine_service_listener');
         this.config = {
             death_delay: toMinutes(5)
         };
@@ -17,20 +16,36 @@ class GameEngine {
         this.vehicules = vehiculesService;
         this.map = mapService;
         this.go = gameObjectService;
+        this.matchmaking = matchmakingService;
         this.isRunning = false;
     }
 
-    initMap () {
+    configure(config) {
+        this.debug = config.debug;
+    }
+
+    init(gameServer) {
+        this.gameServer = gameServer;
+        this.go.init(this.gameServer);
+        this.storm.init(this.gameServer);
+    }
+
+    initMap (matchmaking) {
         const travelPlane = this.vehicules.createTravelPlane();
-        const planeGO = GameObject.instantiate(travelPlane);
-        planeGO.transform.setPosition(this.map.dropTravelPath.start.x * this.map.worldSize.x, this.map.dropTravelPath.start.y * this.map.worldSize.y, 0);
-        planeGO.transform.setRotation(this.map.dropTravelPath.vector.x, this.map.dropTravelPath.vector.y, 0);
-        const players = GameService.matchmaking.getPlayers();
-        _.each(players, (player, idx) => {
-            let go = GameObject.instantiate(player.player);
-            go.parent = planeGO;
-            travelPlane.enterPlayer(idx, player.player);
-        });
+        const planeGO = this.go.instanciate(travelPlane);
+
+        if (planeGO) {
+            planeGO.transform.setPosition(this.map.dropTravelPath.start.x * this.map.worldSize.x, this.map.dropTravelPath.start.y * this.map.worldSize.y, 0);
+            planeGO.transform.setRotation(this.map.dropTravelPath.vector.x, this.map.dropTravelPath.vector.y, 0);
+            const players = matchmaking.getPlayers();
+            _.each(players, (player, idx) => {
+                let go = this.go.instanciate(player.player);
+                go.parent = planeGO;
+                travelPlane.enterPlayer(idx, player.player);
+            });
+        } else {
+            throw new Error('World initialisation error');
+        }
     }
 
     execPlayerAction(player, action, params) {
@@ -54,12 +69,11 @@ class GameEngine {
         }
     }
 
-    start() {
-        this.initMap();
-        this.go.start();
+    start(matchmaking) {
+        this.initMap(matchmaking);
         this.tick.start();
-        GameService.matchmaking.events.fire('start');
-        this.events.fire('matchmaking_start');
+        this.matchmaking.events.fire('start');
+        this.events.fire('matchmaking:start', matchmaking);
         this.collections('game').kindUpdate('behavior', cli => {
             cli.behavior.addTag('alive');
         });
@@ -68,7 +82,7 @@ class GameEngine {
     }
 
     update(time) {
-        const ms = time.total / 1000;
+        const ms = time.total;
 
         this.storm.update(time);
         this.go.update(time);
@@ -84,4 +98,6 @@ class GameEngine {
     }
 }
 
-export default GameEngine;
+GameEngineService.$inject = ['Collections', 'EventsFactory', 'Storm', 'Vehicules', 'Map', 'GameObjects', 'Matchmaking'];
+
+export default GameEngineService;

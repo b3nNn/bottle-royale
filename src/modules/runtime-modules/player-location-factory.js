@@ -1,19 +1,19 @@
 import PlayerLocation from './player-location';
 import ModuleFactory from './module-factory';
-import { GameService } from '../../services/game-service';
 import PlayerLocationProxy from './player-location-proxy';
 
 class PlayerLocationFactory extends ModuleFactory {
-    constructor(collections) {
+    constructor(gameServer) {
         super();
-        this.collections = collections;
+        this.gameServer = gameServer;
+        this.collections = gameServer.collections;
     }
 
     createPlayerLocation(client) {
         const location = new PlayerLocation(client);
         location.ID = this.collections('game.player_location').uid();
         this.collections('game').push('player_location', {
-            serverID: GameService.serverID,
+            serverID: this.gameServer.ID,
             locationID: location.ID,
             clientID: client.ID,
             location

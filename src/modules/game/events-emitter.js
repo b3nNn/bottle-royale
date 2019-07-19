@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-class EventService {
+class EventEmitter {
     constructor(collections, kind) {
         this.kind = kind;
         this.collections = collections;
@@ -48,4 +48,4 @@ class EventService {
     }
 }
 
-export default EventService;
+export default EventEmitter;
