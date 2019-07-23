@@ -7,7 +7,7 @@ const nodeExternals = require('webpack-node-externals');
 module.exports = {
     mode: 'development',
     entry: {
-        httpserver: './src/httpserver.js'
+        app: './src/index.js'
     },
     target: 'node',
     externals: [nodeExternals()],

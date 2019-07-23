@@ -9,7 +9,7 @@ const httpPort = process.env.GAME_CLIENT_HTTP_PORT !== undefined ? process.env.G
 module.exports = {
     mode: 'development',
     entry: {
-        gameclient: "./src/gameclient.js"
+        app: "./src/index.js"
     },
     externals: {
         'socket.io-client': 'io'
