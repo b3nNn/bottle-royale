@@ -5,7 +5,9 @@ class Application {
     constructor(argv) {
         this.argv = argv || {};
         this.config = {
-            debug: this.argv.debug
+            host: this.argv.host,
+            debug: this.argv.debug,
+            debugPersistence: this.argv['debug-persistence']
         };
         this.events = new EventEmitter();
         this.middlewares = [];
@@ -48,9 +50,9 @@ class Application {
     async init() {
         try {
             for (let def of this.serviceDefinitions) {
-                if (_.isFunction(def.provider.constructor)) {
-                    this.services[def.name] = new def.provider(...this.getInjectArguments(def.provider));
-                } else if (_.isFunction(def.provider)) {
+                if (_.isFunction(def.provider.constructor) && def.constructorParams) {
+                    this.services[def.name] = new def.provider(def.constructorParams, ...this.getInjectArguments(def.provider));
+                } else if (_.isFunction(def.provider.constructor)) {
                     this.services[def.name] = new def.provider(...this.getInjectArguments(def.provider));
                 }
                 if (this.services[def.name] && _.isFunction(this.services[def.name].configure)) {
@@ -58,8 +60,8 @@ class Application {
                 }
             }
             for (let def of this.middlewareDefinitions) {
-                if (_.isFunction(def.provider.constructor)) {
-                    this.middlewares.push(new def.provider(...this.getInjectArguments(def.provider)));
+                if (_.isFunction(def.provider.constructor) && def.constructorParams) {
+                    this.middlewares.push(new def.provider(def.constructorParams, ...this.getInjectArguments(def.provider)));
                 } else if (_.isFunction(def.provider)) {
                     this.middlewares.push(new def.provider(...this.getInjectArguments(def.provider)));
                 }

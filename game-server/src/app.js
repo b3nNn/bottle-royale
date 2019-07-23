@@ -24,7 +24,8 @@ const argv = minimist(process.argv.slice(2));
 (async () => {
     const app = new Application(argv);
     app.service('Collections', GameCollections, {
-        persistHandlers: [new RethinkDBPersistHandler({debug: false})]
+        persistHandlers: [new RethinkDBPersistHandler()],
+        debug: false
     });
     app.service('EventsFactory', EventsFactory);
     app.service('Bundles', BundlesServices);

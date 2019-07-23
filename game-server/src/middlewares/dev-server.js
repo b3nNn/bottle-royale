@@ -14,7 +14,7 @@ class DevServer {
     async run() {
         this.app.events.on('bundles:loaded', async bundles => {
             await this.gameServer.addBundles(_.clone(bundles));
-            await this.gameServer.init();
+            await this.gameServer.init(this.app.config);
             await this.gameServer.startMatchmaking();
         });
         this.engine.events.on('matchmaking:start', matchmaking => {

@@ -111,7 +111,7 @@ class RethinkDBPersistHandler extends PersistHandler {
     async init(options) {
         const opts = options || {};
 
-        this.debug = opts.debug;
+        this.debug = opts.debugPersistence;
         this.r = rethinkdbdash();
         this.tableOpts = tableOptions(this.r);
         this.serverID = 0;

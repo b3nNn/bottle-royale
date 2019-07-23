@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 const GameCollections = options => {
     const opts = options || {};
-
     const persistHandlers = opts.persistHandlers || [];
     const collections = [];
     const ids = {};
@@ -100,10 +99,12 @@ const GameCollections = options => {
 
     proxyBuilder.init = async () => {
         for (let handler of persistHandlers) {
-            await handler.init({
-                debug: false
-            });
+            await handler.init(opts);
         }
+    }
+
+    proxyBuilder.configure = (config, argv) => {
+        opts.debugPersistence = config.debugPersistence || false;
     }
     return proxyBuilder;
 }
