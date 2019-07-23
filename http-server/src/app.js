@@ -58,8 +58,10 @@ server.listen(+argv['port'], () => {
     r.db('testing').table('game_object').changes().run()
     .then(cursor => {
         cursor.each((error, change) => {
-            if (!error && change.new_val.serverID) {
+            if (!error && change.new_val && change.new_val.serverID) {
                 io.to(`server-${change.new_val.serverID}`).emit('game_object:change', change);
+            } else if (!error && change.old_val && change.old_val.serverID) {
+                io.to(`server-${change.old_val.serverID}`).emit('game_object:change', change);
             }
         });
     });

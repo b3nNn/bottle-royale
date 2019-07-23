@@ -53,7 +53,7 @@ class GameObject {
     serialize() {
         return {
             gameObjectID: this.ID,
-            serverID: 0,
+            serverID: this.service.gameServer.ID,
             name: this.name,
             active: this.active,
             transform: this.transform.serialize()

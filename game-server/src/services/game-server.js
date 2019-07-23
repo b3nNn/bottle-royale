@@ -26,7 +26,9 @@ class GameServer {
         let client;
         let namespace;
 
-        await this.collections.init();
+        await this.collections.init(_.assign({
+            serverID: this.ID
+        }, config));
         this.collections('game').push('server', {
             serverID: this.ID,
             host: config.host || undefined

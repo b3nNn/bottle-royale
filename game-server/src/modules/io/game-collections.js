@@ -97,9 +97,10 @@ const GameCollections = options => {
         };
     };
 
-    proxyBuilder.init = async () => {
+    proxyBuilder.init = async config => {
+        const options = _.assign(_.clone(config), opts);
         for (let handler of persistHandlers) {
-            await handler.init(opts);
+            await handler.init(options);
         }
     }
 

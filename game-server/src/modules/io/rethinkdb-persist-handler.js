@@ -114,7 +114,7 @@ class RethinkDBPersistHandler extends PersistHandler {
         this.debug = opts.debugPersistence;
         this.r = rethinkdbdash();
         this.tableOpts = tableOptions(this.r);
-        this.serverID = 0;
+        this.serverID = opts.serverID;
         await this.initDatabase();
         await this.initWorker();
     }
