@@ -29,10 +29,6 @@ class Storm {
         this.state = 'move';
     }
 
-    stay() {
-        this.state = 'stay';
-    }
-
     levelUp() { 
         this.level++;
     }

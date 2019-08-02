@@ -98,9 +98,6 @@ client.on('game_found', matchmaking => {
         storm.on('prepare', storm => {
             client.log('the storm is preparing');
         });
-        storm.on('stay', storm => {
-            client.log('the storm is staying');
-        });
         storm.on('move', storm => {
             client.log('the storm is moving');
         });

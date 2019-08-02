@@ -1,5 +1,7 @@
 import _ from 'lodash';
+import 'three';
 import React from 'react';
+import GameRenderer from './game-renderer';
 
 class ServerPage extends React.Component {
     constructor(props) {
@@ -9,6 +11,7 @@ class ServerPage extends React.Component {
         };
         this.onGameObjectList = this.onGameObjectList.bind(this);
         this.onGameObjectChange = this.onGameObjectChange.bind(this);
+        this.renderer = new GameRenderer('container', document, window);
         console.log('ServerPage props', props);
     }
 
@@ -32,6 +35,8 @@ class ServerPage extends React.Component {
     }
 
     componentDidMount() {
+        this.renderer.init();
+        this.renderer.animate();
         this.props.socket.emit('join-server', this.props.match.params.id);
         this.props.socket.on('game_object:list', this.onGameObjectList);
         this.props.socket.on('game_object:change', this.onGameObjectChange);
@@ -45,7 +50,7 @@ class ServerPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <div id="container">
             </div>
         );
     }

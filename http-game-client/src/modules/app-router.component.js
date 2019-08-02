@@ -10,7 +10,7 @@ class AppRouter extends React.Component {
 
     render() {
         return (
-            <Router>
+            <Router basename="#" >
               <Route exact path="/" render={(props) => <ServerListPage {...this.props} />} />
               <Route path="/server/:id" render={(props) => <ServerPage {...this.props} match={props.match} />} />
             </Router>

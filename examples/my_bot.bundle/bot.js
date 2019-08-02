@@ -17,9 +17,6 @@ client.on('game_found', matchmaking => {
         storm.on('prepare', storm => {
             client.log('the storm prepare');
         });
-        storm.on('stay', storm => {
-            client.log('the storm stay');
-        });
         storm.on('move', storm => {
             client.log('the storm move');
         });
