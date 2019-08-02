@@ -38,24 +38,12 @@ class GameStormEngine {
             }
             case 'move': {
                 if (time.total > this.expireAt) {
-                    this.instance.stay();
+                    this.instance.prepare();
                     this.collections('game').filterOneUpdate('storm', item => item.stormID === this.instance.ID, storm => {
                         storm.storm.state = this.instance.state;
                     });
                     this.events.fire('stay', this.instance.clientProxy);
                     this.expireAt = this.expireAt + this.instance.stayDelay;
-                }
-            }
-            case 'stay': {
-                if (time.total > this.expireAt) {
-                    this.instance.levelUp();
-                    this.instance.prepare();
-                    this.collections('game').filterOneUpdate('storm', item => item.stormID === this.instance.ID, storm => {
-                        storm.storm.state = this.instance.state;
-                        storm.storm.level = this.instance.level;
-                    });
-                    this.events.fire('prepare', this.instance.clientProxy);
-                    this.expireAt = this.expireAt + this.instance.moveDelay;
                 }
             }
             default:

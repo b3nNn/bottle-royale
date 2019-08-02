@@ -9,7 +9,7 @@ const httpPort = process.env.GAME_CLIENT_HTTP_PORT !== undefined ? process.env.G
 module.exports = {
     mode: 'development',
     entry: {
-        app: "./src/index.js"
+        app: "./src/app.js"
     },
     externals: {
         'socket.io-client': 'io'
@@ -23,7 +23,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
-                        plugins: ['@babel/plugin-transform-runtime']
+                        plugins: ['@babel/plugin-transform-runtime',  'react-html-attrs']
                     }
                 }
             },
@@ -77,6 +77,7 @@ module.exports = {
             Popper: ['popper.js', 'default'],
             Util: "exports-loader?Util!bootstrap/js/dist/util",
             Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+            THREE: 'three'
         }),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin()
