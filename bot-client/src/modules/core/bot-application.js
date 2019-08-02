@@ -4,8 +4,6 @@ import ScriptedApplication from './scripted-application';
 class BotApplication extends ScriptedApplication {
     constructor(script, path, dir) {
         super(script, path, dir);
-        // this.client = GameService.clients.createClient();
-        // GameService.clients.registerClientApp(this.client, this);
     }
 
     setup(client, namespace) {

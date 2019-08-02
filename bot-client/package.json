@@ -1,0 +1,59 @@
+{
+  "name": "bottle-royale",
+  "version": "0.0.1",
+  "description": "Implement your strategy for surviving with **javascript** and challenge opponents in a **battle royale** environnement.",
+  "main": "./src/index.js",
+  "scripts": {
+    "start:watch": "npm-run-all --parallel watch:build \"watch:app:build -- {@}\" --",
+    "watch:build": "webpack --watch --config webpack.build.js",
+    "watch:app:build": "nodemon ./dist/app.js --watch ./dist",
+    "watch:app": "nodemon ./src/index.js",
+    "start": "node ./dist/app.js",
+    "stress": "nodemon ./dist/app.js --  --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle --bot ../examples/my_bot.bundle",
+    "build": "webpack --config webpack.build.js",
+    "test": "jest",
+    "clean": "rm -rf ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b3nNn/bottle-royale.git"
+  },
+  "author": "benoit martinet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/b3nNn/bottle-royale/issues"
+  },
+  "homepage": "https://github.com/b3nNn/bottle-royale#readme",
+  "dependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-transform-runtime": "^7.5.0",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/register": "^7.4.4",
+    "@babel/runtime": "^7.5.4",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^1.0.0",
+    "coffee-loader": "^0.9.0",
+    "coffee-script": "^1.12.7",
+    "cors": "^2.8.5",
+    "custom-env": "^1.0.1",
+    "flatted": "^2.0.1",
+    "lodash": "^4.17.14",
+    "microtime": "^3.0.0",
+    "minimist": "^1.2.0",
+    "moment": "^2.24.0",
+    "nanoid": "^2.0.3",
+    "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
+    "rethinkdbdash": "^2.3.31",
+    "sylvester": "0.0.21",
+    "vm2": "^3.8.2",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.6",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "webpack-dev-server": "^3.7.2"
+  }
+}

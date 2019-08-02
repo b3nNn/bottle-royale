@@ -1,7 +1,6 @@
 
 import _ from 'lodash';
 import nanoid from 'nanoid';
-import BattleRoyaleNamespace from '../modules/runtime-modules/battle-royale-namespace';
 
 class GameServer {
     constructor(collections, clientService, matchmaking, gameEngine) {
@@ -11,7 +10,6 @@ class GameServer {
         this.clients = clientService;
         this.matchmaking = matchmaking;
         this.engine = gameEngine;
-        this.br = new BattleRoyaleNamespace(this);
         this.isRunning = true;
         this.bundles = [];
         this.loadedBundles = [];
@@ -34,18 +32,6 @@ class GameServer {
             host: config.host || undefined
         });
         this.engine.init(this);
-        this.br.init();
-        for (let bundle of this.bundles) {
-            try {
-                bundle.load();
-                client = this.clients.createClient();
-                namespace = this.br.get(client);
-                bundle.apps.bot.setup(client, namespace);
-                await bundle.compile();
-            } catch (err) {
-                throw err;
-            }
-        }
     }
 
     async startMatchmaking() {

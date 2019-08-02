@@ -1,5 +1,4 @@
 import _ from 'lodash';
-// import { GameService } from '../../services/game-service';
 import { NodeVM, VMScript } from 'vm2';
 
 class ScriptedApplication {
@@ -18,7 +17,6 @@ class ScriptedApplication {
         this.vm = new NodeVM({
             console: 'inherit',
             sandbox: {
-                // GameService,
                 br: this.namespace
             },
             require: {

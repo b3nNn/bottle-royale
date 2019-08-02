@@ -8,7 +8,6 @@ import mainLoop from './modules/core/main-loop';
 import GameCollections from './modules/io/game-collections';
 import StormService from './services/storm-service';
 import RethinkDBPersistHandler from './modules/io/rethinkdb-persist-handler';
-import BundlesServices from './services/bundles-service';
 import ClientService from './services/client-service';
 import GameEngineService from './services/game-engine-service';
 import GameObjectService from './services/game-object-service';
@@ -17,7 +16,6 @@ import VehiculeService from './services/vehicule-service';
 
 import MatchmakingMiddleware from './middlewares/matchmaking';
 import GameStormEngine from './middlewares/game-storm-engine';
-import InlineBundleLoader from './middlewares/inline-bundle-loader';
 import DevServer from './middlewares/dev-server';
 
 const argv = minimist(process.argv.slice(2));
@@ -28,7 +26,6 @@ const argv = minimist(process.argv.slice(2));
         debug: false
     });
     app.service('EventsFactory', EventsFactory);
-    app.service('Bundles', BundlesServices);
     app.service('GameObjects', GameObjectService);
     app.service('Map', MapService);
     app.service('Vehicules', VehiculeService);
@@ -39,7 +36,6 @@ const argv = minimist(process.argv.slice(2));
     app.service('GameServer', GameServer);
     app.middleware(MatchmakingMiddleware);
     app.middleware(GameStormEngine);
-    app.middleware(InlineBundleLoader);
     app.middleware(DevServer);
     await app.run(mainLoop);
 })();
