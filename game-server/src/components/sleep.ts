@@ -1,4 +1,4 @@
-const sleep = duration => {
+const sleep = (duration: number): Promise<void> => {
     return new Promise(resolve => {
         setTimeout(() => {
             resolve();

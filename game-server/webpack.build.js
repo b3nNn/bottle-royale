@@ -7,8 +7,9 @@ const nodeExternals = require('webpack-node-externals');
 module.exports = {
     mode: 'development',
     entry: {
-        app: './src/index.js'
+        app: './src/app.ts'
     },
+    devtool: 'inline-source-map',
     target: 'node',
     externals: [nodeExternals()],
     module: {
@@ -23,7 +24,18 @@ module.exports = {
                         plugins: ['@babel/plugin-transform-runtime']
                     }
                 }
-            }
+            },
+            {
+                test: /\.tsx?$/,
+                use: {
+                    loader: 'ts-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                        plugins: ['@babel/plugin-transform-runtime']
+                    }
+                },
+                exclude: /(node_modules|bower_components)/,
+              }
         ]
     },
     output: {

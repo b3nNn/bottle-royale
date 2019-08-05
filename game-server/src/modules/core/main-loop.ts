@@ -1,10 +1,12 @@
 import sleep from '../../components/sleep';
 import Clock from '../../components/clock';
 import { toSeconds } from '../game/time';
+import Application from './application';
+import GameServer from '../../services/game-server';
 
 const framerate = toSeconds(1 / 10);
 
-const mainLoop = async (App, GameServer) => {
+const mainLoop = async (App: Application, GameServer: GameServer) => {
     let now;
     let lastTick;
     const tick = new Clock();
@@ -20,7 +22,7 @@ const mainLoop = async (App, GameServer) => {
 
     tick.start();
     lastTick = tick.getElapsed();
-    while (GameServer.isRunning) {
+    while (GameServer.isRunning()) {
         now = tick.getElapsed();
         time.elapsed = now - lastTick;
         time.total = now;

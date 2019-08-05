@@ -3,6 +3,8 @@ import _ from 'lodash';
 import nanoid from 'nanoid';
 
 class GameServer {
+    private run: boolean;
+
     constructor(collections, clientService, matchmaking, gameEngine) {
         this.debug = true;
         this.ID = nanoid();
@@ -10,7 +12,7 @@ class GameServer {
         this.clients = clientService;
         this.matchmaking = matchmaking;
         this.engine = gameEngine;
-        this.isRunning = true;
+        this.run = true;
         this.bundles = [];
         this.loadedBundles = [];
     }
@@ -47,6 +49,10 @@ class GameServer {
     async endMatchmaking() {
         this.matchmaking.end();
         this.engine.events.fire('matchmaking_end');
+    }
+
+    isRunning(): boolean {
+        return this.run;
     }
 }
 
