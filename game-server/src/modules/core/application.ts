@@ -11,10 +11,10 @@ import { Time } from '../game/time';
 class Application {
     public events: EventEmitter;
 
-    private argv: minimist.ParsedArgs;
-    private config: ApplicationConfig;
-    private middlewares: IMiddleware[];
-    private services: Map<string, IService>;
+    public argv: minimist.ParsedArgs;
+    public config: ApplicationConfig;
+    public middlewares: IMiddleware[];
+    public services: Map<string, IService>;
     private serviceDeclarations: ServiceDeclaration[];
     private middlewareDeclarations: MiddlewareDeclaration[];
 
@@ -33,7 +33,7 @@ class Application {
         this.serviceDeclarations.push(declaration);
     }
 
-    middleware(provider: Function): void {
+    middleware(provider: any): void {
         const declaration = new MiddlewareDeclaration(provider);
         this.middlewareDeclarations.push(declaration);
     }
@@ -77,9 +77,9 @@ class Application {
             }
             for (let def of this.middlewareDeclarations) {
                 if (_.isFunction(def.provider.constructor) && def.constructorParams) {
-                    this.middlewares.push(def.provider.call({}, def.constructorParams, ...this.getInjectArguments(def.provider)));
-                } else if (_.isFunction(def.provider)) {
-                    this.middlewares.push(def.provider.call({}, ...this.getInjectArguments(def.provider)));
+                    this.middlewares.push(new def.provider(def.constructorParams, ...this.getInjectArguments(def.provider)));
+                } else if (_.isFunction(def.provider.constructor)) {
+                    this.middlewares.push(new def.provider(...this.getInjectArguments(def.provider)));
                 }
             }
         } catch (err) {

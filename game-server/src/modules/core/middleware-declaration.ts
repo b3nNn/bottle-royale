@@ -1,8 +1,8 @@
 class MiddlewareDeclaration {
-    public provider: Function;
+    public provider: any;
     public constructorParams: any;
 
-    constructor(provider: Function, constructorParams?: any) {
+    constructor(provider: any, constructorParams?: any) {
         this.provider = provider;
         this.constructorParams = constructorParams;
     }
