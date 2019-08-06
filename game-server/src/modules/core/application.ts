@@ -33,8 +33,8 @@ class Application {
         this.serviceDeclarations.push(declaration);
     }
 
-    middleware(provider: any): void {
-        const declaration = new MiddlewareDeclaration(provider);
+    middleware(provider: any, constructorParams?: any): void {
+        const declaration = new MiddlewareDeclaration(provider, constructorParams);
         this.middlewareDeclarations.push(declaration);
     }
 
