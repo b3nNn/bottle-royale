@@ -28,7 +28,7 @@ class Application {
         this.middlewareDeclarations = [];
     }
 
-    service(name: string, provider: Function, constructorParams?: any): void {
+    service(name: string, provider: any, constructorParams?: any): void {
         let declaration = new ServiceDeclaration(name, provider, constructorParams);
         this.serviceDeclarations.push(declaration);
     }
@@ -61,11 +61,9 @@ class Application {
         try {
             for (let def of this.serviceDeclarations) {
                 if (_.isFunction(def.provider.constructor) && def.constructorParams) {
-                    service = def.provider.call({}, def.constructorParams, ...this.getInjectArguments(def.provider));
-                    // this.services.set(def.name, def.provider.call({}, def.constructorParams, ...this.getInjectArguments(def.provider)));
+                    service = new def.provider(def.constructorParams, ...this.getInjectArguments(def.provider));
                 } else if (_.isFunction(def.provider.constructor)) {
-                    service = def.provider.call({}, ...this.getInjectArguments(def.provider));
-                    // this.services.set(def.name, def.provider.call({}, ...this.getInjectArguments(def.provider)));
+                    service = new def.provider(...this.getInjectArguments(def.provider));
                 } else {
                     service = null;
                 }

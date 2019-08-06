@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import PersistHandler from './persist-handler';
 import { Worker } from 'worker_threads';
 import rethinkdbdash from 'rethinkdbdash';
 import { stringify } from 'flatted';
+import IPersistHandler from './ipersist-handler';
 
 const gameWhitelists = [
     'server',
@@ -98,9 +98,8 @@ const tableOptions = r => {
     }
 };
 
-class RethinkDBPersistHandler extends PersistHandler {
+class RethinkDBPersistHandler implements IPersistHandler {
     constructor() {
-        super();
         this.debug = false;
         this.worker = null;
         this.serverID = null;

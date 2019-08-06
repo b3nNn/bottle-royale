@@ -5,7 +5,7 @@ import Application from './modules/core/application';
 import GameServer from './services/game-server';
 // import MatchmakingService from './services/matchmaking-service';
 import mainLoop from './modules/core/main-loop';
-import { GameCollections } from './modules/io/game-collections';
+import CollectionsProvider from './modules/io/collections-provider';
 // import StormService from './services/storm-service';
 // import RethinkDBPersistHandler from './modules/io/rethinkdb-persist-handler';
 // import ClientService from './services/client-service';
@@ -21,7 +21,7 @@ import { GameCollections } from './modules/io/game-collections';
 const argv = minimist(process.argv.slice(2));
 (async () => {
     const app = new Application(argv);
-    app.service('Collections', GameCollections, {
+    app.service('Collections', CollectionsProvider, {
         persistHandlers: [],//new RethinkDBPersistHandler()],
         debug: false
     });

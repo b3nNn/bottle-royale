@@ -1,7 +1,8 @@
 import _ from 'lodash';
-import ApplicationConfig from '../core/application-config';
+import ICollection from './icollection';
+import CollectionsConfig from './collections-config';
 
-class Collections {
+class Collections implements ICollection {
     private name: string;
     private collections: any[];
     private config: CollectionsConfig;
@@ -18,6 +19,10 @@ class Collections {
         _.each(this.config.persistHandlers, handler => handler.update(this.name, kind, entry));
     };
 
+    pushItem(kind: string, entry: any): void {
+        _.each(this.config.persistHandlers, handler => handler.update(this.name, kind, entry));
+    };
+
     uid(): number {
         return ++this.nextID;
     }
@@ -27,7 +32,7 @@ class Collections {
             collection: this.name,
             kind: kind
         }, entry));
-        _.each(this.config.persistHandlers, handler => handler.push(this.name, kind, entry));
+        this.pushItem(kind, entry);
     }
 
     kind(kind: string): any[] {
@@ -39,7 +44,7 @@ class Collections {
         }, []);
     }
 
-    kindUpdate(kind: string, callback: Function) {
+    kindUpdate(kind: string, callback: Function): void {
         const all = _.reduce(this.collections, (acc: any[], item: any) => {
             if (item.collection === this.name && item.kind === kind) {
                 acc.push(item);
@@ -52,7 +57,7 @@ class Collections {
         });
     }
 
-    filter(kind: string, filter: Function) {
+    filter(kind: string, filter: Function): any[] {
         return _.reduce(this.collections, (acc: any[], item: any) => {
             if (item.collection === this.name && item.kind === kind && filter(item) === true) {
                 acc.push(item);
@@ -61,7 +66,7 @@ class Collections {
         }, []);
     }
 
-    filterUpdate(kind: string, filter: Function, callback: Function) {
+    filterUpdate(kind: string, filter: Function, callback: Function): void {
         const res = _.reduce(this.collections, (acc: any[], item: any) => {
             if (item.collection === this.name && item.kind === kind && filter(item) === true) {
                 acc.push(item);
@@ -76,7 +81,7 @@ class Collections {
         });
     }
 
-    filterOne(kind: string, filter: Function, callback: Function) {
+    filterOne(kind: string, filter: Function, callback: Function): void {
         const res = _.reduce(this.collections, (acc: any[], item: any) => {
             if (item.collection === this.name && item.kind === kind && filter(item) === true) {
                 acc.push(item);
@@ -86,7 +91,7 @@ class Collections {
         callback(res.length === 0 ? null : res[0]);
     }
 
-    filterOneUpdate(kind: string, filter: Function, callback: Function) {
+    filterOneUpdate(kind: string, filter: Function, callback: Function): void {
         const res = _.reduce(this.collections, (acc: any[], item: any) => {
             if (item.collection === this.name && item.kind === kind && filter(item) === true) {
                 acc.push(item);
@@ -97,7 +102,7 @@ class Collections {
         this.updateItem(kind, res.length === 0 ? null : res[0]);
     }
 
-    all() {
+    all(): any[] {
         return _.reduce(this.collections, (acc: any[], item: any) => {
             if (item.collection === this.name) {
                 acc.push(item);
@@ -107,59 +112,4 @@ class Collections {
     }
 }
 
-class CollectionsConfig {
-    public debug: boolean;
-    public debugPersistence: boolean;
-    public persistHandlers: any[];
-
-    constructor(options: any) {
-        this.debug = (options.debug !== undefined ? options.debug : false);
-        this.debugPersistence = (options.debugPersistence !== undefined ? options.debugPersistence : false);
-        this.persistHandlers = (options.persistHandlers !== undefined ? options.persistHandlers : []);
-    }
-}
-
-class HandlerConfig {
-    public debug: boolean;
-    
-    constructor(options: any) {
-        this.debug = (options.debug !== undefined ? true : false);
-    }
-}
-
-class Builder {
-    private collections: any[];
-    private config: CollectionsConfig;
-    
-    constructor(collections: any[], config: CollectionsConfig) {
-        this.collections = collections;
-        this.config = config;
-        this.build = this.build.bind(this);
-    }
-
-    async init(appConfig: ApplicationConfig) {
-        const config = new HandlerConfig(_.assign(_.clone(appConfig), this.config));
-
-        for (let handler of this.config.persistHandlers) {
-            await handler.init(config);
-        }
-    }
-
-    configure(config: ApplicationConfig) {
-        this.config.debugPersistence = config.debugPersistence || false;
-    }
-
-    build(name: string) {
-        return new Collections(name, this.collections, this.config);
-    }
-}
-
-const CollectionsProvider = (options: any): Function => {
-    const config = new CollectionsConfig(options);
-    const collections: any[] = [];
-    const builder = new Builder(collections, config)
-
-    return builder.build;
-}
-
-export { CollectionsProvider as GameCollections };
+export default Collections;
