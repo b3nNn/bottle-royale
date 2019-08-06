@@ -6,7 +6,7 @@ import GameServer from '../../services/game-server';
 
 const framerate = toSeconds(1 / 10);
 
-const mainLoop = async (App: Application, GameServer: GameServer) => {
+const mainLoop = async (App: Application, GameServer: GameServer): Promise<void> => {
     let now;
     let lastTick;
     const tick = new Clock();

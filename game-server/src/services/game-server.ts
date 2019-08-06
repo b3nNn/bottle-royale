@@ -1,31 +1,28 @@
 
 import _ from 'lodash';
 import nanoid from 'nanoid';
+import ApplicationConfig from '../modules/core/application-config';
 
 class GameServer {
-    private run: boolean;
+    static $inject: string[] = ['Collections', 'ClientService', 'Matchmaking', 'GameEngine'];
 
-    constructor(collections, clientService, matchmaking, gameEngine) {
-        this.debug = true;
+    private run: boolean;
+    private ID: string;
+    private collections: any;
+    private clients: any;
+    private matchmaking: any;
+    private engine: any;
+
+    constructor(collections: any, clientService: any, matchmaking: any, gameEngine: any) {
         this.ID = nanoid();
         this.collections = collections;
         this.clients = clientService;
         this.matchmaking = matchmaking;
         this.engine = gameEngine;
         this.run = true;
-        this.bundles = [];
-        this.loadedBundles = [];
     }
 
-    async addBundles(bundles) {
-        this.bundles = _.concat(this.bundles, bundles);
-        return this.bundles;
-    }
-
-    async init(config) {
-        let client;
-        let namespace;
-
+    async init(config: ApplicationConfig): Promise<void> {
         await this.collections.init(_.assign({
             serverID: this.ID
         }, config));
@@ -36,7 +33,7 @@ class GameServer {
         this.engine.init(this);
     }
 
-    async startMatchmaking() {
+    async startMatchmaking(): Promise<void> {
         let instance = this.matchmaking.createInstance(this);
         this.matchmaking.open(instance);
         this.clients.handleMatchmaking(instance);
@@ -46,7 +43,7 @@ class GameServer {
         this.engine.start(instance);
     }
 
-    async endMatchmaking() {
+    async endMatchmaking(): Promise<void> {
         this.matchmaking.end();
         this.engine.events.fire('matchmaking_end');
     }
@@ -55,7 +52,5 @@ class GameServer {
         return this.run;
     }
 }
-
-GameServer.$inject = ['Collections', 'ClientService', 'Matchmaking', 'GameEngine'];
 
 export default GameServer;
