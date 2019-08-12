@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import minimist from 'minimist';
 
 class ApplicationConfig {
@@ -6,9 +7,9 @@ class ApplicationConfig {
     public debugPersistence: boolean;
 
     constructor(argv: minimist.ParsedArgs) {
-        this.host = argv['host'];
-        this.debug = (argv['debug'] !== undefined ? false : true);
-        this.debugPersistence = (argv['debug-persistence'] !== undefined ? false : true);
+        this.host = (_.isString(argv['host']) ? argv['host'] : undefined);
+        this.debug = (_.isBoolean(argv['debug']) ? argv['debug'] : false);
+        this.debugPersistence = (_.isBoolean(argv['debug-persistence']) ? argv['debug-persistence'] : false);
     }
 }
 
