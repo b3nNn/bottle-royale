@@ -42,6 +42,11 @@ describe('main loop', () => {
         clockMock.getElapsed.mockClear();
     });
 
+    it('should have dependencies', () => {
+        expect.hasAssertions();
+        expect(mainLoop.$inject).toEqual(['App', 'GameServer']);
+    });
+
     it('should update the application', async () => {
         expect.hasAssertions();
         gameServerMock.isRunning.mockReturnValueOnce(true);
@@ -57,7 +62,18 @@ describe('main loop', () => {
         }));
     });
 
-    it('should update time', async () => {
+    it('should update while the game server is running', async () => {
+        expect.hasAssertions();
+        await mainLoop(app, gameServer);
+        expect(app.update).not.toHaveBeenCalled();
+
+        gameServerMock.isRunning.mockReturnValueOnce(true)
+        .mockReturnValueOnce(true);
+        await mainLoop(app, gameServer);
+        expect(app.update).toBeCalledTimes(2);
+    });
+
+    it('should update the timing', async () => {
         const loopCount = 2;
         const framerate = toSeconds(1 / 10);
         const elapsedValues = [1000, 2000, 5000, 10000, 20000];
