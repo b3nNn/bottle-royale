@@ -14,7 +14,7 @@ const mainLoop = async (App: Application, GameServer: GameServer): Promise<void>
         framerate,
         elapsed: 0,
         total: 0,
-        prefs: {
+        perfs: {
             updateTime: 0,
             usage: 0
         }
@@ -26,11 +26,11 @@ const mainLoop = async (App: Application, GameServer: GameServer): Promise<void>
         now = tick.getElapsed();
         time.elapsed = now - lastTick;
         time.total = now;
-        time.prefs.usage = (time.prefs.updateTime / time.framerate) * 100;
+        time.perfs.usage = (time.perfs.updateTime / time.framerate) * 100;
         await App.update(time);
-        time.prefs.updateTime = (tick.getElapsed() - now);
-        if (time.prefs.updateTime < time.framerate) {
-            await sleep((time.framerate - time.prefs.updateTime) / 1000);
+        time.perfs.updateTime = (tick.getElapsed() - now);
+        if (time.perfs.updateTime < time.framerate) {
+            await sleep((time.framerate - time.perfs.updateTime) / 1000);
         }
         lastTick = now;
     }

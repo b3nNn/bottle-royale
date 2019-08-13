@@ -8,8 +8,8 @@ class ApplicationConfig {
 
     constructor(argv: minimist.ParsedArgs) {
         this.host = (_.isString(argv['host']) ? argv['host'] : undefined);
-        this.debug = (_.isBoolean(argv['debug']) ? argv['debug'] : false);
-        this.debugPersistence = (_.isBoolean(argv['debug-persistence']) ? argv['debug-persistence'] : false);
+        this.debug = (!_.isUndefined(argv['debug']) ? true : false);
+        this.debugPersistence = (!_.isUndefined(argv['debug-persistence']) ? true : false);
     }
 }
 
