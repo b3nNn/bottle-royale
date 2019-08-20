@@ -53,6 +53,7 @@ describe('game server service', () => {
 
     it('should have some default values', () => {
         expect.hasAssertions();
+        expect(GameServer.$inject).toEqual(['Collections', 'ClientService', 'Matchmaking', 'GameEngine']);
         expect(gs.ID).toEqual(nextID);
         expect(gs.run).toBeTruthy();
     });
