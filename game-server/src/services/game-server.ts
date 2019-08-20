@@ -33,7 +33,7 @@ class GameServer {
         this.engine.init(this);
     }
 
-    async startMatchmaking(): Promise<void> {
+    async startMatchmaking(): Promise<any> {
         let instance = this.matchmaking.createInstance(this);
         this.matchmaking.open(instance);
         this.clients.handleMatchmaking(instance);
@@ -41,6 +41,7 @@ class GameServer {
         this.clients.bootstrapMatchmaking(instance);
         this.matchmaking.live(instance);
         this.engine.start(instance);
+        return instance;
     }
 
     async endMatchmaking(): Promise<void> {
