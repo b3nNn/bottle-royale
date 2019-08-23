@@ -5,6 +5,16 @@ const nanoid = require('nanoid');
 const nextID: string = 'my next ID';
 nanoid.mockImplementation(() => nextID);
 
+// jest.mock('../../../src/components/clock', () => {
+//     return jest.fn().mockImplementation(() => clockMock);
+// });
+// jest.mock('../../../src/modules/core/application', () => {
+//     return jest.fn().mockImplementation(() => applicationMock);
+// });
+// jest.mock('../../../src/services/game-server', () => {
+//     return jest.fn().mockImplementation(() => gameServerMock);
+// });
+
 describe('game server service', () => {
     const collections = {};
     const clientService = {

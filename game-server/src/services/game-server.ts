@@ -2,6 +2,7 @@
 import _ from 'lodash';
 import nanoid from 'nanoid';
 import ApplicationConfig from '../modules/core/application-config';
+import ClientService from './client-service';
 
 class GameServer {
     static $inject: string[] = ['Collections', 'ClientService', 'Matchmaking', 'GameEngine'];
@@ -13,7 +14,7 @@ class GameServer {
     private matchmaking: any;
     private engine: any;
 
-    constructor(collections: any, clientService: any, matchmaking: any, gameEngine: any) {
+    constructor(collections: any, clientService: ClientService, matchmaking: any, gameEngine: any) {
         this.ID = nanoid();
         this.collections = collections;
         this.clients = clientService;
