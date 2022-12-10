@@ -40,7 +40,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "custom-env": "^1.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "flatted": "^2.0.1",
     "lodash": "^4.17.14",
     "microtime": "^3.0.0",
